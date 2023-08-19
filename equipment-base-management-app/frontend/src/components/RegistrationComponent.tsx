@@ -80,10 +80,6 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
                 </div>
                 <button>Register</button>
             </form>
-            <div>{this.state.firstName}</div>
-            <div>{this.state.lastName}</div>
-            <div>{this.state.email}</div>
-            <div>{this.state.password}</div>
         </div>
         )
     }

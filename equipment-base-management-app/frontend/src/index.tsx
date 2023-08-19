@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
 import RegistrationComponent from './components/RegistrationComponent'
 
 const root = ReactDOM.createRoot(
@@ -12,5 +10,3 @@ root.render(
     <RegistrationComponent />
   </React.StrictMode>
 );
-
-reportWebVitals();
