@@ -1,5 +1,6 @@
 import React, {ChangeEvent} from 'react';
 import ReactDOM  from 'react-dom';
+import axios from 'axios';
 
 type RegistrationState = {
     firstName: string;
@@ -12,7 +13,7 @@ type RegistrationProps = {
 
 }
 
-class RegistrationComponent extends React.Component<RegistrationProps, RegistrationState> {
+class RegistrationForm extends React.Component<RegistrationProps, RegistrationState> {
     
 
     constructor(props: RegistrationProps) {
@@ -54,8 +55,11 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
         })
     }
 
-    submit = () => {
+    submit = (event: any) => {
+        event.preventDefault()
+        const url = "http://localhost:8080/api/v1/users"
         alert("Sending: \n Firstname: " + this.state.firstName + "\n Lastname: " + this.state.lastName + "\n Email: " + this.state.email + "\n Password: " + this.state.password)
+        axios.post(url, this.state)
     }
 
     render() {
@@ -63,7 +67,7 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
         <div>
             <form onSubmit={this.submit}>
                 <div>
-                    <label>First name: </label> 
+                    <p>First name: </p> 
                     <input type="text" onChange={this.setFirstName}></input>
                 </div>
                 <div>
@@ -85,4 +89,4 @@ class RegistrationComponent extends React.Component<RegistrationProps, Registrat
     }
 }
 
-export default RegistrationComponent;
+export default RegistrationForm;

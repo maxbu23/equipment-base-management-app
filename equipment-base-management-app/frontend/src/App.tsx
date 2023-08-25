@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom"
-import RegistrationComponent from './components/RegistrationComponent'
+import RegistrationComponent from './components/RegistrationForm'
 
 ReactDOM.render(
   <RegistrationComponent/>,
