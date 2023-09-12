@@ -25,6 +25,8 @@ class RegistrationForm extends React.Component<RegistrationProps, RegistrationSt
             password: "",
             email: ""
         }
+
+        
     }
 
     setFirstName = (event: ChangeEvent<HTMLInputElement>) => {
