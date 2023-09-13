@@ -5,9 +5,12 @@ const DashboardComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     return(
-        <div>
-            <h1>Hello world</h1>
-            <div>JWT Value is {jwt}</div>
+        <div 
+            style={{
+                margin: "2em" 
+            }}
+        >
+           <button>Submit New Assignment</button>
         </div>
     );
 }

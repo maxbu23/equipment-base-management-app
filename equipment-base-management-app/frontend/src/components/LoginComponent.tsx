@@ -1,5 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import useLocalState from "../util/useLocalStorage";
+import "../style/Common.css"
 
 const LoginComponent = () => {
 
@@ -39,26 +40,31 @@ const LoginComponent = () => {
 
     return(
         <>
-            <div>
-                <label htmlFor='email'>Email: </label>
-                <input 
-                    type='email' 
-                    id='email' 
-                    value={email} 
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                />
-            </div>
-            <div>
-                <label htmlFor='password'>Password: </label>
-                <input 
-                    type='password' 
-                    id='password' 
-                    value={password} 
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
-                />
-            </div>
-            <div>
-                <button id="submit" type="button" onClick={() => sendLoginRequest()}>Login</button>
+            <div className="center">
+                <h1>Login</h1>
+                <div className="form">
+                    <div className="input-container">
+                        <label htmlFor='email'>Email: </label>
+                        <input 
+                            type='email' 
+                            id='email' 
+                            value={email} 
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="input-container">
+                        <label htmlFor='password'>Password: </label>
+                        <input 
+                            type='password' 
+                            id='password' 
+                            value={password} 
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
+                        />
+                    </div>
+                    <div>
+                        <button className="submit-button" id="submit" type="button" onClick={() => sendLoginRequest()}>Login</button>
+                    </div>
+                </div>
             </div>
         </>
     );
