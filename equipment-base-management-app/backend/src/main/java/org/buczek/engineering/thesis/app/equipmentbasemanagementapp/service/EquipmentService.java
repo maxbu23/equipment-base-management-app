@@ -10,14 +10,14 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.Use
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class EquipmentService {
-
-    private static final String USER_NOT_FOUND_MESSAGE = "User with id: %d does not exist";
 
     private final EquipmentRepository equipmentRepository;
     private final UserRepository userRepository;
@@ -30,8 +30,12 @@ public class EquipmentService {
             log.info("User with id: {} has benn found", userId);
             equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, user.get()));
         } else {
-            throw new EntityNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, userId));
+            equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, null));
         }
+    }
+
+    public List<EquipmentDto> getAllEquipments() {
+        return equipmentRepository.findAll().stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
     }
 
     private Equipment mapEquipmentDtoToEntity(EquipmentDto equipmentDto, User user) {
@@ -41,6 +45,16 @@ public class EquipmentService {
                 .equipmentType(equipmentDto.equipmentType())
                 .serialNumber(equipmentDto.serialNumber())
                 .owner(user)
+                .build();
+    }
+
+    private EquipmentDto mapEquipmentEntityToDto(Equipment equipment) {
+        return EquipmentDto.builder()
+                .name(equipment.getName())
+                .brand(equipment.getBrand())
+                .equipmentType(equipment.getEquipmentType())
+                .serialNumber(equipment.getSerialNumber())
+                .userId(equipment.getOwner() != null ? equipment.getOwner().getId() : -1)
                 .build();
     }
 }

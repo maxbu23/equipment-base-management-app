@@ -24,6 +24,9 @@ application:
     admin1:
       email: marley@gmail.com
       password: password
+    user1:
+      email: user1@gmail.com
+      password: user1
 
 
 

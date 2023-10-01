@@ -1,7 +1,7 @@
 import React from "react";
 import useLocalState from "../util/useLocalStorage";
 
-const DashboardComponent = () => {
+const UserDashboardComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     return(
@@ -10,10 +10,11 @@ const DashboardComponent = () => {
                 margin: "2em" 
             }}
         >
+            <h1>User dashboard</h1>
            <button>Submit New Assignment</button>
         </div>
     );
 }
 
-export default DashboardComponent;
+export default UserDashboardComponent;
 

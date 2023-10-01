@@ -1,6 +1,7 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config;
 
 import lombok.RequiredArgsConstructor;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -43,7 +44,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests()
-                .requestMatchers(antMatcher("/api/v1/auth/**"),antMatcher("/h2-console"), antMatcher("/h2-console.html"))
+                .requestMatchers(antMatcher("/api/v1/auth/**"), antMatcher("/h2-console.html"))
                 .permitAll()
                 .anyRequest()
                 .authenticated()

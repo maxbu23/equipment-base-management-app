@@ -44,10 +44,11 @@ public class AuthenticateService {
         return generateAuthenticationResponse(user);
     }
 
-    private AuthenticationResponse generateAuthenticationResponse(UserDetails userDetails) {
-        String jwtToken = jwtService.generateToken(userDetails);
+    private AuthenticationResponse generateAuthenticationResponse(User user) {
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .jwtToken(jwtToken)
+                .role(user.getRole())
                 .build();
     }
 }

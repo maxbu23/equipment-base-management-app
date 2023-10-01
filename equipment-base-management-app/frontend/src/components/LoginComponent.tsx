@@ -14,7 +14,7 @@ const LoginComponent = () => {
             password: password
         }
       
-          fetch('http://localhost:8080/api/v1/auth/authenticate',
+          fetch('/api/v1/auth/authenticate',
             {
                 headers: {
                     "Content-Type": "application/json"
@@ -32,7 +32,11 @@ const LoginComponent = () => {
           })
           .then(([body, statusCode]) => {
             setJwt(body.jwtToken);
-            window.location.href = "/dashboard";
+            if (body.role === 'ADMIN' ) {
+                window.location.href = "/admin-dashboard";
+            } else {
+                window.location.href = "/user-dashboard";
+            }
           }).catch((message: string) => {
             alert(message);
           });

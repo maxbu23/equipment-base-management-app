@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 
 @Data
 @Builder
@@ -12,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
 
     private String jwtToken;
+    private Role role;
 
 }

@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +40,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("{} Internal filter process starting...", CLASS_NAME);
 
         if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/h2-console")) {
+            final String authHeader = request.getHeader("Authorization");
+            final String authHeader2 = request.getHeader("authorization");
+//        log.info("AuthHeader" + headersStrings);
+            log.info("Authorization header: {}", authHeader);
+            log.info("Authorization header: {}", authHeader2);
             filterChain.doFilter(request, response);
             return;
         }
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        List<String> headersStrings = new ArrayList<>();
+//        while(headerNames.hasMoreElements()) {
+//            headersStrings.add(headerNames.nextElement());
+//        }
+
 
         final String authHeader = request.getHeader("Authorization");
-
+//        log.info("AuthHeader" + headersStrings);
+        log.info("Authorization header: {}", authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             log.warn("{} headers does not contain Authorization header or header is invalid!", CLASS_NAME);
             filterChain.doFilter(request, response);
