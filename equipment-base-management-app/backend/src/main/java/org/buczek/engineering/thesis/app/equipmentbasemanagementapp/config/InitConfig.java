@@ -56,28 +56,31 @@ public class InitConfig implements CommandLineRunner {
 
         userRepository.save(admin);
         userRepository.save(user);
+        saveInitUsers();
         saveInitEquipments();
+
     }
 
     private void saveInitEquipments() {
+        User owner = userRepository.getReferenceById(3L);
         Equipment equipment1 = Equipment.builder()
                 .name("Mac Book Pro 13")
                 .equipmentType(EquipmentType.PC)
-                .owner(null)
+                .owner(owner)
                 .serialNumber("ASD-1234-2345")
                 .brand("Apple")
                 .build();
         Equipment equipment2 = Equipment.builder()
                 .name("Mac Book Air 14")
                 .equipmentType(EquipmentType.PC)
-                .owner(null)
+                .owner(owner)
                 .serialNumber("ASD-8989-2345")
                 .brand("Apple")
                 .build();
         Equipment equipment3 = Equipment.builder()
                 .name("Keyboard Logitech MX mini")
                 .equipmentType(EquipmentType.PRINTER)
-                .owner(null)
+                .owner(owner)
                 .serialNumber("ASD-7812-2345")
                 .brand("Logitech")
                 .build();
@@ -90,5 +93,25 @@ public class InitConfig implements CommandLineRunner {
                 .build();
 
         equipmentRepository.saveAll(List.of(equipment4, equipment1, equipment3, equipment2));
+    }
+
+    private void saveInitUsers() {
+        User user1 = User.builder()
+                .firstname("Marcin")
+                .lastname("Bulka")
+                .role(Role.USER)
+                .email("m.bulka@gmail.com")
+                .password(passwordEncoder.encode("password"))
+                .build();
+
+        User user2 = User.builder()
+                .firstname("Jakub")
+                .lastname("Wawrzyniak")
+                .role(Role.USER)
+                .email("j.wawrzyniak@gmail.com")
+                .build();
+
+        userRepository.save(user1);
+        userRepository.save(user2);
     }
 }

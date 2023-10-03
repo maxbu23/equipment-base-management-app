@@ -7,6 +7,7 @@ const LoginComponent = () => {
     const[email, setEmail] = useState<string>("");
     const[password, setPassword] = useState<string>("");
     const [jwt, setJwt] = useLocalState("", "jwt");
+    const [id, setId] = useLocalState(-1, "id")
 
     function sendLoginRequest() {
         const reqBody = {
@@ -32,6 +33,7 @@ const LoginComponent = () => {
           })
           .then(([body, statusCode]) => {
             setJwt(body.jwtToken);
+            setId(body.id);
             if (body.role === 'ADMIN' ) {
                 window.location.href = "/admin-dashboard";
             } else {

@@ -6,6 +6,8 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.Use
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -15,6 +17,10 @@ public class UserService {
     public void saveUser(UserDto userDto) {
         userRepository.save(mapUserDtoToEntity(userDto));
         //todo: if everything have been done successfully send password by email and save it somewhere
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     private User mapUserDtoToEntity(UserDto userDto) {

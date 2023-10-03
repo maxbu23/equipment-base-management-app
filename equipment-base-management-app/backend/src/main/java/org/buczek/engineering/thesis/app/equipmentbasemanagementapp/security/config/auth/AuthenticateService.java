@@ -47,6 +47,7 @@ public class AuthenticateService {
     private AuthenticationResponse generateAuthenticationResponse(User user) {
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
+                .id(user.getId())
                 .jwtToken(jwtToken)
                 .role(user.getRole())
                 .build();

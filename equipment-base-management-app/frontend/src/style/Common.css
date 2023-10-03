@@ -1,7 +1,7 @@
 .background {
     margin: 0px;
     padding: 0px;
-    background: linear-gradient(12deg, #2980b9, #8e44ad);
+    background: linear-gradient(12deg, #313639, #a097a4);
     height: 100vh;
     overflow: hidden;
 }
@@ -13,6 +13,17 @@
     transform: translate(-50%, -50%);
     width: 400px;
     background: white;
+    border-radius: 10px;
+}
+
+.set-to-left {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.center-top {
+    position:relative;
+    padding: 2% 10%;
     border-radius: 10px;
 }
 

@@ -1,33 +1,76 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import useLocalState from "../util/useLocalStorage";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { Container, ListGroup, ListGroupItem, Nav, Navbar, Table } from "react-bootstrap";
+import { Equipment, User } from "../model/Equipment";
+import EquipmentList from "./lists/EquipmentList";
+import UserList from "./lists/UserList";
 
 const AdminDashboardComponent = () => {
-    const [jwt, setJwt] = useLocalState("", "jwt");
-    const [equipments, setEquipments] = useState(Array<String>)
 
-    // useEffect()
-    
-    const config = {
-        headers:{
-            Authorization: `Bearer ${jwt}`,
-        }
-      };
+    const [jwt, setJwt] = useLocalState("", "jwt");
+    const [equipments, setEquipments] = useState(Array<Equipment>)
+    const [users, setUsers] = useState(Array<User>)
+    const [table, setTable] = useState<JSX.Element>()
+
+    useEffect(() => {
+        fetchAndSetEquipments()
+        fetchAndSetUsers()
+    }, [])
+
+    useEffect(() => {
+        setTable(<EquipmentList equipments={equipments}/>)
+    }, [equipments])
+
+    function fetchAndSetEquipments() {
+        axios.get<Equipment[]>(
+            '/api/v1/admin/equipments',
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    Accept: "application/json"
+                }
+            }
+        ).then((response: AxiosResponse<Equipment[]>) => {
+            setEquipments(response.data)
+        })
+        setTable(<EquipmentList  equipments={equipments}/>)
+    } 
+
+    function fetchAndSetUsers() {
+        axios.get<User[]>(
+            'api/v1/admin/users',
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    Accept: "application/json"
+                }
+            }
+        ).then((response: AxiosResponse<User[]>) => {
+            setUsers(response.data)
+        })
+        setTable(<UserList users={users}/>)
+    }
 
     return(
-        <div 
-            style={{
-                margin: "2em" 
-            }}
-        >
-            <h1>Admin dashboard</h1>
-                Equipments: {equipments}
-           <button className="submit-button" onClick={() => {
-        
-          axios.get('/api/v1/admin/equipments', config)
-            .then(res => console.log(res.data))
-            .catch(err => console.error(err));
-    }}>Submit New Assignment</button>
+        <div>
+            <Navbar className="set-to-left" bg="dark" data-bs-theme="dark">
+                <Container>
+                    <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+                        <Nav className="me-auto">
+                            <Nav.Link href="#home">Home</Nav.Link>
+                            <Nav.Link href="#features">Features</Nav.Link>
+                            <Nav.Link href="#pricing">Pricing</Nav.Link>
+                        </Nav>
+                </Container>
+            </Navbar>
+            <div className="center-top">
+                <div>
+                    <button onClick={() => fetchAndSetEquipments()}>Equipments</button>
+                    <button onClick={() => fetchAndSetUsers()}>Users</button>
+                </div>
+                {table}
+            </div>
         </div>
     );
 }

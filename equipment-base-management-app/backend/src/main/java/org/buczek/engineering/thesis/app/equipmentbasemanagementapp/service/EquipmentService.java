@@ -38,6 +38,10 @@ public class EquipmentService {
         return equipmentRepository.findAll().stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
     }
 
+    public List<EquipmentDto> getAllEquipmentsByUserId(long userId) {
+        return equipmentRepository.findByOwnerId(userId).stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
+    }
+
     private Equipment mapEquipmentDtoToEntity(EquipmentDto equipmentDto, User user) {
         return Equipment.builder()
                 .name(equipmentDto.name())
@@ -50,6 +54,7 @@ public class EquipmentService {
 
     private EquipmentDto mapEquipmentEntityToDto(Equipment equipment) {
         return EquipmentDto.builder()
+                .id(equipment.getId())
                 .name(equipment.getName())
                 .brand(equipment.getBrand())
                 .equipmentType(equipment.getEquipmentType())

@@ -23,7 +23,7 @@ public class Equipment {
     private String serialNumber;
     @Enumerated(EnumType.STRING)
     private EquipmentType equipmentType;
-    @OneToOne
+    @ManyToOne
     private User owner;
 
 }

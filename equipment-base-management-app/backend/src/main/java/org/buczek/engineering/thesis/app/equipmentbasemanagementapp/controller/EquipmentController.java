@@ -10,21 +10,27 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1")
 @CrossOrigin(allowedHeaders = {"*"}, value = "*")
 @Slf4j
 public class EquipmentController {
 
     private final EquipmentService equipmentService;
 
-//    @PostMapping("/equipments")
-//    public void addNewEquipment(@RequestBody EquipmentDto equipmentDto) {
-//        equipmentService.saveNewEquipment(equipmentDto);
-//    }
+    @PostMapping("/admin/equipments")
+    public void addNewEquipment(@RequestBody EquipmentDto equipmentDto) {
+        equipmentService.saveNewEquipment(equipmentDto);
+    }
 
-    @GetMapping("/equipments")
+    @GetMapping("/admin/equipments")
     public List<EquipmentDto> getAllEquipments() {
-        log.info("DONE");
         return equipmentService.getAllEquipments();
+    }
+
+    @GetMapping("/user/equipments/{userId}")
+    public List<EquipmentDto> getAllEquipmentsByUserId(@PathVariable("userId") long userId) {
+        List<EquipmentDto> allEquipmentsByUserId = equipmentService.getAllEquipmentsByUserId(userId);
+        log.info("Id: {} Equipments: {}", userId, allEquipmentsByUserId);
+        return allEquipmentsByUserId;
     }
 }

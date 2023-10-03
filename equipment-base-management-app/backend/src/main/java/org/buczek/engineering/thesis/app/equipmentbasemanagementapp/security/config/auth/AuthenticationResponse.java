@@ -12,6 +12,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.mod
 @NoArgsConstructor
 public class AuthenticationResponse {
 
+    private Long id;
     private String jwtToken;
     private Role role;
 
