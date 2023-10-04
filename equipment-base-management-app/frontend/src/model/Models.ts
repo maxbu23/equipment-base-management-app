@@ -11,8 +11,9 @@ export interface Equipment {
 }
 
 export interface User {
-    id: number;
+    id?: string | number;
     firstname: string;
     lastname: string;
     email: string;
+    equipmentIds?: string[] | number[]
 }

@@ -33,4 +33,11 @@ public class EquipmentController {
         log.info("Id: {} Equipments: {}", userId, allEquipmentsByUserId);
         return allEquipmentsByUserId;
     }
+
+    @GetMapping("/admin/equipments/available")
+    public List<EquipmentDto> getAllAvailableEquipments() {
+        List<EquipmentDto> allAvailableEquipments = equipmentService.getAllAvailableEquipments();
+        log.info("Available equipments: {}", allAvailableEquipments);
+        return allAvailableEquipments;
+    }
 }

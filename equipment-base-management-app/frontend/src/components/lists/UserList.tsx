@@ -1,6 +1,6 @@
 import React from "react"
 import { Table } from "react-bootstrap"
-import { Equipment, User } from "../../model/Equipment"
+import { Equipment, User } from "../../model/Models"
 
 interface MyProps {
     users?: User[];

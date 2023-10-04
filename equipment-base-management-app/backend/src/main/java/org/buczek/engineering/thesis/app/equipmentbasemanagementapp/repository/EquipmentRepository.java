@@ -12,4 +12,6 @@ public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     List<Equipment> findByOwnerId(Long ownerId);
 
+    @Query("SELECT u FROM Equipment u WHERE u.owner.id = null")
+    List<Equipment> getAllAvailableEquipments();
 }

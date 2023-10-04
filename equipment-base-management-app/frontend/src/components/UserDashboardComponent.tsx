@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useLocalState from "../util/useLocalStorage";
 import axios, { AxiosResponse } from "axios";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { Equipment, User } from "../model/Equipment";
+import { Equipment, User } from "../model/Models";
 import EquipmentList from "./lists/EquipmentList";
 import UserList from "./lists/UserList";
 

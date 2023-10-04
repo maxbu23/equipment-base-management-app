@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import RegistrationComponent from './components/RegistrationForm'
+import RegistrationComponent from './components/RegistrationComponent'
 import App from './App'
 import { BrowserRouter } from 'react-router-dom';
 

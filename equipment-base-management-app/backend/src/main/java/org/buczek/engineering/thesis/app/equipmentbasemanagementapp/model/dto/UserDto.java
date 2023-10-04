@@ -4,13 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @Builder
 public class UserDto {
 
-    private String firstName;
-    private String lastName;
+    private String firstname;
+    private String lastname;
     private String email;
+    private List<Long> equipmentIds;
 
 }

@@ -2,9 +2,11 @@ import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import useLocalState from "../util/useLocalStorage";
 import axios, { AxiosResponse } from "axios";
 import { Container, ListGroup, ListGroupItem, Nav, Navbar, Table } from "react-bootstrap";
-import { Equipment, User } from "../model/Equipment";
+import { Equipment, User } from "../model/Models";
 import EquipmentList from "./lists/EquipmentList";
 import UserList from "./lists/UserList";
+import { Route, Routes } from "react-router-dom";
+import RegistrationComponent from "./RegistrationComponent";
 
 const AdminDashboardComponent = () => {
 
@@ -58,7 +60,7 @@ const AdminDashboardComponent = () => {
                 <Container>
                     <Navbar.Brand href="#home">Navbar</Navbar.Brand>
                         <Nav className="me-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
+                            <Nav.Link href="/registration-form">Add new user</Nav.Link>
                             <Nav.Link href="#features">Features</Nav.Link>
                             <Nav.Link href="#pricing">Pricing</Nav.Link>
                         </Nav>

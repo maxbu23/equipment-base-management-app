@@ -66,33 +66,34 @@ public class InitConfig implements CommandLineRunner {
         Equipment equipment1 = Equipment.builder()
                 .name("Mac Book Pro 13")
                 .equipmentType(EquipmentType.PC)
-                .owner(owner)
                 .serialNumber("ASD-1234-2345")
                 .brand("Apple")
                 .build();
         Equipment equipment2 = Equipment.builder()
                 .name("Mac Book Air 14")
                 .equipmentType(EquipmentType.PC)
-                .owner(owner)
                 .serialNumber("ASD-8989-2345")
                 .brand("Apple")
                 .build();
         Equipment equipment3 = Equipment.builder()
                 .name("Keyboard Logitech MX mini")
                 .equipmentType(EquipmentType.PRINTER)
-                .owner(owner)
                 .serialNumber("ASD-7812-2345")
                 .brand("Logitech")
                 .build();
         Equipment equipment4 = Equipment.builder()
                 .name("Mac Book Pro 13")
                 .equipmentType(EquipmentType.PC)
-                .owner(null)
                 .serialNumber("ASD-1234-78721")
                 .brand("Apple")
                 .build();
-
-        equipmentRepository.saveAll(List.of(equipment4, equipment1, equipment3, equipment2));
+        Equipment equipment5 = Equipment.builder()
+                .name("Brother printer MC231")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("ASD-EQ4-78721")
+                .brand("Brother")
+                .build();
+        equipmentRepository.saveAll(List.of(equipment4, equipment1, equipment3, equipment2, equipment5));
     }
 
     private void saveInitUsers() {

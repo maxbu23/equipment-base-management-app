@@ -16,6 +16,24 @@
     border-radius: 10px;
 }
 
+.registration-form-user {
+    margin-top: 1%;
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-bottom: 1%;
+    left: 40%;
+    background: white;
+    border-radius: 10px;
+}
+
+.registration-form-equipments {
+    margin-right: 10%;
+    margin-left: 10%;
+    left: 40%;
+    background: white;
+    border-radius: 10px;
+}
+
 .set-to-left {
     margin-right: auto;
     margin-left: 0;

@@ -1,6 +1,5 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
@@ -36,6 +35,10 @@ public class EquipmentService {
 
     public List<EquipmentDto> getAllEquipments() {
         return equipmentRepository.findAll().stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
+    }
+
+    public List<EquipmentDto> getAllAvailableEquipments() {
+        return equipmentRepository.getAllAvailableEquipments().stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
     }
 
     public List<EquipmentDto> getAllEquipmentsByUserId(long userId) {
