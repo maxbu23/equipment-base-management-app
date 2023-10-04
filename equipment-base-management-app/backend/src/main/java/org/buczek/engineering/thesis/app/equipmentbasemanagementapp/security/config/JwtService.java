@@ -22,6 +22,8 @@ public class JwtService {
 
     @Value("${application.security.jwt.secret-key}")
     private String secretKey;
+    @Value("${application.security.jwt.expiration}")
+    private long expirationTime;
     public String extractUsername(String jwtToken) {
         // subject should be user email or username, because those values are unique
         return extractSingleClaim(jwtToken, Claims::getSubject);
@@ -38,7 +40,7 @@ public class JwtService {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 // todo: implement fetching expiration period time from properties
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

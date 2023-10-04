@@ -30,15 +30,6 @@ const RegistrationComponent = () => {
         })
     }, [])
 
-
-
-    // submit = (event: any) => {
-    //     event.preventDefault()
-    //     const url = "http://localhost:8080/api/v1/users"
-    //     alert("Sending: \n Firstname: " + this.state.firstName + "\n Lastname: " + this.state.lastName + "\n Email: " + this.state.email + "\n Password: " + this.state.password)
-    //     axios.post(url, this.state)
-    // }
-
     function addEquipment(id: string) {
         if (equipmentIds.includes(id)) {
             const newEquipmentIds = equipmentIds.filter(_id => _id !== id);
@@ -48,16 +39,8 @@ const RegistrationComponent = () => {
         }
     }
 
-    // interface User {
-    //     firstname: string;
-    //     lastname: string;
-    //     email: string;
-    //     equipmentIds: string[];
-    // }
-
     function sendCreateNewUserRequest() {
         const newUser: User = createNewUser()
-        console.log("New user: " + newUser)
         axios.post(
             `/api/v1/admin/users`,
             newUser,
@@ -67,8 +50,10 @@ const RegistrationComponent = () => {
                     Accept: "application/json"
                 }
             }
-        ).then((status) => {
-            console.log(status)
+        ).then((response) => {
+            if (response.status === 200) {
+                window.location.href = 'admin-dashboard'
+            }
         })
     }
 
@@ -81,7 +66,6 @@ const RegistrationComponent = () => {
         }
         return newUser;
     }
-
 
     return(
         <div> 
@@ -111,16 +95,12 @@ const RegistrationComponent = () => {
                             onChange={(event) => addEquipment(event.target.id)}
                         />
                     </div>
-      ))}
+                ))}
                 </Form>
+                <button className='submit-button' onClick={() => sendCreateNewUserRequest()}>button</button>
             </div>
-            <button onClick={() => sendCreateNewUserRequest()}>button</button>
         </div>   
         )
 }
 
 export default RegistrationComponent;
-
-function delay(arg0: number) {
-    throw new Error('Function not implemented.');
-}

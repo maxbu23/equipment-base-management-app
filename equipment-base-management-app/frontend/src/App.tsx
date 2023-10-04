@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import useLocalState from "./util/useLocalStorage";
 import { Routes, Route } from "react-router-dom";
-import AdminDashboard from "./components/AdminDashboardComponent";
+import AdminDashboard from "./components/dashboards/AdminDashboardComponent";
 import LoginComponent from "./components/LoginComponent";
 import { PrivateRoute, AdminRoute } from "./util/Routes";
-import UserDashboardComponent from "./components/UserDashboardComponent";
-import RegistrationComponent from "./components/RegistrationComponent";
+import UserDashboardComponent from "./components/dashboards/UserDashboardComponent";
+import RegistrationComponent from "./components/AddNewUserComponent";
+import AddNewUserComponent from "./components/AddNewEquipmentComponent";
 
 function App() {
 const [jwt, setJwt] = useLocalState("", "jwt");
@@ -28,8 +29,12 @@ const [jwt, setJwt] = useLocalState("", "jwt");
         <AdminRoute>
           <RegistrationComponent />
         </AdminRoute>
-      }>
-      </Route> 
+      }/>
+      <Route path="add-new-equipment" element={
+        <AdminRoute>
+            <AddNewUserComponent />
+        </AdminRoute>
+      }/> 
       <Route path="/" element={<LoginComponent />}/>
       <Route path="/login" element={<LoginComponent />}/>   
     </Routes>

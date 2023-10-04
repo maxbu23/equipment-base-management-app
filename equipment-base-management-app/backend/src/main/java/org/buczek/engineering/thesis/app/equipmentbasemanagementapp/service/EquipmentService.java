@@ -22,12 +22,11 @@ public class EquipmentService {
     private final UserRepository userRepository;
 
     public void saveNewEquipment(EquipmentDto equipmentDto) {
-
         Long userId = equipmentDto.userId();
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            log.info("User with id: {} has benn found", userId);
-            equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, user.get()));
+
+        if (userId != null) {
+            Optional<User> user = userRepository.findById(userId);
+            user.ifPresent(value -> equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, value)));
         } else {
             equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, null));
         }
