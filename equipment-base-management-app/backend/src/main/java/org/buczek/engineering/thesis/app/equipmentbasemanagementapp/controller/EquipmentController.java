@@ -40,4 +40,14 @@ public class EquipmentController {
         log.info("Available equipments: {}", allAvailableEquipments);
         return allAvailableEquipments;
     }
+
+    @PutMapping("/admin/equipments")
+    public void updateEquipment(@RequestBody EquipmentDto equipmentDto) {
+        equipmentService.updateEquipment(equipmentDto);
+    }
+    @DeleteMapping("/admin/equipments/{equipmentId}")
+    public void deleteEquipment(@PathVariable("equipmentId") long equipmentId) {
+        log.info("Deleting equipment with id: {}", equipmentId);
+        equipmentService.deleteEquipment(equipmentId);
+    }
 }

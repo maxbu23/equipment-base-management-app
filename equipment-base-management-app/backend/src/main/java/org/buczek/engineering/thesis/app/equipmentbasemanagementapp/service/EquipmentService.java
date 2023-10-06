@@ -44,6 +44,14 @@ public class EquipmentService {
         return equipmentRepository.findByOwnerId(userId).stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
     }
 
+    public void updateEquipment(EquipmentDto equipmentDto) {
+        equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto));
+    }
+
+    public void deleteEquipment(long equipmentId) {
+        equipmentRepository.deleteById(equipmentId);
+    }
+
     private Equipment mapEquipmentDtoToEntity(EquipmentDto equipmentDto, User user) {
         return Equipment.builder()
                 .name(equipmentDto.name())
@@ -54,6 +62,15 @@ public class EquipmentService {
                 .build();
     }
 
+    private Equipment mapEquipmentDtoToEntity(EquipmentDto equipmentDto) {
+        return Equipment.builder()
+                .id(equipmentDto.id())
+                .name(equipmentDto.name())
+                .brand(equipmentDto.brand())
+                .equipmentType(equipmentDto.equipmentType())
+                .serialNumber(equipmentDto.serialNumber())
+                .build();
+    }
     private EquipmentDto mapEquipmentEntityToDto(Equipment equipment) {
         return EquipmentDto.builder()
                 .id(equipment.getId())

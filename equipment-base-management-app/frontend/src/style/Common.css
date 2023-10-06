@@ -83,3 +83,32 @@
     background-color: #8e44ad;
     transition: .5s;
 }
+
+.delete-button {
+    width: 100%;
+    height: 50px;
+    border: 1px solid;
+    color: white;
+    background-color: #b72929;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #ed0000;
+    transition: .5s;
+}
+
+.update-button {
+    width: 100%;
+    height: 50px;
+    border: 1px solid;
+    color: white;
+    background-color: #29b73c;
+    cursor: pointer;
+}
+
+.update-button:hover {
+    background-color: #10e62c;
+    transition: .5s;
+}
+

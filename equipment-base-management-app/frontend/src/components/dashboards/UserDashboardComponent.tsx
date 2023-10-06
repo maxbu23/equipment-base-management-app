@@ -29,7 +29,7 @@ const UserDashboardComponent = () => {
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList equipments={equipments}/>)
+        setTable(<EquipmentList equipments={equipments} refreshData={() => {}}/>)
     }, [equipments])
 
     return(
