@@ -1,26 +1,22 @@
-import { Button, Form, Modal } from "react-bootstrap";
-import { Equipment, EquipmentType } from "../../model/Models";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useLocalState from "../../util/useLocalStorage";
+import { Equipment, EquipmentType } from "../../model/Models";
+import { Form } from "react-bootstrap";
 import axios from "axios";
 
-type FunctionType = () => void;
+const UpdateEquipmentComponent = () => {
 
-interface Props {
-    onHide: FunctionType;
-    show: boolean;
-    equipment: Equipment; 
-}
-
-const UpdateEquipment = (props: Props) => {
-
+    const params = new URLSearchParams(window.location.search);
+    const encodedEquipment = params.get('data');
+    const equipment : Equipment = JSON.parse(atob(encodedEquipment as string));
+    
     const [jwt, setJwt] = useLocalState("", "jwt")
 
-    const [updatingId, setUpdatingId] = useState(props.equipment.id)
-    const [updatingName, setUpdatingName] = useState(props.equipment.name);
-    const [updatingBrand, setUpdatingBrand] = useState(props.equipment.brand);
-    const [updatingSerialNumber, setUpdatingSerialNumber] = useState(props.equipment.serialNumber)
-    const [updatingType, setUpdatingType] = useState(props.equipment.equipmentType.toString())
+    const [updatingId, setUpdatingId] = useState(equipment.id)
+    const [updatingName, setUpdatingName] = useState(equipment.name);
+    const [updatingBrand, setUpdatingBrand] = useState(equipment.brand);
+    const [updatingSerialNumber, setUpdatingSerialNumber] = useState(equipment.serialNumber)
+    const [updatingType, setUpdatingType] = useState(equipment.equipmentType.toString())
 
     function sendCreateNewEquipmentRequest() {
         const updatedEquipment: Equipment = createUpdatedEquipment()
@@ -51,20 +47,8 @@ const UpdateEquipment = (props: Props) => {
         return newEquipment;
     }
 
-    return (
-        <Modal
-          {...props}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title-vcenter">
-              Update equipment
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          <div>
+    return(
+        <div>
             <div className='registration-form-user'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control value={updatingName} onChange={(event) => setUpdatingName(event.target.value) }/>
@@ -79,15 +63,10 @@ const UpdateEquipment = (props: Props) => {
                 <Form.Control value={updatingBrand} onChange={(event) => setUpdatingBrand(event.target.value)}/>
                 <Form.Label>Serial number</Form.Label>
                 <Form.Control value={updatingSerialNumber} onChange={(event) => setUpdatingSerialNumber(event.target.value)} />
-                <Button style={{width:"100%", marginTop: "10px"}} className='submit-button' onClick={() => sendCreateNewEquipmentRequest()}>Update</Button>
+                <button style={{width:"100%"}} className='submit-button' onClick={() => sendCreateNewEquipmentRequest()}>button</button>
             </div>            
         </div>   
-          </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={props.onHide}>Close</Button>
-          </Modal.Footer>
-        </Modal>
-      );
+        )
 }
 
-export default UpdateEquipment;
+export default UpdateEquipmentComponent;
