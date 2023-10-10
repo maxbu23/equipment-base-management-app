@@ -1,11 +1,9 @@
 import React from "react"
-import { Table } from "react-bootstrap"
+import { Button, Table } from "react-bootstrap"
 import { Equipment } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
-import { Route, Routes } from "react-router-dom";
-import { AdminRoute } from "../../util/Routes";
-import UpdateEquipmentComponent from "../update/UpdateEquipmentComponent";
+import UpdateEquipment from "../update/UpdateEquipment";
 
 type FunctionType = () => void;
 
@@ -34,14 +32,14 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
                     alert("Equipment deleted successfully");
                 }
                 refreshData()
-
             })
         }
         
         function updateEquipment(equipment: Equipment) {
-            const encodedData = btoa(JSON.stringify(equipment));
-            window.location.href = `/update-equipment?data=${encodedData}`;
+            setModalShow(true);
         }
+
+        const [modalShow, setModalShow] = React.useState(false);
 
         return(
             <Table striped bordered hover>
@@ -67,9 +65,18 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
                             <td>
                                 <button className="delete-button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
                             </td>
+                            <UpdateEquipment
+                            equipment={equipment}
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                            />
                         </tr>
                 ): <></>} 
                 </tbody>
+                <Button variant="primary" onClick={() => setModalShow(true)}>
+        Launch vertically centered modal
+      </Button>
+               
             </Table>
     
     )

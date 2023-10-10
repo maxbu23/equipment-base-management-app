@@ -1,23 +1,26 @@
-import { useEffect, useState } from "react";
-import useLocalState from "../../util/useLocalStorage";
+import { Button, Form, Modal } from "react-bootstrap";
 import { Equipment, EquipmentType } from "../../model/Models";
-import { Form } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
+import useLocalState from "../../util/useLocalStorage";
 import axios from "axios";
 
-const UpdateEquipmentComponent = () => {
+type FunctionType = () => void;
 
-    const params = new URLSearchParams(window.location.search);
-    const encodedEquipment = params.get('data');
-    const equipment : Equipment = JSON.parse(atob(encodedEquipment as string));
-    
+interface Props {
+    onHide: FunctionType;
+    show: boolean;
+    equipment: Equipment; 
+}
+
+const UpdateEquipment = (props: Props) => {
+
     const [jwt, setJwt] = useLocalState("", "jwt")
 
-    const [updatingId, setUpdatingId] = useState(equipment.id)
-    const [updatingName, setUpdatingName] = useState(equipment.name);
-    const [updatingBrand, setUpdatingBrand] = useState(equipment.brand);
-    const [updatingSerialNumber, setUpdatingSerialNumber] = useState(equipment.serialNumber)
-    const [updatingType, setUpdatingType] = useState(equipment.equipmentType.toString())
+    const [updatingId, setUpdatingId] = useState(props.equipment.id)
+    const [updatingName, setUpdatingName] = useState(props.equipment.name);
+    const [updatingBrand, setUpdatingBrand] = useState(props.equipment.brand);
+    const [updatingSerialNumber, setUpdatingSerialNumber] = useState(props.equipment.serialNumber)
+    const [updatingType, setUpdatingType] = useState(props.equipment.equipmentType.toString())
 
     function sendCreateNewEquipmentRequest() {
         const updatedEquipment: Equipment = createUpdatedEquipment()
@@ -48,8 +51,20 @@ const UpdateEquipmentComponent = () => {
         return newEquipment;
     }
 
-    return(
-        <div>
+    return (
+        <Modal
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              Update equipment
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+          <div>
             <div className='registration-form-user'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control value={updatingName} onChange={(event) => setUpdatingName(event.target.value) }/>
@@ -67,7 +82,12 @@ const UpdateEquipmentComponent = () => {
                 <button style={{width:"100%"}} className='submit-button' onClick={() => sendCreateNewEquipmentRequest()}>button</button>
             </div>            
         </div>   
-        )
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={props.onHide}>Close</Button>
+          </Modal.Footer>
+        </Modal>
+      );
 }
 
-export default UpdateEquipmentComponent;
+export default UpdateEquipment;
