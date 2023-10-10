@@ -1,7 +1,6 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import ReactDOM  from 'react-dom';
+import {useEffect, useState} from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { Container, Form, Nav, Navbar } from 'react-bootstrap';
+import { Container, Form, Navbar } from 'react-bootstrap';
 import useLocalState from "../util/useLocalStorage";
 import { Equipment, User } from '../model/Models';
 

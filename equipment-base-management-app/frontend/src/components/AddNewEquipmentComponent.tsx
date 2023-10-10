@@ -1,9 +1,8 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import ReactDOM  from 'react-dom';
-import axios, { AxiosResponse } from 'axios';
-import { Container, Form, Nav, Navbar } from 'react-bootstrap';
+import { useState } from 'react';
+import axios from 'axios';
+import { Container, Form, Navbar } from 'react-bootstrap';
 import useLocalState from "../util/useLocalStorage";
-import allEquipmentTypes, { Equipment, EquipmentType, User } from '../model/Models';
+import { Equipment, EquipmentType } from '../model/Models';
 
 const AddNewUserComponent = () => {
     

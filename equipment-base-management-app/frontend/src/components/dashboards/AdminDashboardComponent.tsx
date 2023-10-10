@@ -1,12 +1,10 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import useLocalState from "../../util/useLocalStorage";
 import axios, { AxiosResponse } from "axios";
-import { Container, ListGroup, ListGroupItem, Nav, Navbar, Table } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { Equipment, User } from "../../model/Models";
 import EquipmentList from "../lists/EquipmentList";
 import UserList from "../lists/UserList";
-import { Route, Routes } from "react-router-dom";
-import RegistrationComponent from "../AddNewUserComponent";
 
 const AdminDashboardComponent = () => {
 
