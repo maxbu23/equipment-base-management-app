@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import useLocalState from "../util/useLocalStorage";
 import "../style/Common.css"
 
