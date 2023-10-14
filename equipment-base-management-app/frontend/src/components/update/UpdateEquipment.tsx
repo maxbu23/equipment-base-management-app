@@ -79,7 +79,7 @@ const UpdateEquipment = (props: Props) => {
                     <Form.Select value={updatingType} onChange={(event) => setUpdatingType(event.target.value)}>
                         <option color="red" value="">Select equipment type</option>
                         {Object.values(EquipmentType).map((type) => (
-                            <option value={type.toUpperCase()}>{type.toUpperCase()}</option>
+                            <option key={type} value={type.toUpperCase()}>{type.toUpperCase()}</option>
                         ))}
                     </Form.Select>
                     <Form.Label>Brand</Form.Label>

@@ -15,16 +15,12 @@ allEquipmentTypes.push(EquipmentType.LAPTOP, EquipmentType.PC, EquipmentType.PRI
 export default allEquipmentTypes;
 
 export interface Equipment {
-    id?: string;
+    id: string;
     name: string;
     brand: string;
     serialNumber: string;
     equipmentType: EquipmentType;
-}
-
-export interface EquipmentAndEquipmentState {
-    equipment: Equipment,
-    equipmentState: EquipmentState;
+    equipmentState?: EquipmentState;
 }
 
 export interface User {
@@ -34,4 +30,9 @@ export interface User {
     email: string;
     equipmentIds?: string[] | number[];
     role?: string;
+}
+
+export interface UserAndEquipmentsIds {
+    user: User;
+    equipmentIds: string[];
 }

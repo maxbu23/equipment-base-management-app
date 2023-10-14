@@ -24,7 +24,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
 
         const [equipmentsToShow, setEquipmentsToShow] = useState<Array<Equipment>>();
         const [equipmentToUpdate, setEquipmentToUpdate] = useState<Equipment>(
-            {
+            {   
                 id: "",
                 name: "",
                 brand: "",
@@ -57,7 +57,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
 
         }, [filterValue])
 
-        function deleteEquipment(id?: string) {
+        function deleteEquipment(id: string) {
             axios.delete(
                 `api/v1/admin/equipments/${id}`,
                 {

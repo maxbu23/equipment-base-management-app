@@ -2,8 +2,10 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserAndEquipmentsDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
@@ -43,11 +45,32 @@ public class UserService {
         //todo: if everything have been done successfully send password by email and save it somewhere
     }
 
-    public void updateUser(UserDto userDto) {
-        Optional<User> user = userRepository.findById(userDto.getId());
+    public void updateUser(UserAndEquipmentsDto userAndEquipmentsDto) {
+        Optional<User> user = userRepository.findById(userAndEquipmentsDto.getUser().getId());
         if (user.isPresent()) {
             String password = user.get().getPassword();
-            userRepository.save(mapUserDtoToEntity(userDto, password));
+            User updatedUser = mapUserDtoToEntity(userAndEquipmentsDto.getUser(), password);
+            userRepository.save(updatedUser);
+
+            List<Equipment> alreadyAssignedEquipments = equipmentRepository.findByOwnerId(userAndEquipmentsDto.getUser().getId());
+
+            // setting equipments to unassigned
+            alreadyAssignedEquipments.stream()
+                            .filter(e -> !userAndEquipmentsDto.getEquipmentIds().contains(e.getId()))
+                                    .forEach(e -> {
+                                        e.setOwner(null);
+                                        e.setEquipmentState(EquipmentState.NOT_ASSIGNED);
+                                    });
+            equipmentRepository.saveAll(alreadyAssignedEquipments);
+
+            // setting equipments to assigned
+            List<Equipment> notAssignedEquipmentsYet = equipmentRepository.findAllById(userAndEquipmentsDto.getEquipmentIds());
+            notAssignedEquipmentsYet
+                            .forEach(e -> {
+                                e.setEquipmentState(EquipmentState.ASSIGNED);
+                                e.setOwner(updatedUser);
+                            });
+            equipmentRepository.saveAll(notAssignedEquipmentsYet);
         }
     }
 
@@ -120,5 +143,16 @@ public class UserService {
         log.info("Generated password: {}", password);
 
         return password;
+    }
+
+    private void setOwnerAndEquipmentState(Equipment equipment, User owner) {
+
+        if (equipment.getEquipmentState().equals(EquipmentState.NOT_ASSIGNED)) {
+            equipment.setOwner(owner);
+            equipment.setEquipmentState(EquipmentState.ASSIGNED);
+        } else {
+            equipment.setEquipmentState(EquipmentState.NOT_ASSIGNED);
+            equipment.setOwner(null);
+        }
     }
 }

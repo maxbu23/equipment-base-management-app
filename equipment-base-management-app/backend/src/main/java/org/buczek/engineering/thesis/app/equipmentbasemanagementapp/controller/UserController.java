@@ -2,6 +2,7 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserAndEquipmentsDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.UserService;
@@ -30,8 +31,8 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public void updateUser(@RequestBody UserDto userDto) {
-        userService.updateUser(userDto);
+    public void updateUser(@RequestBody UserAndEquipmentsDto userAndEquipmentsDto) {
+        userService.updateUser(userAndEquipmentsDto);
     }
     @DeleteMapping("/users/{userId}")
     public void deleteUser(@PathVariable("userId") long userId) {
