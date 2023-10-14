@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import useLocalState from "../../util/useLocalStorage";
 import axios, { AxiosResponse } from "axios";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Equipment, User } from "../../model/Models";
 import EquipmentList from "../lists/EquipmentList";
 import UserList from "../lists/UserList";
@@ -19,7 +19,7 @@ const AdminDashboardComponent = () => {
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showDelete={true} showUpdate={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
     }, [equipments])
 
     function fetchAndSetEquipments() {
@@ -34,7 +34,7 @@ const AdminDashboardComponent = () => {
         ).then((response: AxiosResponse<Equipment[]>) => {
             setEquipments(response.data)
         })
-        setTable(<EquipmentList  equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showDelete={true} showUpdate={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
     } 
 
     function fetchAndSetUsers() {
@@ -49,7 +49,7 @@ const AdminDashboardComponent = () => {
         ).then((response: AxiosResponse<User[]>) => {
             setUsers(response.data)
         })
-        setTable(<UserList users={users}/>)
+        setTable(<UserList users={users} refreshData={fetchAndSetUsers}/>)
     }
 
     return(
@@ -60,14 +60,13 @@ const AdminDashboardComponent = () => {
                         <Nav className="me-auto">
                             <Nav.Link href="/registration-form">Add new user</Nav.Link>
                             <Nav.Link href="/add-new-equipment">Add new equipment</Nav.Link>
-                            <Nav.Link href="#pricing">Pricing</Nav.Link>
                         </Nav>
                 </Container>
             </Navbar>
             <div className="center-top">
                 <div>
-                    <button onClick={() => fetchAndSetEquipments()}>Equipments</button>
-                    <button onClick={() => fetchAndSetUsers()}>Users</button>
+                    <Button onClick={() => fetchAndSetEquipments()}>Equipments</Button>
+                    <Button onClick={() => fetchAndSetUsers()}>Users</Button>
                 </div>
                 {table}
             </div>

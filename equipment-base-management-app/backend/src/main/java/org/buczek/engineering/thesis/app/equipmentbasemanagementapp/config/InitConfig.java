@@ -3,6 +3,7 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
@@ -68,30 +69,37 @@ public class InitConfig implements CommandLineRunner {
                 .equipmentType(EquipmentType.PC)
                 .serialNumber("ASD-1234-2345")
                 .brand("Apple")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment2 = Equipment.builder()
                 .name("Mac Book Air 14")
                 .equipmentType(EquipmentType.PC)
                 .serialNumber("ASD-8989-2345")
                 .brand("Apple")
+                .owner(owner)
+                .equipmentState(EquipmentState.ASSIGNED)
                 .build();
         Equipment equipment3 = Equipment.builder()
                 .name("Keyboard Logitech MX mini")
                 .equipmentType(EquipmentType.PRINTER)
                 .serialNumber("ASD-7812-2345")
                 .brand("Logitech")
+                .owner(owner)
+                .equipmentState(EquipmentState.ASSIGNED)
                 .build();
         Equipment equipment4 = Equipment.builder()
                 .name("Mac Book Pro 13")
                 .equipmentType(EquipmentType.PC)
                 .serialNumber("ASD-1234-78721")
                 .brand("Apple")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment5 = Equipment.builder()
                 .name("Brother printer MC231")
                 .equipmentType(EquipmentType.PC)
                 .serialNumber("ASD-EQ4-78721")
                 .brand("Brother")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         equipmentRepository.saveAll(List.of(equipment4, equipment1, equipment3, equipment2, equipment5));
     }

@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react"
 import { Button, Dropdown, Form, Table } from "react-bootstrap"
-import { Equipment } from "../../model/Models"
+import { Equipment, EquipmentType } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
 import UpdateEquipment from "../update/UpdateEquipment";
 
 type FunctionType = () => void;
 
-
 interface Props {
     equipments: Equipment[];
+    showDelete: boolean;
+    showUpdate: boolean;
     refreshData: FunctionType;
 }
 
-const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
-
+const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, showUpdate}) => {
+        
         const [jwt, setJwt] = useLocalState("", "jwt")
         const [modalShow, setModalShow] = useState(false);
 
@@ -22,6 +23,15 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
         const [filterValue, setFilterValue] = useState("");
 
         const [equipmentsToShow, setEquipmentsToShow] = useState<Array<Equipment>>();
+        const [equipmentToUpdate, setEquipmentToUpdate] = useState<Equipment>(
+            {
+                id: "",
+                name: "",
+                brand: "",
+                serialNumber: "",
+                equipmentType: EquipmentType.PC
+            }
+        )
 
         useEffect(() => {
             setEquipmentsToShow(equipments);
@@ -47,8 +57,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
 
         }, [filterValue])
 
-        function deleteEquipment(id?: number) {
-            console.log("ID: " + id)
+        function deleteEquipment(id?: string) {
             axios.delete(
                 `api/v1/admin/equipments/${id}`,
                 {
@@ -61,11 +70,14 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
                 if (respone.status === 200) {
                     alert("Equipment deleted successfully");
                 }
+                setFilterValue("")
                 refreshData()
             })
         }
         
-        function updateEquipment() {
+        function updateEquipment(equipment: Equipment) {
+            setEquipmentToUpdate(equipment)
+            console.log("Equipment: " + equipment.name)
             setModalShow(true);
         }
             
@@ -97,8 +109,8 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
                                 <th>Name</th>
                                 <th>Brand</th>
                                 <th>Serial number</th>
-                                <th style={{border:"none"}}></th>
-                                <th style={{border:"none"}}></th>
+                                {showUpdate ? <th style={{border:"none"}}></th> : <></>}
+                                {showDelete ? <th style={{border:"none"}}></th> : <></>}                                
                             </tr>
                         </thead>
                         <tbody>
@@ -109,19 +121,24 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData}) => {
                                     <td>{equipment.name}</td>
                                     <td>{equipment.brand}</td>
                                     <td>{equipment.serialNumber}</td>
-                                    <td>
-                                        <button className="update-button" onClick={() => updateEquipment()}>Update</button>
-                                    </td>
-                                    <td>
-                                        <button className="delete-button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
-                                    </td>
-                                    <UpdateEquipment
-                                        equipment={equipment}
-                                        show={modalShow}
-                                        onHide={() => setModalShow(false)}
-                                    />
+                                    
+                                    {showUpdate ? 
+                                        <td>
+                                            <button className="button" onClick={() => updateEquipment(equipment)}>Update</button>
+                                        </td>
+                                    : <></>}
+                                    {showDelete ? 
+                                        <td>
+                                            <button className="button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
+                                        </td>
+                                    : <></>}   
                                 </tr>
                         ): <></>} 
+                        <UpdateEquipment
+                            equipment={equipmentToUpdate}
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                        />
                         </tbody>
                     </Table>
                 </div>

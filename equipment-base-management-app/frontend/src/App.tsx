@@ -6,6 +6,7 @@ import { PrivateRoute, AdminRoute } from "./util/Routes";
 import UserDashboardComponent from "./components/dashboards/UserDashboardComponent";
 import RegistrationComponent from "./components/AddNewUserComponent";
 import AddNewUserComponent from "./components/AddNewEquipmentComponent";
+import "./style/Buttons.css"
 
 function App() {
   return(

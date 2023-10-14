@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { Container, Form, Navbar } from 'react-bootstrap';
+import { Button, Container, Form, Navbar } from 'react-bootstrap';
 import useLocalState from "../util/useLocalStorage";
 import { Equipment, User } from '../model/Models';
 
@@ -58,6 +58,7 @@ const RegistrationComponent = () => {
 
     function createNewUser() : User {
         let newUser = {
+            id: "",
             firstname: firstname,
             lastname: lastname,
             email: email,
@@ -96,7 +97,7 @@ const RegistrationComponent = () => {
                     </div>
                 ))}
                 </Form>
-                <button className='submit-button' onClick={() => sendCreateNewUserRequest()}>button</button>
+                <Button className='submit-button' onClick={() => sendCreateNewUserRequest()}>Add</Button>
             </div>
         </div>   
         )

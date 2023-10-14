@@ -41,6 +41,11 @@ public class EquipmentController {
         return allAvailableEquipments;
     }
 
+    @GetMapping("/admin/equipments/userAndAvailable/{userId}")
+    public List<EquipmentDto> getUserAndAllAvailableEquipments(@PathVariable("userId") long userId) {
+        return equipmentService.getUserAndAllAvailableEquipments(userId);
+    }
+
     @PutMapping("/admin/equipments")
     public void updateEquipment(@RequestBody EquipmentDto equipmentDto) {
         equipmentService.updateEquipment(equipmentDto);

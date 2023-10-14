@@ -107,8 +107,19 @@
     cursor: pointer;
 }
 
+
+
 .update-button:hover {
     background-color: #10e62c;
     transition: .5s;
+}
+
+.main-color {
+    background-color: #232F34;
+}
+
+.main-color:hover {
+    background-color: #232F34;
+
 }
 

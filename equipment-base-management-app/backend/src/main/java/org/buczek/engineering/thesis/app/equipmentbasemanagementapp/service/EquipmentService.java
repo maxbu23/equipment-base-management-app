@@ -9,6 +9,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.Use
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +39,16 @@ public class EquipmentService {
 
     public List<EquipmentDto> getAllAvailableEquipments() {
         return equipmentRepository.getAllAvailableEquipments().stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
+    }
+
+    public List<EquipmentDto> getUserAndAllAvailableEquipments(long userId) {
+        List<EquipmentDto> availableEquipments = equipmentRepository.getAllAvailableEquipments().stream().map(this::mapEquipmentEntityToDto).toList();
+        List<EquipmentDto> userEquipments = equipmentRepository.findByOwnerId(userId).stream().map(this::mapEquipmentEntityToDto).toList();
+
+        ArrayList<EquipmentDto> userAndAvailableEquipments = new ArrayList<>();
+        userAndAvailableEquipments.addAll(userEquipments);
+        userAndAvailableEquipments.addAll(availableEquipments);
+        return userAndAvailableEquipments;
     }
 
     public List<EquipmentDto> getAllEquipmentsByUserId(long userId) {
@@ -79,6 +90,7 @@ public class EquipmentService {
                 .equipmentType(equipment.getEquipmentType())
                 .serialNumber(equipment.getSerialNumber())
                 .userId(equipment.getOwner() != null ? equipment.getOwner().getId() : -1)
+                .equipmentState(equipment.getEquipmentState())
                 .build();
     }
 }

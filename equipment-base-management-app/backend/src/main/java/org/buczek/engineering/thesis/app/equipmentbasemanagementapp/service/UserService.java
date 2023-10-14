@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.passay.DictionarySubstringRule.ERROR_CODE;
 
@@ -30,7 +32,6 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public void saveUser(UserDto userDto) {
-
         List<Equipment> equipmentsToAssign = equipmentRepository.findAllById(userDto.getEquipmentIds());
         log.info("Equipments to assign: {}", equipmentsToAssign);
         User owner = mapUserDtoToEntity(userDto);
@@ -42,17 +43,48 @@ public class UserService {
         //todo: if everything have been done successfully send password by email and save it somewhere
     }
 
+    public void updateUser(UserDto userDto) {
+        Optional<User> user = userRepository.findById(userDto.getId());
+        if (user.isPresent()) {
+            String password = user.get().getPassword();
+            userRepository.save(mapUserDtoToEntity(userDto, password));
+        }
+    }
+
+    public void deleteUserById(long userId) {
+        List<Equipment> equipments = equipmentRepository.findByOwnerId(userId);
+        for (Equipment equipment : equipments) {
+            equipment.setOwner(null);
+        }
+        equipmentRepository.saveAll(equipments);
+        userRepository.deleteById(userId);
+    }
+
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userRepository.findAll().stream().filter(u -> u.getRole().equals(Role.USER)).collect(Collectors.toList());
     }
 
     private User mapUserDtoToEntity(UserDto userDto) {
         return User.builder()
+                .id(userDto.getId())
                 .firstname(userDto.getFirstname())
                 .lastname(userDto.getLastname())
                 .email(userDto.getEmail())
                 //todo: generate random password
                 .password("")
+                .role(Role.USER)
+                .build();
+    }
+
+    private User mapUserDtoToEntity(UserDto userDto, String password) {
+        return User.builder()
+                .id(userDto.getId())
+                .firstname(userDto.getFirstname())
+                .lastname(userDto.getLastname())
+                .email(userDto.getEmail())
+                //todo: generate random password
+                .password(password)
+                .role(Role.USER)
                 .build();
     }
 

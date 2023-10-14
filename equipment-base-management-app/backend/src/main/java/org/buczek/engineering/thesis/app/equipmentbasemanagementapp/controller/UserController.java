@@ -28,4 +28,13 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
+    @PutMapping("/users")
+    public void updateUser(@RequestBody UserDto userDto) {
+        userService.updateUser(userDto);
+    }
+    @DeleteMapping("/users/{userId}")
+    public void deleteUser(@PathVariable("userId") long userId) {
+        userService.deleteUserById(userId);
+    }
 }

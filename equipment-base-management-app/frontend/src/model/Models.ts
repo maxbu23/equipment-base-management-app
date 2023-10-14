@@ -4,17 +4,27 @@ export enum EquipmentType {
     PRINTER = "Printer"
 }
 
+export enum EquipmentState {
+    ASSIGNED = "ASSIGNED",
+    NOT_ASSIGNED = "NOT_ASSIGNED"
+}
+
 const allEquipmentTypes =  new Array<EquipmentType>
 allEquipmentTypes.push(EquipmentType.LAPTOP, EquipmentType.PC, EquipmentType.PRINTER);
 
 export default allEquipmentTypes;
 
 export interface Equipment {
-    id?: number;
+    id?: string;
     name: string;
     brand: string;
     serialNumber: string;
     equipmentType: EquipmentType;
+}
+
+export interface EquipmentAndEquipmentState {
+    equipment: Equipment,
+    equipmentState: EquipmentState;
 }
 
 export interface User {
@@ -22,5 +32,6 @@ export interface User {
     firstname: string;
     lastname: string;
     email: string;
-    equipmentIds?: string[] | number[]
+    equipmentIds?: string[] | number[];
+    role?: string;
 }

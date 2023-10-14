@@ -32,6 +32,7 @@ const AddNewUserComponent = () => {
 
     function createNewEquipment() : Equipment {
         let newEquipment = {
+            id: "",
             name: name,
             brand: brand,
             serialNumber: serialNumber,
