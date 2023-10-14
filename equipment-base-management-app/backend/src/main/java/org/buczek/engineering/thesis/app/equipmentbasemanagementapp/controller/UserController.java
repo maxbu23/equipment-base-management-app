@@ -19,12 +19,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/users")
-    public void addNewUser(@RequestBody UserDto userDto) {
-        log.info("[UserController] Saving user: {}", userDto);
-        userService.saveUser(userDto);
-    }
-
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userService.getAllUsers();

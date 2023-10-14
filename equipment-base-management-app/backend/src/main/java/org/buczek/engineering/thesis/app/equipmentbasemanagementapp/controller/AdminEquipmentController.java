@@ -10,47 +10,40 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1")
-@CrossOrigin(allowedHeaders = {"*"}, value = "*")
+@RequestMapping("/api/v1/admin")
+@CrossOrigin(value = "*")
 @Slf4j
-public class EquipmentController {
+public class AdminEquipmentController {
 
     private final EquipmentService equipmentService;
 
-    @PostMapping("/admin/equipments")
+    @PostMapping("/equipments")
     public void addNewEquipment(@RequestBody EquipmentDto equipmentDto) {
         equipmentService.saveNewEquipment(equipmentDto);
     }
 
-    @GetMapping("/admin/equipments")
+    @GetMapping("/equipments")
     public List<EquipmentDto> getAllEquipments() {
         return equipmentService.getAllEquipments();
     }
 
-    @GetMapping("/user/equipments/{userId}")
-    public List<EquipmentDto> getAllEquipmentsByUserId(@PathVariable("userId") long userId) {
-        List<EquipmentDto> allEquipmentsByUserId = equipmentService.getAllEquipmentsByUserId(userId);
-        log.info("Id: {} Equipments: {}", userId, allEquipmentsByUserId);
-        return allEquipmentsByUserId;
-    }
-
-    @GetMapping("/admin/equipments/available")
+    @GetMapping("/equipments/available")
     public List<EquipmentDto> getAllAvailableEquipments() {
         List<EquipmentDto> allAvailableEquipments = equipmentService.getAllAvailableEquipments();
         log.info("Available equipments: {}", allAvailableEquipments);
         return allAvailableEquipments;
     }
 
-    @GetMapping("/admin/equipments/userAndAvailable/{userId}")
+    @GetMapping("/equipments/userAndAvailable/{userId}")
     public List<EquipmentDto> getUserAndAllAvailableEquipments(@PathVariable("userId") long userId) {
         return equipmentService.getUserAndAllAvailableEquipments(userId);
     }
 
-    @PutMapping("/admin/equipments")
+    @PutMapping("/equipments")
     public void updateEquipment(@RequestBody EquipmentDto equipmentDto) {
         equipmentService.updateEquipment(equipmentDto);
     }
-    @DeleteMapping("/admin/equipments/{equipmentId}")
+    @DeleteMapping("/equipments/{equipmentId}")
     public void deleteEquipment(@PathVariable("equipmentId") long equipmentId) {
         log.info("Deleting equipment with id: {}", equipmentId);
         equipmentService.deleteEquipment(equipmentId);

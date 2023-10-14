@@ -14,7 +14,6 @@ const RegistrationComponent = () => {
     const [equipmentIds, setEquipmentIds] = useState(Array<string>)
 
     useEffect(() => {
-        console.log("CALLING ")
         axios.get<Equipment[]>(
             `/api/v1/admin/equipments/available`,
             {
@@ -41,7 +40,7 @@ const RegistrationComponent = () => {
     function sendCreateNewUserRequest() {
         const newUser: User = createNewUser()
         axios.post(
-            `/api/v1/admin/users`,
+            `/api/v1/auth/register`,
             newUser,
             {
                 headers: {

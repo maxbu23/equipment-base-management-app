@@ -39,12 +39,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info("{} Internal filter process starting...", CLASS_NAME);
 
-        if (request.getServletPath().contains("/api/v1/auth") || request.getServletPath().contains("/h2-console")) {
+        if (request.getServletPath().contains("/api/v1/auth/authenticate")) {
             final String authHeader = request.getHeader("Authorization");
-            final String authHeader2 = request.getHeader("authorization");
-//        log.info("AuthHeader" + headersStrings);
             log.info("Authorization header: {}", authHeader);
-            log.info("Authorization header: {}", authHeader2);
             filterChain.doFilter(request, response);
             return;
         }
