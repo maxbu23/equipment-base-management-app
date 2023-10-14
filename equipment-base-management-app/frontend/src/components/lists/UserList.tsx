@@ -80,7 +80,7 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
         <>
             <div style={{display: "flex", margin: "5px"}}>
                 <Dropdown>
-                    <Dropdown.Toggle style={{border: "solid"}} className="main-color" id="dropdown-basic">
+                    <Dropdown.Toggle className="filter-dropdown" >
                         {filterColumn}
                     </Dropdown.Toggle>
 
@@ -97,7 +97,7 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                 />
             </div>
             <div>
-                <Table striped bordered hover>
+                <Table striped borderless size="sm">
                     <thead>
                         <tr>
                             <th>Firstname</th>

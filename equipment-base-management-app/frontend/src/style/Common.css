@@ -114,12 +114,16 @@
     transition: .5s;
 }
 
-.main-color {
+.filter-dropdown {
     background-color: #232F34;
+    border: "solid";
+    border-color: #232F34;
 }
 
-.main-color:hover {
+.filter-dropdown:hover {
     background-color: #232F34;
+    border: "solid";
+    border-color: #232F34;
 
 }
 

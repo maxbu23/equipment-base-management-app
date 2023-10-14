@@ -85,7 +85,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
             <>  
                 <div style={{display: "flex", margin: "5px"}}>
                     <Dropdown>
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        <Dropdown.Toggle className="filter-dropdown" id="dropdown-basic">
                             {filterColumn}
                         </Dropdown.Toggle>
 
@@ -102,7 +102,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
                     />
                 </div>
                 <div>
-                    <Table striped bordered hover>
+                    <Table striped borderless size="sm">
                         <thead>
                             <tr>
                                 <th>Type</th>
