@@ -52,21 +52,22 @@ const AdminDashboardComponent = () => {
         setTable(<UserList users={users} refreshData={fetchAndSetUsers}/>)
     }
 
+    
+
     return(
         <div>
-            <Navbar className="set-to-left" bg="dark" data-bs-theme="dark">
+            <Navbar data-bs-theme="dark">
                 <Container>
-                    <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-                        <Nav className="me-auto">
+                        <Nav >
                             <Nav.Link href="/registration-form">Add new user</Nav.Link>
-                            <Nav.Link href="/add-new-equipment">Add new equipment</Nav.Link>
+                            <Nav.Link  href="/add-new-equipment">Add new equipment</Nav.Link>
                         </Nav>
                 </Container>
             </Navbar>
             <div className="center-top">
                 <div>
-                    <Button onClick={() => fetchAndSetEquipments()}>Equipments</Button>
-                    <Button onClick={() => fetchAndSetUsers()}>Users</Button>
+                    <button className="button" onClick={() => fetchAndSetEquipments()}>Equipments</button>
+                    <button className="button" onClick={() => fetchAndSetUsers()}>Users</button>
                 </div>
                 {table}
             </div>

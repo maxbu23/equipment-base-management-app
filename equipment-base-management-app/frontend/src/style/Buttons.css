@@ -19,8 +19,19 @@
     background-color: #232F34;
     cursor: pointer;
     border-radius: 10px;
+    border-color: #232F34;
+    margin: 1px;
 }
 
 .button:hover {
     background-color: #d28d20;
+    border-color: #d28d20
+}
+
+.navbar {
+    background-color: #232F34;
+}
+
+.navbar .nav-link:hover {
+    color: #d28d20 /* Change this to the desired color */
 }

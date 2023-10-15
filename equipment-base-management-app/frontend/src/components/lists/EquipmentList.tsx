@@ -4,6 +4,7 @@ import { Equipment, EquipmentType } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
 import UpdateEquipment from "../update/UpdateEquipment";
+import ExportFile from "../export/ExportFile";
 
 type FunctionType = () => void;
 
@@ -16,8 +17,9 @@ interface Props {
 
 const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, showUpdate}) => {
         
-        const [jwt, setJwt] = useLocalState("", "jwt")
-        const [modalShow, setModalShow] = useState(false);
+        const [jwt, setJwt] = useLocalState("", "jwt");
+        const [updateEquipmentModalShow, setUpdateEquipmentModalShow] = useState(false);
+        const [exportModalShow, setExportModalShow] = useState(false);
 
         const [filterColumn, setFilterColumn] = useState("Name");
         const [filterValue, setFilterValue] = useState("");
@@ -31,7 +33,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
                 serialNumber: "",
                 equipmentType: EquipmentType.PC
             }
-        )
+        );
 
         useEffect(() => {
             setEquipmentsToShow(equipments);
@@ -77,13 +79,17 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
         
         function updateEquipment(equipment: Equipment) {
             setEquipmentToUpdate(equipment)
-            console.log("Equipment: " + equipment.name)
-            setModalShow(true);
+            setUpdateEquipmentModalShow(true);
         }
-            
+        
+        function exportEquipmentsToXlsxFile() {
+            setExportModalShow(true);
+        }
+
         return(
-            <>  
+            <>                  
                 <div style={{display: "flex", margin: "5px"}}>
+
                     <Dropdown>
                         <Dropdown.Toggle className="filter-dropdown" id="dropdown-basic">
                             {filterColumn}
@@ -109,8 +115,10 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
                                 <th>Name</th>
                                 <th>Brand</th>
                                 <th>Serial number</th>
-                                {showUpdate ? <th style={{border:"none"}}></th> : <></>}
-                                {showDelete ? <th style={{border:"none"}}></th> : <></>}                                
+                                {showUpdate && showDelete ? 
+                                <th colSpan={2} style={{border:"none"}}>                
+                                    <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
+                                </th> : <></>}
                             </tr>
                         </thead>
                         <tbody>
@@ -136,9 +144,13 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
                         ): <></>} 
                         <UpdateEquipment
                             equipment={equipmentToUpdate}
-                            show={modalShow}
-                            onHide={() => setModalShow(false)}
+                            show={updateEquipmentModalShow}
+                            onHide={() => setUpdateEquipmentModalShow(false)}
                         />
+                        <ExportFile 
+                            show={exportModalShow}
+                            onHide={() => setExportModalShow(false)}
+                        /> 
                         </tbody>
                     </Table>
                 </div>

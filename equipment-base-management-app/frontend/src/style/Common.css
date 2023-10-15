@@ -41,8 +41,7 @@
 
 .center-top {
     position:relative;
-    padding: 2% 10%;
-    border-radius: 10px;
+    padding: 2%;
 }
 
 .center h1 {
@@ -127,3 +126,8 @@
 
 }
 
+.table {
+    border-radius: 10px;
+    overflow: hidden; /* Ensures the border radius is applied correctly */
+
+}
