@@ -28,7 +28,6 @@ const ExportFile = (props: Props) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        const now = Math.floor(new Date().getTime() / 1000);
         link.setAttribute('download', `${filename}.xlsx`);
         document.body.appendChild(link);
         link.click();
