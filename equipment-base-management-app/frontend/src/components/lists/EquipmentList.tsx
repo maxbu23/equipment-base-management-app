@@ -3,9 +3,9 @@ import { Dropdown, Form, Table, Tooltip } from "react-bootstrap"
 import { Equipment, EquipmentWithLocalization, EquipmentType } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
-import UpdateEquipment from "../update/UpdateEquipment";
+import UpdateEquipment from "../modals/UpdateEquipment";
 import ExportFile from "../export/ExportFile";
-import AssignEquipment from "../update/AssignEquipment";
+import AssignEquipment from "../modals/AssignEquipment";
 
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
@@ -63,25 +63,25 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
             setEquipmentsToShow(equipments);
         }, [equipments])
 
-        // useEffect(() => {
-        //     const regex = new RegExp(filterValue, 'i');
-        //     let filterdEquipments;
-        //     switch (filterColumn) {
-        //         case "Name":
-        //             filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.name))
-        //             setEquipmentsToShow(filterdEquipments)
-        //             break;
-        //         case "Brand":
-        //             filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.brand))
-        //             setEquipmentsToShow(filterdEquipments)
-        //             break;
-        //         case "SerialNumber":
-        //             filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.serialNumber))
-        //             setEquipmentsToShow(filterdEquipments)
-        //             break;
-        //     }
+        useEffect(() => {
+            const regex = new RegExp(filterValue, 'i');
+            let filterdEquipments;
+            switch (filterColumn) {
+                case "Name":
+                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.name))
+                    setEquipmentsToShow(filterdEquipments)
+                    break;
+                case "Brand":
+                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.brand))
+                    setEquipmentsToShow(filterdEquipments)
+                    break;
+                case "SerialNumber":
+                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.serialNumber))
+                    setEquipmentsToShow(filterdEquipments)
+                    break;
+            }
 
-        // }, [filterValue])
+        }, [filterValue])
 
         function deleteEquipment(id: string) {
             axios.delete(
@@ -115,7 +115,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
             setAssignModalShow(true);
         }
 
-        function unassignEquipment(equipmentId: string) {
+        function removeAssingnment(equipmentId: string) {
             axios.put(
                 `/api/v1/admin/equipments/remove-assignment/${equipmentId}`,
                 null,
@@ -215,7 +215,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                                         <>
                                             {equipmentWithLocation.equipmentState === 'ASSIGNED' ? 
                                                 <td>
-                                                    <button className="button" onClick={() => unassignEquipment(equipmentWithLocation.id)}>Remove assignment</button>
+                                                    <button className="button" onClick={() => removeAssingnment(equipmentWithLocation.id)}>Remove assignment</button>
                                                 </td>
                                                 : 
                                                 <td>

@@ -3,6 +3,7 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.EquipmentMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.UserMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
@@ -36,6 +37,7 @@ public class EquipmentService {
     private final LocalizationService localizationService;
     private final UserMapper userMapper;
     private final LocalizationMapper localizationMapper;
+    private final EquipmentMapper equipmentMapper;
 
     public void saveNewEquipment(EquipmentDto equipmentDto) {
         Long userId = equipmentDto.userId();
@@ -53,6 +55,11 @@ public class EquipmentService {
         return equipments.stream()
                 .map(this::mapEquipmentEntityToDto)
                 .toList();
+    }
+
+    public List<EquipmentDto> getUserEquipments(Long ownerId) {
+        return equipmentRepository.findByOwnerId(ownerId).stream()
+                .map(equipmentMapper::entityToDto).toList();
     }
 
     public List<EquipmentDto> getAllAvailableEquipments() {

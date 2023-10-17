@@ -3,7 +3,8 @@ import { Dropdown, Form, Table } from "react-bootstrap"
 import { User } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
-import UpdateUser from "../update/UpdateUser";
+import UpdateUser from "../modals/UpdateUser";
+import AllEquipments from "../modals/AllEquipments";
 
 type FunctionType = () => void;
 
@@ -15,16 +16,19 @@ interface MyProps {
 const UserList: React.FC<MyProps> = ({users, refreshData}) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
-    const [modalShow, setModalShow] = useState(false);
+    
+    // modals windows
+    const [updateUserModalShow, setUpdateUserModalShow] = useState(false);
+    const [allEquipmentModalShow, setAllEquipmentModalShow] = useState(false);
 
     const [filterColumn, setFilterColumn] = useState("Lastname");
     const [filterValue, setFilterValue] = useState("");
 
     const [usersToShow, setUsersToShow] = useState<Array<User>>();
-    const [userToUpdate, setUserToUpdate] = useState<User>(
+    const [selectedUser, setSelectedUser] = useState<User>(
         {
             id: "",
-            firstname: "dupa",
+            firstname: "",
             lastname: "",
             email: "",
         }
@@ -72,8 +76,13 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
     }
 
     function updateUser(user: User) {
-        setUserToUpdate(user);
-        setModalShow(true);
+        setSelectedUser(user);
+        setUpdateUserModalShow(true);
+    }
+
+    function showAllEquipments(user: User) {
+        setSelectedUser(user);
+        setAllEquipmentModalShow(true);
     }
 
     return(
@@ -103,8 +112,7 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                             <th>Firstname</th>
                             <th>Lastname</th>
                             <th>Email</th>
-                            <th style={{border:"none"}}></th>
-                            <th style={{border:"none"}}></th>
+                            <th colSpan={3} style={{border:"none"}}></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -113,6 +121,9 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                             <td>{user.firstname}</td>
                             <td>{user.lastname}</td>
                             <td>{user.email}</td>
+                            <td>
+                                <button className="button" onClick={() => showAllEquipments(user)}>All equipments</button>
+                            </td>
                             <td>
                                 <button className="button" onClick={() => updateUser(user)}>Update</button>
                             </td>
@@ -124,10 +135,15 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                     </tbody>
                 </Table>
                 <UpdateUser
-                        user={userToUpdate}
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                    />
+                    user={selectedUser}
+                    show={updateUserModalShow}
+                    onHide={() => setUpdateUserModalShow(false)}
+                />
+                <AllEquipments 
+                    onHide={() => setAllEquipmentModalShow(false)} 
+                    show={allEquipmentModalShow} 
+                    user={selectedUser}                    
+                />
             </div>
         </>
     )

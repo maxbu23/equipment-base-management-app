@@ -29,6 +29,11 @@ public class AdminEquipmentController {
         return equipmentService.getAllEquipments();
     }
 
+    @GetMapping("/equipments/{ownerId}")
+    public List<EquipmentDto> getUserEquipments(@PathVariable("ownerId") Long ownerId) {
+        return equipmentService.getUserEquipments(ownerId);
+    }
+
     @GetMapping("/equipments/available")
     public List<EquipmentDto> getAllAvailableEquipments() {
         List<EquipmentDto> allAvailableEquipments = equipmentService.getAllAvailableEquipments();
