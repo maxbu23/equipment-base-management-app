@@ -74,13 +74,6 @@ public class InitConfig implements CommandLineRunner {
     }
 
     private void saveInitEquipments() {
-        User owner = userRepository.getReferenceById(3L);
-        Localization localization = Localization.builder()
-                .department("WFIiS")
-                .building("D-10")
-                .floor(2)
-                .roomNumber(201)
-                .build();
         Equipment equipment1 = Equipment.builder()
                 .name("Mac Book Pro 13")
                 .equipmentType(EquipmentType.PC)
@@ -93,16 +86,14 @@ public class InitConfig implements CommandLineRunner {
                 .equipmentType(EquipmentType.PC)
                 .serialNumber("ASD-8989-2345")
                 .brand("Apple")
-                .owner(owner)
-                .equipmentState(EquipmentState.ASSIGNED)
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment3 = Equipment.builder()
                 .name("Keyboard Logitech MX mini")
                 .equipmentType(EquipmentType.PRINTER)
                 .serialNumber("ASD-7812-2345")
                 .brand("Logitech")
-                .owner(owner)
-                .equipmentState(EquipmentState.ASSIGNED)
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment4 = Equipment.builder()
                 .name("Mac Book Pro 13")

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react"
-import { Button, Dropdown, Form, Table } from "react-bootstrap"
+import { Dropdown, Form, Table, Tooltip } from "react-bootstrap"
 import { Equipment, EquipmentWithLocalization, EquipmentType } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
 import UpdateEquipment from "../update/UpdateEquipment";
 import ExportFile from "../export/ExportFile";
 import AssignEquipment from "../update/AssignEquipment";
-import { config } from "process";
+
+import Button from 'react-bootstrap/Button';
+import Image from 'react-bootstrap/Image';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 
 type FunctionType = () => void;
 
@@ -155,17 +158,18 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                     />
                 </div>
                 <div>
-                    <Table striped borderless size="sm">
+                    <Table className="" striped borderless size="sm">
                         <thead>
                             <tr>
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Brand</th>
                                 <th>Serial number</th>
+                                <th>Owner</th>
                                 <th>Department</th>
                                 <th>Building</th>
                                 <th>Floor</th>
-                                <th>Room number</th>
+                                <th>Room</th>
                                 {showAdminActions ? 
                                 <th colSpan={3} style={{border:"none"}}>                
                                     <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
@@ -174,12 +178,27 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                         </thead>
                         <tbody>
                         {equipmentsToShow ? equipmentsToShow.map((equipmentWithLocation) =>
-                            
-                                <tr key={equipmentWithLocation.equipment.id}>
+                                <tr className="table-row" key={equipmentWithLocation.equipment.id}>
                                     <td>{equipmentWithLocation.equipment.equipmentType}</td>
-                                    <td>{equipmentWithLocation.equipment.name}</td>
+                                    <td>
+                                    <OverlayTrigger
+                                        overlay={<Tooltip id="button-tooltip-2">{equipmentWithLocation.equipment.name}</Tooltip>}
+                                        placement="top-start"
+                                    >
+                                        <span>{equipmentWithLocation.equipment.name}</span>
+                                    </OverlayTrigger>
+                                        
+                                    </td>
                                     <td>{equipmentWithLocation.equipment.brand}</td>
                                     <td>{equipmentWithLocation.equipment.serialNumber}</td>
+                                    <td> 
+                                    <OverlayTrigger
+                                        overlay={<Tooltip id="button-tooltip-2">test</Tooltip>}
+                                        placement="top-start"
+                                    >
+                                        <span>test</span>
+                                    </OverlayTrigger>
+                                    </td>
                                     <td>
                                         {equipmentWithLocation.localization ? equipmentWithLocation.localization.department : ""}
                                     </td>
@@ -230,7 +249,9 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                         />
                         </tbody>
                     </Table>
+                
                 </div>
+                
             </>
     
     )
