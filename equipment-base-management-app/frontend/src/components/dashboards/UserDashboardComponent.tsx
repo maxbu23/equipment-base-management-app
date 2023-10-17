@@ -8,12 +8,12 @@ import EquipmentList from "../lists/EquipmentList";
 const UserDashboardComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [id, setId] = useLocalState(-1, "id");
-    const [equipments, setEquipments] = useState(Array<EquipmentWithLocalization>)
+    const [equipments, setEquipments] = useState(Array<Equipment>)
     const [table, setTable] = useState<JSX.Element>()
 
     useEffect(() => {
         console.log("CALLING ")
-        axios.get<EquipmentWithLocalization[]>(
+        axios.get<Equipment[]>(
             `/api/v1/user/equipments/${id}`,
             {
                 headers: {
@@ -21,7 +21,7 @@ const UserDashboardComponent = () => {
                     Accept: "application/json"
                 }
             }
-        ).then((response: AxiosResponse<EquipmentWithLocalization[]>) => {
+        ).then((response: AxiosResponse<Equipment[]>) => {
             console.log(response.data)
             setEquipments(response.data)
         })

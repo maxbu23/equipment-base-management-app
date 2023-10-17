@@ -21,6 +21,8 @@ export interface Equipment {
     serialNumber: string;
     equipmentType: EquipmentType;
     equipmentState?: EquipmentState;
+    owner?: User
+    localization?: Localization;
 }
 
 export interface User {

@@ -3,6 +3,8 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.UserMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentWithLocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
@@ -32,6 +34,8 @@ public class EquipmentService {
 
     private final UserService userService;
     private final LocalizationService localizationService;
+    private final UserMapper userMapper;
+    private final LocalizationMapper localizationMapper;
 
     public void saveNewEquipment(EquipmentDto equipmentDto) {
         Long userId = equipmentDto.userId();
@@ -44,10 +48,10 @@ public class EquipmentService {
         }
     }
 
-    public List<EquipmentWithLocalizationDto> getAllEquipments() {
+    public List<EquipmentDto> getAllEquipments() {
         List<Equipment> equipments = equipmentRepository.findAll();
         return equipments.stream()
-                .map(this::mapEquipmentEntityToEquipmentWithLocalizationDto)
+                .map(this::mapEquipmentEntityToDto)
                 .toList();
     }
 
@@ -135,7 +139,8 @@ public class EquipmentService {
                 .brand(equipment.getBrand())
                 .equipmentType(equipment.getEquipmentType())
                 .serialNumber(equipment.getSerialNumber())
-                .userId(equipment.getOwner() != null ? equipment.getOwner().getId() : -1)
+                .owner(userMapper.entityToDto(equipment.getOwner()))
+                .localization(localizationMapper.entityToDto(equipment.getLocalization()))
                 .equipmentState(equipment.getEquipmentState())
                 .build();
     }

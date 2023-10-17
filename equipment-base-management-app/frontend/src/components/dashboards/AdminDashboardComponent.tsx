@@ -9,7 +9,7 @@ import UserList from "../lists/UserList";
 const AdminDashboardComponent = () => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
-    const [equipments, setEquipments] = useState(Array<EquipmentWithLocalization>)
+    const [equipments, setEquipments] = useState(Array<Equipment>)
     const [users, setUsers] = useState(Array<User>)
     const [table, setTable] = useState<JSX.Element>()
 
@@ -23,7 +23,7 @@ const AdminDashboardComponent = () => {
     }, [equipments])
 
     function fetchAndSetEquipments() {
-        axios.get<EquipmentWithLocalization[]>(
+        axios.get<Equipment[]>(
             '/api/v1/admin/equipments',
             {
                 headers: {
@@ -31,7 +31,7 @@ const AdminDashboardComponent = () => {
                     Accept: "application/json"
                 }
             }
-        ).then((response: AxiosResponse<EquipmentWithLocalization[]>) => {
+        ).then((response: AxiosResponse<Equipment[]>) => {
             setEquipments(response.data)
         })
         setTable(<EquipmentList showAdminActions={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)

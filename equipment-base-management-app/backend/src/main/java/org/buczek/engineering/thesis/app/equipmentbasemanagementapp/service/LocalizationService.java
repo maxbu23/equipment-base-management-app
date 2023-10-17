@@ -19,9 +19,10 @@ import java.util.Optional;
 public class LocalizationService {
 
     private final LocalizationRepository localizationRepository;
+    private final LocalizationMapper localizationMapper;
 
     public List<LocalizationDto> getAllLocalizations() {
-        return localizationRepository.findAll().stream().map(LocalizationMapper::mapLocalizationEntityToDto).toList();
+        return localizationRepository.findAll().stream().map(localizationMapper::entityToDto).toList();
     }
 
     public Localization findLocalizationById(Long localizationId) {

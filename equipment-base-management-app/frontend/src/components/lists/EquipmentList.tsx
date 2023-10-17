@@ -14,7 +14,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 type FunctionType = () => void;
 
 interface Props {
-    equipments: EquipmentWithLocalization[];
+    equipments: Equipment[];
     showAdminActions: boolean;
     refreshData: FunctionType;
 }
@@ -29,16 +29,16 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
         const [filterColumn, setFilterColumn] = useState("Name");
         const [filterValue, setFilterValue] = useState("");
 
-        const [equipmentsToShow, setEquipmentsToShow] = useState<Array<EquipmentWithLocalization>>();
-        const [equipmentToUpdate, setEquipmentToUpdate] = useState<EquipmentWithLocalization>(
+        const [equipmentsToShow, setEquipmentsToShow] = useState<Array<Equipment>>();
+        const [equipmentToUpdate, setEquipmentToUpdate] = useState<Equipment>(
             {   
-                equipment:  {
+               
                     id: "",
                     name: "",
                     brand: "",
                     serialNumber: "",
-                    equipmentType: EquipmentType.PC
-                },
+                    equipmentType: EquipmentType.PC,
+                
                 localization: {
                     id: "",
                     department: "",
@@ -63,25 +63,25 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
             setEquipmentsToShow(equipments);
         }, [equipments])
 
-        useEffect(() => {
-            const regex = new RegExp(filterValue, 'i');
-            let filterdEquipments;
-            switch (filterColumn) {
-                case "Name":
-                    filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.name))
-                    setEquipmentsToShow(filterdEquipments)
-                    break;
-                case "Brand":
-                    filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.brand))
-                    setEquipmentsToShow(filterdEquipments)
-                    break;
-                case "SerialNumber":
-                    filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.serialNumber))
-                    setEquipmentsToShow(filterdEquipments)
-                    break;
-            }
+        // useEffect(() => {
+        //     const regex = new RegExp(filterValue, 'i');
+        //     let filterdEquipments;
+        //     switch (filterColumn) {
+        //         case "Name":
+        //             filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.name))
+        //             setEquipmentsToShow(filterdEquipments)
+        //             break;
+        //         case "Brand":
+        //             filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.brand))
+        //             setEquipmentsToShow(filterdEquipments)
+        //             break;
+        //         case "SerialNumber":
+        //             filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.serialNumber))
+        //             setEquipmentsToShow(filterdEquipments)
+        //             break;
+        //     }
 
-        }, [filterValue])
+        // }, [filterValue])
 
         function deleteEquipment(id: string) {
             axios.delete(
@@ -101,7 +101,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
             })
         }
         
-        function updateEquipment(equipment: EquipmentWithLocalization) {
+        function updateEquipment(equipment: Equipment) {
             setEquipmentToUpdate(equipment)
             setUpdateEquipmentModalShow(true);
         }
@@ -178,25 +178,25 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                         </thead>
                         <tbody>
                         {equipmentsToShow ? equipmentsToShow.map((equipmentWithLocation) =>
-                                <tr className="table-row" key={equipmentWithLocation.equipment.id}>
-                                    <td>{equipmentWithLocation.equipment.equipmentType}</td>
+                                <tr className="table-row" key={equipmentWithLocation.id}>
+                                    <td>{equipmentWithLocation.equipmentType}</td>
                                     <td>
                                     <OverlayTrigger
-                                        overlay={<Tooltip id="button-tooltip-2">{equipmentWithLocation.equipment.name}</Tooltip>}
+                                        overlay={<Tooltip id="button-tooltip-2">{equipmentWithLocation.name}</Tooltip>}
                                         placement="top-start"
                                     >
-                                        <span>{equipmentWithLocation.equipment.name}</span>
+                                        <span>{equipmentWithLocation.name}</span>
                                     </OverlayTrigger>
                                         
                                     </td>
-                                    <td>{equipmentWithLocation.equipment.brand}</td>
-                                    <td>{equipmentWithLocation.equipment.serialNumber}</td>
+                                    <td>{equipmentWithLocation.brand}</td>
+                                    <td>{equipmentWithLocation.serialNumber}</td>
                                     <td> 
                                     <OverlayTrigger
-                                        overlay={<Tooltip id="button-tooltip-2">test</Tooltip>}
+                                        overlay={<Tooltip id="button-tooltip-2">{equipmentWithLocation.owner?.email}</Tooltip>}
                                         placement="top-start"
                                     >
-                                        <span>test</span>
+                                        <span>{equipmentWithLocation.owner?.email}</span>
                                     </OverlayTrigger>
                                     </td>
                                     <td>
@@ -213,13 +213,13 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                                     </td>
                                     {showAdminActions ? 
                                         <>
-                                            {equipmentWithLocation.equipment.equipmentState === 'ASSIGNED' ? 
+                                            {equipmentWithLocation.equipmentState === 'ASSIGNED' ? 
                                                 <td>
-                                                    <button className="button" onClick={() => unassignEquipment(equipmentWithLocation.equipment.id)}>Remove assignment</button>
+                                                    <button className="button" onClick={() => unassignEquipment(equipmentWithLocation.id)}>Remove assignment</button>
                                                 </td>
                                                 : 
                                                 <td>
-                                                    <button className="button" onClick={() => assignEquipment(equipmentWithLocation.equipment)}>Assign</button>
+                                                    <button className="button" onClick={() => assignEquipment(equipmentWithLocation)}>Assign</button>
                                                 </td>
                                             }
                                             
@@ -227,17 +227,17 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                                                 <button className="button" onClick={() => updateEquipment(equipmentWithLocation)}>Update</button>
                                             </td>
                                             <td>
-                                                <button className="button" onClick={() => deleteEquipment(equipmentWithLocation.equipment.id)}>Delete</button>
+                                                <button className="button" onClick={() => deleteEquipment(equipmentWithLocation.id)}>Delete</button>
                                             </td>
                                         </>
                                     : <></>}   
                                 </tr>
                         ): <></>} 
-                        <UpdateEquipment
+                        {/* <UpdateEquipment
                             equipmentWithLocalization={equipmentToUpdate}
                             show={updateEquipmentModalShow}
                             onHide={() => setUpdateEquipmentModalShow(false)}
-                        />
+                        /> */}
                         <AssignEquipment 
                             equipmentToAssign={equipmentToAssign}
                             show={assignModalShow}

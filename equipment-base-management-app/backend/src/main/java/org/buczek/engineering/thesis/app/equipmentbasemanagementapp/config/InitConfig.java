@@ -31,6 +31,7 @@ public class InitConfig implements CommandLineRunner {
 
     private final EquipmentRepository equipmentRepository;
     private final LocalizationRepository localizationRepository;
+    private final LocalizationMapper localizationMapper;
 
     private final XLSXReader xlsxReader;
 
@@ -70,7 +71,7 @@ public class InitConfig implements CommandLineRunner {
 
 
         List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
-        localizationRepository.saveAll(localizationDtos.stream().map(LocalizationMapper::mapLocalizationDtoToEntity).toList());
+        localizationRepository.saveAll(localizationDtos.stream().map(localizationMapper::dtoToEntity).toList());
     }
 
     private void saveInitEquipments() {

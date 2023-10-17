@@ -25,7 +25,7 @@ public class AdminEquipmentController {
     }
 
     @GetMapping("/equipments")
-    public List<EquipmentWithLocalizationDto> getAllEquipments() {
+    public List<EquipmentDto> getAllEquipments() {
         return equipmentService.getAllEquipments();
     }
 
