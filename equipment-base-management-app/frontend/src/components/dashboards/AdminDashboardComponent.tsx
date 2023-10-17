@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import useLocalState from "../../util/useLocalStorage";
 import axios, { AxiosResponse } from "axios";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
-import { Equipment, User } from "../../model/Models";
+import { Equipment, EquipmentWithLocalization, User } from "../../model/Models";
 import EquipmentList from "../lists/EquipmentList";
 import UserList from "../lists/UserList";
 
 const AdminDashboardComponent = () => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
-    const [equipments, setEquipments] = useState(Array<Equipment>)
+    const [equipments, setEquipments] = useState(Array<EquipmentWithLocalization>)
     const [users, setUsers] = useState(Array<User>)
     const [table, setTable] = useState<JSX.Element>()
 
@@ -19,11 +19,11 @@ const AdminDashboardComponent = () => {
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList showDelete={true} showUpdate={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showAdminActions={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
     }, [equipments])
 
     function fetchAndSetEquipments() {
-        axios.get<Equipment[]>(
+        axios.get<EquipmentWithLocalization[]>(
             '/api/v1/admin/equipments',
             {
                 headers: {
@@ -31,10 +31,10 @@ const AdminDashboardComponent = () => {
                     Accept: "application/json"
                 }
             }
-        ).then((response: AxiosResponse<Equipment[]>) => {
+        ).then((response: AxiosResponse<EquipmentWithLocalization[]>) => {
             setEquipments(response.data)
         })
-        setTable(<EquipmentList showDelete={true} showUpdate={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showAdminActions={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
     } 
 
     function fetchAndSetUsers() {
@@ -54,6 +54,29 @@ const AdminDashboardComponent = () => {
 
     
 
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (event: any) => {
+        setFile(event.target.files[0]);
+    };
+
+    const handleUpload = () => {
+        const formData = new FormData();
+        formData.append('file', "file");
+
+        axios.post('http://localhost:8080/api/upload', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }).then(response => {
+            // Tutaj możesz obsłużyć odpowiedź z serwera
+        }).catch(error => {
+            // Obsługa błędów
+        });
+    };
+
+
+
     return(
         <div>
             <Navbar data-bs-theme="dark">
@@ -71,6 +94,8 @@ const AdminDashboardComponent = () => {
                 </div>
                 {table}
             </div>
+            {/* <input type="file" onChange={handleFileChange}></input>
+            <button onClick={handleUpload}>UPLOAD</button> */}
         </div>
     );
 }

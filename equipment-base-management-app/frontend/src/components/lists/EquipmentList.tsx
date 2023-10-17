@@ -1,31 +1,52 @@
 import React, { useEffect, useState } from "react"
 import { Button, Dropdown, Form, Table } from "react-bootstrap"
-import { Equipment, EquipmentType } from "../../model/Models"
+import { Equipment, EquipmentWithLocalization, EquipmentType } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
 import UpdateEquipment from "../update/UpdateEquipment";
 import ExportFile from "../export/ExportFile";
+import AssignEquipment from "../update/AssignEquipment";
+import { config } from "process";
 
 type FunctionType = () => void;
 
 interface Props {
-    equipments: Equipment[];
-    showDelete: boolean;
-    showUpdate: boolean;
+    equipments: EquipmentWithLocalization[];
+    showAdminActions: boolean;
     refreshData: FunctionType;
 }
 
-const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, showUpdate}) => {
+const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActions}) => {
         
         const [jwt, setJwt] = useLocalState("", "jwt");
         const [updateEquipmentModalShow, setUpdateEquipmentModalShow] = useState(false);
         const [exportModalShow, setExportModalShow] = useState(false);
+        const [assignModalShow, setAssignModalShow] = useState(false);
 
         const [filterColumn, setFilterColumn] = useState("Name");
         const [filterValue, setFilterValue] = useState("");
 
-        const [equipmentsToShow, setEquipmentsToShow] = useState<Array<Equipment>>();
-        const [equipmentToUpdate, setEquipmentToUpdate] = useState<Equipment>(
+        const [equipmentsToShow, setEquipmentsToShow] = useState<Array<EquipmentWithLocalization>>();
+        const [equipmentToUpdate, setEquipmentToUpdate] = useState<EquipmentWithLocalization>(
+            {   
+                equipment:  {
+                    id: "",
+                    name: "",
+                    brand: "",
+                    serialNumber: "",
+                    equipmentType: EquipmentType.PC
+                },
+                localization: {
+                    id: "",
+                    department: "",
+                    building: "",
+                    floor: -1,
+                    roomNumber: -1
+                }
+            }
+        );
+
+        const [equipmentToAssign, setEquipmentToAssign] = useState<Equipment>(
             {   
                 id: "",
                 name: "",
@@ -44,15 +65,15 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
             let filterdEquipments;
             switch (filterColumn) {
                 case "Name":
-                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.name))
+                    filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.name))
                     setEquipmentsToShow(filterdEquipments)
                     break;
                 case "Brand":
-                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.brand))
+                    filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.brand))
                     setEquipmentsToShow(filterdEquipments)
                     break;
                 case "SerialNumber":
-                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.serialNumber))
+                    filterdEquipments = equipments.filter(equipmentWithLocation => regex.test(equipmentWithLocation.equipment.serialNumber))
                     setEquipmentsToShow(filterdEquipments)
                     break;
             }
@@ -61,15 +82,15 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
 
         function deleteEquipment(id: string) {
             axios.delete(
-                `api/v1/admin/equipments/${id}`,
+                `/api/v1/admin/equipments/${id}`,
                 {
                     headers: {
                         Authorization: `Bearer ${jwt}`,
                         Accept: "application/json"
                     }
                 }
-            ).then((respone) => {
-                if (respone.status === 200) {
+            ).then((response) => {
+                if (response.status === 200) {
                     alert("Equipment deleted successfully");
                 }
                 setFilterValue("")
@@ -77,7 +98,7 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
             })
         }
         
-        function updateEquipment(equipment: Equipment) {
+        function updateEquipment(equipment: EquipmentWithLocalization) {
             setEquipmentToUpdate(equipment)
             setUpdateEquipmentModalShow(true);
         }
@@ -85,6 +106,32 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
         function exportEquipmentsToXlsxFile() {
             setExportModalShow(true);
         }
+
+        function assignEquipment(equipment: Equipment) {
+            setEquipmentToAssign(equipment);
+            setAssignModalShow(true);
+        }
+
+        function unassignEquipment(equipmentId: string) {
+            axios.put(
+                `/api/v1/admin/equipments/remove-assignment/${equipmentId}`,
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        Accept: "application/json"
+                    }
+                }
+                
+            ).then((response => {
+                if (response.status === 200) {
+                    alert("Assignment has been removed");
+                }
+                refreshData()            
+            })).catch((error) => {
+                console.log(error);
+            })
+        }   
 
         return(
             <>                  
@@ -115,42 +162,72 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showDelete, sh
                                 <th>Name</th>
                                 <th>Brand</th>
                                 <th>Serial number</th>
-                                {showUpdate && showDelete ? 
-                                <th colSpan={2} style={{border:"none"}}>                
+                                <th>Department</th>
+                                <th>Building</th>
+                                <th>Floor</th>
+                                <th>Room number</th>
+                                {showAdminActions ? 
+                                <th colSpan={3} style={{border:"none"}}>                
                                     <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
                                 </th> : <></>}
                             </tr>
                         </thead>
                         <tbody>
-                        {equipmentsToShow ? equipmentsToShow.map((equipment) =>
+                        {equipmentsToShow ? equipmentsToShow.map((equipmentWithLocation) =>
                             
-                                <tr key={equipment.id}>
-                                    <td>{equipment.equipmentType}</td>
-                                    <td>{equipment.name}</td>
-                                    <td>{equipment.brand}</td>
-                                    <td>{equipment.serialNumber}</td>
-                                    
-                                    {showUpdate ? 
-                                        <td>
-                                            <button className="button" onClick={() => updateEquipment(equipment)}>Update</button>
-                                        </td>
-                                    : <></>}
-                                    {showDelete ? 
-                                        <td>
-                                            <button className="button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
-                                        </td>
+                                <tr key={equipmentWithLocation.equipment.id}>
+                                    <td>{equipmentWithLocation.equipment.equipmentType}</td>
+                                    <td>{equipmentWithLocation.equipment.name}</td>
+                                    <td>{equipmentWithLocation.equipment.brand}</td>
+                                    <td>{equipmentWithLocation.equipment.serialNumber}</td>
+                                    <td>
+                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.department : ""}
+                                    </td>
+                                    <td>
+                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.building : ""}
+                                    </td>
+                                    <td>
+                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.floor : ""}
+                                    </td>
+                                    <td>
+                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.roomNumber : ""}
+                                    </td>
+                                    {showAdminActions ? 
+                                        <>
+                                            {equipmentWithLocation.equipment.equipmentState === 'ASSIGNED' ? 
+                                                <td>
+                                                    <button className="button" onClick={() => unassignEquipment(equipmentWithLocation.equipment.id)}>Remove assignment</button>
+                                                </td>
+                                                : 
+                                                <td>
+                                                    <button className="button" onClick={() => assignEquipment(equipmentWithLocation.equipment)}>Assign</button>
+                                                </td>
+                                            }
+                                            
+                                            <td>
+                                                <button className="button" onClick={() => updateEquipment(equipmentWithLocation)}>Update</button>
+                                            </td>
+                                            <td>
+                                                <button className="button" onClick={() => deleteEquipment(equipmentWithLocation.equipment.id)}>Delete</button>
+                                            </td>
+                                        </>
                                     : <></>}   
                                 </tr>
                         ): <></>} 
                         <UpdateEquipment
-                            equipment={equipmentToUpdate}
+                            equipmentWithLocalization={equipmentToUpdate}
                             show={updateEquipmentModalShow}
                             onHide={() => setUpdateEquipmentModalShow(false)}
+                        />
+                        <AssignEquipment 
+                            equipmentToAssign={equipmentToAssign}
+                            show={assignModalShow}
+                            onHide={() => setAssignModalShow(false)}
                         />
                         <ExportFile 
                             show={exportModalShow}
                             onHide={() => setExportModalShow(false)}
-                        /> 
+                        />
                         </tbody>
                     </Table>
                 </div>

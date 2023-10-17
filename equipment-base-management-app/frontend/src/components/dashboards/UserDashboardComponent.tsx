@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import useLocalState from "../../util/useLocalStorage";
 import axios, { AxiosResponse } from "axios";
 import { Navbar, Container, Nav } from "react-bootstrap";
-import { Equipment } from "../../model/Models";
+import { Equipment, EquipmentWithLocalization } from "../../model/Models";
 import EquipmentList from "../lists/EquipmentList";
 
 const UserDashboardComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [id, setId] = useLocalState(-1, "id");
-    const [equipments, setEquipments] = useState(Array<Equipment>)
+    const [equipments, setEquipments] = useState(Array<EquipmentWithLocalization>)
     const [table, setTable] = useState<JSX.Element>()
 
     useEffect(() => {
         console.log("CALLING ")
-        axios.get<Equipment[]>(
+        axios.get<EquipmentWithLocalization[]>(
             `/api/v1/user/equipments/${id}`,
             {
                 headers: {
@@ -21,14 +21,14 @@ const UserDashboardComponent = () => {
                     Accept: "application/json"
                 }
             }
-        ).then((response: AxiosResponse<Equipment[]>) => {
+        ).then((response: AxiosResponse<EquipmentWithLocalization[]>) => {
             console.log(response.data)
             setEquipments(response.data)
         })
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList showDelete={false} showUpdate={false} equipments={equipments} refreshData={() => {}}/>)
+        setTable(<EquipmentList showAdminActions={false} equipments ={equipments} refreshData={() => {}}/>)
     }, [equipments])
 
     return(

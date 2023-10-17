@@ -31,5 +31,7 @@ public class Equipment {
     private EquipmentState equipmentState;
     @ManyToOne
     private User owner;
+    @ManyToOne
+    private Localization localization;
 
 }

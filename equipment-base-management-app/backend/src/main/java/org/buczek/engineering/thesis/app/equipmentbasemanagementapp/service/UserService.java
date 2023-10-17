@@ -1,5 +1,6 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserAndEquipmentsDto;
@@ -11,17 +12,12 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.Use
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.PasswordGenerator;
-import org.passay.CharacterData;
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.passay.DictionarySubstringRule.ERROR_CODE;
 
 @Service
 @AllArgsConstructor
@@ -74,6 +70,14 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll().stream().filter(u -> u.getRole().equals(Role.USER)).collect(Collectors.toList());
+    }
+
+    public User findUserById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException("User with ID " + userId + " does not exists.");
+        }
+        return user.get();
     }
 
     private User mapUserDtoToEntity(UserDto userDto) {

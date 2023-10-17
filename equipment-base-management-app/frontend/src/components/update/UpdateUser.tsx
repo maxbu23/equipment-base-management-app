@@ -122,7 +122,7 @@ const UpdateUser = (props: Props) => {
                 <Form.Control value={updatingLastname} onChange={(event) => setUpdatingLastname(event.target.value)}></Form.Control>
                 <Form.Label>Email</Form.Label>
                 <Form.Control value={updatingEmail} onChange={(event) => setUpdatingEmail(event.target.value)}></Form.Control>
-                <Form>
+                {/* <Form>
                     <Form.Label>Equipments</Form.Label>
                     {equipments ? equipments.map((equipment) => (
                         <div className="mb-3">
@@ -135,7 +135,7 @@ const UpdateUser = (props: Props) => {
                             />
                         </div>
                     )): <></>}
-                </Form>
+                </Form> */}
                 <Button style={{width:"100%", marginTop: "10px"}} className='submit-button' onClick={() => sendUpdateUserRequest()}>Update</Button>
             </div>            
         </div>   

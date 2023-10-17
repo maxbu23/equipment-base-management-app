@@ -2,13 +2,18 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Localization;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.LocalizationRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.XLSXReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +30,9 @@ public class InitConfig implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
 
     private final EquipmentRepository equipmentRepository;
+    private final LocalizationRepository localizationRepository;
+
+    private final XLSXReader xlsxReader;
 
     @Value("${application.credentials.admin1.email}")
     private String admin1Email;
@@ -60,10 +68,19 @@ public class InitConfig implements CommandLineRunner {
         saveInitUsers();
         saveInitEquipments();
 
+
+        List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
+        localizationRepository.saveAll(localizationDtos.stream().map(LocalizationMapper::mapLocalizationDtoToEntity).toList());
     }
 
     private void saveInitEquipments() {
         User owner = userRepository.getReferenceById(3L);
+        Localization localization = Localization.builder()
+                .department("WFIiS")
+                .building("D-10")
+                .floor(2)
+                .roomNumber(201)
+                .build();
         Equipment equipment1 = Equipment.builder()
                 .name("Mac Book Pro 13")
                 .equipmentType(EquipmentType.PC)

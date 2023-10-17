@@ -28,6 +28,11 @@
     border-color: #d28d20
 }
 
+.button::selection {
+    background-color: #d28d20;
+    border-color: #d28d20
+}
+
 .navbar {
     background-color: #232F34;
 }

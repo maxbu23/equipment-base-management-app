@@ -36,3 +36,16 @@ export interface UserAndEquipmentsIds {
     user: User;
     equipmentIds: string[];
 }
+
+export interface Localization {
+    id?: string;
+    department: string;
+    building: string;
+    floor: number;
+    roomNumber: number;
+}
+
+export interface EquipmentWithLocalization {
+    equipment: Equipment;
+    localization: Localization;
+}

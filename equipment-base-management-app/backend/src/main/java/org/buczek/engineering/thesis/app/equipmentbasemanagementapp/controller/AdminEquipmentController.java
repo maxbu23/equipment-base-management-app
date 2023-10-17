@@ -3,6 +3,8 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentWithLocalizationDto;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.AssignEquipmentRequest;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.EquipmentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class AdminEquipmentController {
     }
 
     @GetMapping("/equipments")
-    public List<EquipmentDto> getAllEquipments() {
+    public List<EquipmentWithLocalizationDto> getAllEquipments() {
         return equipmentService.getAllEquipments();
     }
 
@@ -40,8 +42,18 @@ public class AdminEquipmentController {
     }
 
     @PutMapping("/equipments")
-    public void updateEquipment(@RequestBody EquipmentDto equipmentDto) {
-        equipmentService.updateEquipment(equipmentDto);
+    public void updateEquipment(@RequestBody EquipmentWithLocalizationDto equipmentWithLocalizationDto) {
+        equipmentService.updateEquipment(equipmentWithLocalizationDto);
+    }
+
+    @PutMapping("/equipments/assign")
+    public void assignEquipment(@RequestBody AssignEquipmentRequest request) {
+        equipmentService.assignEquipment(request);
+    }
+
+    @PutMapping("/equipments/remove-assignment/{equipmentId}")
+    public void removeEquipmentAssignment(@PathVariable("equipmentId") Long equipmentId) {
+        equipmentService.removeEquipmentAssignment(equipmentId);
     }
     @DeleteMapping("/equipments/{equipmentId}")
     public void deleteEquipment(@PathVariable("equipmentId") long equipmentId) {
