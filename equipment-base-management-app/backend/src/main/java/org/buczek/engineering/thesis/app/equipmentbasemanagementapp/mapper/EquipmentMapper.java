@@ -14,6 +14,7 @@ public class EquipmentMapper implements Mapper<Equipment, EquipmentDto>{
     @Override
     public Equipment dtoToEntity(EquipmentDto equipmentDto) {
         return Equipment.builder()
+                .id(equipmentDto.id())
                 .name(equipmentDto.name())
                 .equipmentType(equipmentDto.equipmentType())
                 .equipmentState(equipmentDto.equipmentState())

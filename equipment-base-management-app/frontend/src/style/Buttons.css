@@ -33,6 +33,16 @@
     border-color: #d28d20
 }
 
+.disabled-button {
+    width: 100%;
+    border: 1px solid;
+    color: grey;
+    background-color: #232F34;
+    border-radius: 10px;
+    border-color: #232F34;
+    margin: 1px;
+}
+
 .navbar {
     background-color: #232F34;
 }

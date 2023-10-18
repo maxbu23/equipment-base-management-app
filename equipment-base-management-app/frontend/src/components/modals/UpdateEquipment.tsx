@@ -1,5 +1,5 @@
 import { Button, Form, Modal } from "react-bootstrap";
-import { Equipment, EquipmentType, EquipmentWithLocalization } from "../../model/Models";
+import { Equipment, EquipmentState, EquipmentType, EquipmentWithLocalization, equipmentStateTypes } from "../../model/Models";
 import { useEffect, useState } from "react";
 import useLocalState from "../../util/useLocalStorage";
 import axios from "axios";
@@ -21,6 +21,7 @@ const UpdateEquipment = (props: Props) => {
     const [updatingBrand, setUpdatingBrand] = useState(props.equipment.brand);
     const [updatingSerialNumber, setUpdatingSerialNumber] = useState(props.equipment.serialNumber);
     const [updatingType, setUpdatingType] = useState(props.equipment.equipmentType.toString());
+    const [updatingState, setUpdatingState] = useState(props.equipment.equipmentState?.toString());
 
     useEffect(() => {
         setUpdatingId(props.equipment.id);
@@ -28,6 +29,7 @@ const UpdateEquipment = (props: Props) => {
         setUpdatingBrand(props.equipment.brand);
         setUpdatingSerialNumber(props.equipment.serialNumber);
         setUpdatingType(props.equipment.equipmentType);
+        setUpdatingState(props.equipment.equipmentState)
     }, [props])
 
     function sendCreateNewEquipmentRequest() {
@@ -54,7 +56,8 @@ const UpdateEquipment = (props: Props) => {
                 name: updatingName,
                 brand: updatingBrand,
                 serialNumber: updatingSerialNumber,
-                equipmentType: updatingType as EquipmentType
+                equipmentType: updatingType as EquipmentType,
+                equipmentState: updatingState as EquipmentState
         }
         return newEquipment;
     }
@@ -86,6 +89,17 @@ const UpdateEquipment = (props: Props) => {
                     <Form.Control value={updatingBrand} onChange={(event) => setUpdatingBrand(event.target.value)}/>
                     <Form.Label>Serial number</Form.Label>
                     <Form.Control value={updatingSerialNumber} onChange={(event) => setUpdatingSerialNumber(event.target.value)} />
+                    {updatingState !== "ASSIGNED" ? 
+                        <div>
+                            <Form.Label>Status</Form.Label>
+                            <Form.Select value={updatingState} onChange={(event) => setUpdatingState(event.target.value)}>
+                            <option color="red" value="">Select equipment state</option>
+                                {equipmentStateTypes.filter((state) => state != "ASSIGNED").map((state) => (
+                            <option key={state} value={state.toUpperCase()}>{state.toUpperCase()}</option>
+                        ))}
+                    </Form.Select>
+                        </div> : <></>
+                    }
                     <Button style={{width:"100%", marginTop: "10px"}} className='button' onClick={() => sendCreateNewEquipmentRequest()}>Update</Button>
                 </div>            
             </div>   

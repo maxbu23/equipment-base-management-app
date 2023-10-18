@@ -1,13 +1,24 @@
 export enum EquipmentType {
     PC = "PC",
     LAPTOP = "Laptop", 
-    PRINTER = "Printer"
+    PRINTER = "Printer",
+    MONITOR = "Monitor",
+    TABLET = "Tablet"
 }
 
 export enum EquipmentState {
     ASSIGNED = "ASSIGNED",
-    NOT_ASSIGNED = "NOT_ASSIGNED"
+    NOT_ASSIGNED = "NOT_ASSIGNED",
+    BROKEN = "BROKEN",
+    IN_SERVICE = "IN_SERVICE"
 }
+
+export const equipmentStateTypes = [
+    EquipmentState.BROKEN,
+    EquipmentState.IN_SERVICE,
+    EquipmentState.NOT_ASSIGNED,
+    EquipmentState.ASSIGNED
+]
 
 const allEquipmentTypes =  new Array<EquipmentType>
 allEquipmentTypes.push(EquipmentType.LAPTOP, EquipmentType.PC, EquipmentType.PRINTER);

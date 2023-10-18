@@ -80,11 +80,10 @@ public class EquipmentService {
         return equipmentRepository.findByOwnerId(userId).stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
     }
 
-    public void updateEquipment(EquipmentWithLocalizationDto equipmentWithLocalizationDto) {
-        Optional<Equipment> equipmentOptional = equipmentRepository.findById(equipmentWithLocalizationDto.equipment().id());
+    public void updateEquipment(EquipmentDto equipmentDto) {
+        Optional<Equipment> equipmentOptional = equipmentRepository.findById(equipmentDto.id());
         if (equipmentOptional.isPresent()) {
-            Long localizationId = equipmentOptional.get().getLocalization().getId();
-            equipmentRepository.save(mapEquipmentWithLocalizationDtoToEquipmentEntity(equipmentWithLocalizationDto, localizationId));
+            equipmentRepository.save(equipmentMapper.dtoToEntity(equipmentDto));
 
         }
     }

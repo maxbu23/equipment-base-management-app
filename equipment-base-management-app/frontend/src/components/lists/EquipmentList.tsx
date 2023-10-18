@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { Dropdown, Form, Table, Tooltip } from "react-bootstrap"
 import { Equipment, EquipmentWithLocalization, EquipmentType, User } from "../../model/Models"
 import axios from "axios";
@@ -70,7 +70,7 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
             setEquipmentsToShow(equipments);
         }, [equipments])
 
-        useEffect(() => {
+        useMemo(() => {
             const regex = new RegExp(filterValue, 'i');
             let filterdEquipments;
             switch (filterColumn) {
@@ -229,15 +229,26 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                                     </td>
                                     {showAdminActions ? 
                                         <>
-                                            {equipment.equipmentState === 'ASSIGNED' ? 
+                                            {equipment.equipmentState === "BROKEN" || equipment.equipmentState == "IN_SERVICE" ? 
+                                            <>
                                                 <td>
-                                                    <button className="button" onClick={() => removeAssingnment(equipment.id)}>Remove assignment</button>
+                                                    <button disabled className="disabled-button" onClick={() => assignEquipment(equipment)}>Assign</button>
                                                 </td>
-                                                : 
-                                                <td>
-                                                    <button className="button" onClick={() => assignEquipment(equipment)}>Assign</button>
-                                                </td>
-                                            }
+                                            </> 
+                                            : 
+                                            <>
+                                                {equipment.equipmentState === 'ASSIGNED' ? 
+                                                    <td>
+                                                        <button className="button" onClick={() => removeAssingnment(equipment.id)}>Remove assignment</button>
+                                                    </td>
+                                                    : 
+                                                    <td>
+                                                        <button className="button" onClick={() => assignEquipment(equipment)}>Assign</button>
+                                                    </td>
+                                                }
+                                            
+                                            </>}
+                                           
                                             
                                             <td>
                                                 <button className="button" onClick={() => updateEquipment(equipment)}>Update</button>

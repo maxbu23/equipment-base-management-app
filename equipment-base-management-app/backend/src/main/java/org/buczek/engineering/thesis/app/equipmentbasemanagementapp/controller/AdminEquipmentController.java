@@ -47,8 +47,8 @@ public class AdminEquipmentController {
     }
 
     @PutMapping("/equipments")
-    public void updateEquipment(@RequestBody EquipmentWithLocalizationDto equipmentWithLocalizationDto) {
-        equipmentService.updateEquipment(equipmentWithLocalizationDto);
+    public void updateEquipment(@RequestBody EquipmentDto equipmentDto) {
+        equipmentService.updateEquipment(equipmentDto);
     }
 
     @PutMapping("/equipments/assign")
