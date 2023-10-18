@@ -13,7 +13,13 @@ public class EquipmentMapper implements Mapper<Equipment, EquipmentDto>{
 
     @Override
     public Equipment dtoToEntity(EquipmentDto equipmentDto) {
-        return null;
+        return Equipment.builder()
+                .name(equipmentDto.name())
+                .equipmentType(equipmentDto.equipmentType())
+                .equipmentState(equipmentDto.equipmentState())
+                .serialNumber(equipmentDto.serialNumber())
+                .brand(equipmentDto.brand())
+                .build();
     }
 
     @Override

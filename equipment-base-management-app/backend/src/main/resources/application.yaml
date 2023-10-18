@@ -27,6 +27,9 @@ application:
     user1:
       email: user1@gmail.com
       password: user1
+  initData:
+    localizationsFileName: "localizations.xlsx"
+    equipmentsFileName: "equipments.xlsx"
 
 
 

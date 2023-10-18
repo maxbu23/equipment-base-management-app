@@ -2,7 +2,9 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.EquipmentMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Localization;
@@ -32,6 +34,7 @@ public class InitConfig implements CommandLineRunner {
     private final EquipmentRepository equipmentRepository;
     private final LocalizationRepository localizationRepository;
     private final LocalizationMapper localizationMapper;
+    private final EquipmentMapper equipmentMapper;
 
     private final XLSXReader xlsxReader;
 
@@ -72,6 +75,8 @@ public class InitConfig implements CommandLineRunner {
 
         List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
         localizationRepository.saveAll(localizationDtos.stream().map(localizationMapper::dtoToEntity).toList());
+        List<EquipmentDto> equipmentDtos = xlsxReader.readEquipmentsFromXLSXFile();
+        equipmentRepository.saveAll(equipmentDtos.stream().map(equipmentMapper::dtoToEntity).toList());
     }
 
     private void saveInitEquipments() {
