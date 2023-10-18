@@ -3,8 +3,8 @@ import { Dropdown, Form, Table } from "react-bootstrap"
 import { User } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
-import UpdateUser from "../modals/UpdateUser";
 import AllEquipments from "../modals/AllEquipments";
+import UpdateUser from "../update/UpdateUser";
 
 type FunctionType = () => void;
 

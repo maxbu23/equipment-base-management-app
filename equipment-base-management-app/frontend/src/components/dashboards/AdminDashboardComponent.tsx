@@ -19,7 +19,7 @@ const AdminDashboardComponent = () => {
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList showAdminActions={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showAdminActions={true} showOwnerEmail={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
     }, [equipments])
 
     function fetchAndSetEquipments() {
@@ -34,7 +34,7 @@ const AdminDashboardComponent = () => {
         ).then((response: AxiosResponse<Equipment[]>) => {
             setEquipments(response.data)
         })
-        setTable(<EquipmentList showAdminActions={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showAdminActions={true} showOwnerEmail={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
     } 
 
     function fetchAndSetUsers() {

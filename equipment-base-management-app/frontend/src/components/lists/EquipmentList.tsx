@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Dropdown, Form, Table, Tooltip } from "react-bootstrap"
-import { Equipment, EquipmentWithLocalization, EquipmentType } from "../../model/Models"
+import { Equipment, EquipmentWithLocalization, EquipmentType, User } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
 import UpdateEquipment from "../modals/UpdateEquipment";
@@ -10,21 +10,28 @@ import AssignEquipment from "../modals/AssignEquipment";
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import UserDetails from "../details/UserDetails";
 
 type FunctionType = () => void;
 
 interface Props {
     equipments: Equipment[];
     showAdminActions: boolean;
+    showOwnerEmail: boolean;
     refreshData: FunctionType;
 }
 
-const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActions}) => {
+const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData, showAdminActions}) => {
         
         const [jwt, setJwt] = useLocalState("", "jwt");
+        
+        // modals
         const [updateEquipmentModalShow, setUpdateEquipmentModalShow] = useState(false);
         const [exportModalShow, setExportModalShow] = useState(false);
         const [assignModalShow, setAssignModalShow] = useState(false);
+        const [userDetailsModalShow, setUserDetailsModalShow] = useState(false);
+
+        const [selectedUser, setSelectedUser] = useState<User>();
 
         const [filterColumn, setFilterColumn] = useState("Name");
         const [filterValue, setFilterValue] = useState("");
@@ -115,6 +122,11 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
             setAssignModalShow(true);
         }
 
+        function showUserDetails(user: User) {
+            setSelectedUser(user);
+            setUserDetailsModalShow(true);
+        }
+
         function removeAssingnment(equipmentId: string) {
             axios.put(
                 `/api/v1/admin/equipments/remove-assignment/${equipmentId}`,
@@ -162,10 +174,11 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                         <thead>
                             <tr>
                                 <th>Type</th>
+                                <th>Status</th>
                                 <th>Name</th>
                                 <th>Brand</th>
                                 <th>Serial number</th>
-                                <th>Owner</th>
+                                {showOwnerEmail ? <th>Owner</th> : <></>}
                                 <th>Department</th>
                                 <th>Building</th>
                                 <th>Floor</th>
@@ -177,67 +190,70 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                             </tr>
                         </thead>
                         <tbody>
-                        {equipmentsToShow ? equipmentsToShow.map((equipmentWithLocation) =>
-                                <tr className="table-row" key={equipmentWithLocation.id}>
-                                    <td>{equipmentWithLocation.equipmentType}</td>
+                        {equipmentsToShow ? equipmentsToShow.map((equipment) =>
+                                <tr className="table-row" key={equipment.id}>
+                                    <td>{equipment.equipmentType}</td>
+                                    <td>{equipment.equipmentState}</td>
                                     <td>
                                     <OverlayTrigger
-                                        overlay={<Tooltip id="button-tooltip-2">{equipmentWithLocation.name}</Tooltip>}
+                                        overlay={<Tooltip id="button-tooltip-2">{equipment.name}</Tooltip>}
                                         placement="top-start"
                                     >
-                                        <span>{equipmentWithLocation.name}</span>
+                                        <span>{equipment.name}</span>
                                     </OverlayTrigger>
                                         
                                     </td>
-                                    <td>{equipmentWithLocation.brand}</td>
-                                    <td>{equipmentWithLocation.serialNumber}</td>
-                                    <td> 
-                                    <OverlayTrigger
-                                        overlay={<Tooltip id="button-tooltip-2">{equipmentWithLocation.owner?.email}</Tooltip>}
-                                        placement="top-start"
-                                    >
-                                        <span>{equipmentWithLocation.owner?.email}</span>
-                                    </OverlayTrigger>
+                                    <td>{equipment.brand}</td>
+                                    <td>{equipment.serialNumber}</td>
+                                    {showOwnerEmail && equipment.owner ? 
+                                        <td onClick={() => showUserDetails(equipment.owner as User)}> 
+                                            <OverlayTrigger
+                                                overlay={<Tooltip id="button-tooltip-2">{equipment.owner?.email}</Tooltip>}
+                                                placement="top-start"
+                                            >
+                                                <span>{equipment.owner?.email}</span>
+                                            </OverlayTrigger>
+                                        </td> : <td></td>
+                                    }
+                                    <td>
+                                        {equipment.localization ? equipment.localization.department : ""}
                                     </td>
                                     <td>
-                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.department : ""}
+                                        {equipment.localization ? equipment.localization.building : ""}
                                     </td>
                                     <td>
-                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.building : ""}
+                                        {equipment.localization ? equipment.localization.floor : ""}
                                     </td>
                                     <td>
-                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.floor : ""}
-                                    </td>
-                                    <td>
-                                        {equipmentWithLocation.localization ? equipmentWithLocation.localization.roomNumber : ""}
+                                        {equipment.localization ? equipment.localization.roomNumber : ""}
                                     </td>
                                     {showAdminActions ? 
                                         <>
-                                            {equipmentWithLocation.equipmentState === 'ASSIGNED' ? 
+                                            {equipment.equipmentState === 'ASSIGNED' ? 
                                                 <td>
-                                                    <button className="button" onClick={() => removeAssingnment(equipmentWithLocation.id)}>Remove assignment</button>
+                                                    <button className="button" onClick={() => removeAssingnment(equipment.id)}>Remove assignment</button>
                                                 </td>
                                                 : 
                                                 <td>
-                                                    <button className="button" onClick={() => assignEquipment(equipmentWithLocation)}>Assign</button>
+                                                    <button className="button" onClick={() => assignEquipment(equipment)}>Assign</button>
                                                 </td>
                                             }
                                             
                                             <td>
-                                                <button className="button" onClick={() => updateEquipment(equipmentWithLocation)}>Update</button>
+                                                <button className="button" onClick={() => updateEquipment(equipment)}>Update</button>
                                             </td>
                                             <td>
-                                                <button className="button" onClick={() => deleteEquipment(equipmentWithLocation.id)}>Delete</button>
+                                                <button className="button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
                                             </td>
                                         </>
                                     : <></>}   
                                 </tr>
                         ): <></>} 
-                        {/* <UpdateEquipment
-                            equipmentWithLocalization={equipmentToUpdate}
+                        <UpdateEquipment
+                            equipment={equipmentToUpdate}
                             show={updateEquipmentModalShow}
                             onHide={() => setUpdateEquipmentModalShow(false)}
-                        /> */}
+                        />
                         <AssignEquipment 
                             equipmentToAssign={equipmentToAssign}
                             show={assignModalShow}
@@ -246,6 +262,11 @@ const EquipmentList: React.FC<Props> = ({equipments, refreshData, showAdminActio
                         <ExportFile 
                             show={exportModalShow}
                             onHide={() => setExportModalShow(false)}
+                        />
+                        <UserDetails 
+                            show={userDetailsModalShow}
+                            onHide={() => setUserDetailsModalShow(false)}
+                            user={selectedUser as User}
                         />
                         </tbody>
                     </Table>

@@ -64,8 +64,11 @@ const AddNewUserComponent = () => {
                 <Form.Control onChange={(event) => setBrand(event.target.value)}/>
                 <Form.Label>Serial number</Form.Label>
                 <Form.Control onChange={(event) => setSerialNumber(event.target.value)} />
-                <button style={{width:"100%"}} className='submit-button' onClick={() => sendCreateNewEquipmentRequest()}>button</button>
+                <div>
+                <button className='button' onClick={() => sendCreateNewEquipmentRequest()}>button</button>
+            </div>
             </div>            
+            
         </div>   
         )
 }

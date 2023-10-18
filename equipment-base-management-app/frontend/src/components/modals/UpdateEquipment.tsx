@@ -9,46 +9,29 @@ type FunctionType = () => void;
 interface Props {
     onHide: FunctionType;
     show: boolean;
-    equipmentWithLocalization: EquipmentWithLocalization; 
+    equipment: Equipment; 
 }
 
 const UpdateEquipment = (props: Props) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt")
 
-    const [updatingId, setUpdatingId] = useState(props.equipmentWithLocalization.equipment.id);
-    const [updatingName, setUpdatingName] = useState(props.equipmentWithLocalization.equipment.name);
-    const [updatingBrand, setUpdatingBrand] = useState(props.equipmentWithLocalization.equipment.brand);
-    const [updatingSerialNumber, setUpdatingSerialNumber] = useState(props.equipmentWithLocalization.equipment.serialNumber);
-    const [updatingType, setUpdatingType] = useState(props.equipmentWithLocalization.equipment.equipmentType.toString());
-    const [updatingDepartment, setUpdatingDepartment] = useState("");
-    const [updatingBuilding, setUpdatingBuilding] = useState("");
-    const [updatingFloor, setUpdatingFloor] = useState<number | string>()
-    const [updatingRoomNumber, setUpdatngRoomNumber] = useState<number | string>()
+    const [updatingId, setUpdatingId] = useState(props.equipment.id);
+    const [updatingName, setUpdatingName] = useState(props.equipment.name);
+    const [updatingBrand, setUpdatingBrand] = useState(props.equipment.brand);
+    const [updatingSerialNumber, setUpdatingSerialNumber] = useState(props.equipment.serialNumber);
+    const [updatingType, setUpdatingType] = useState(props.equipment.equipmentType.toString());
 
     useEffect(() => {
-        setUpdatingId(props.equipmentWithLocalization.equipment.id);
-        setUpdatingName(props.equipmentWithLocalization.equipment.name);
-        setUpdatingBrand(props.equipmentWithLocalization.equipment.brand);
-        setUpdatingSerialNumber(props.equipmentWithLocalization.equipment.serialNumber);
-        setUpdatingType(props.equipmentWithLocalization.equipment.equipmentType);
-
-        if (props.equipmentWithLocalization.localization) {
-            setUpdatingDepartment(props.equipmentWithLocalization.localization.department);
-            setUpdatingBuilding(props.equipmentWithLocalization.localization.building);
-            setUpdatingFloor(props.equipmentWithLocalization.localization.floor);
-            setUpdatngRoomNumber(props.equipmentWithLocalization.localization.roomNumber);
-        } else {
-            setUpdatingDepartment("");
-            setUpdatingBuilding("");
-            setUpdatingFloor("");
-            setUpdatngRoomNumber("");
-        }
-
+        setUpdatingId(props.equipment.id);
+        setUpdatingName(props.equipment.name);
+        setUpdatingBrand(props.equipment.brand);
+        setUpdatingSerialNumber(props.equipment.serialNumber);
+        setUpdatingType(props.equipment.equipmentType);
     }, [props])
 
     function sendCreateNewEquipmentRequest() {
-        const updatedEquipment: EquipmentWithLocalization = createUpdatedEquipment()
+        const updatedEquipment: Equipment = createUpdatedEquipment()
         axios.put(
             `/api/v1/admin/equipments`,
             updatedEquipment,
@@ -65,21 +48,13 @@ const UpdateEquipment = (props: Props) => {
         })
     }
 
-    function createUpdatedEquipment() : EquipmentWithLocalization {
+    function createUpdatedEquipment() : Equipment {
         let newEquipment = {
-            equipment: {
                 id: updatingId,
                 name: updatingName,
                 brand: updatingBrand,
                 serialNumber: updatingSerialNumber,
                 equipmentType: updatingType as EquipmentType
-            },
-            localization: {
-                department: updatingDepartment,
-                building: updatingBuilding,
-                floor: updatingFloor as number,
-                roomNumber: updatingRoomNumber as number
-            }
         }
         return newEquipment;
     }
@@ -111,15 +86,6 @@ const UpdateEquipment = (props: Props) => {
                     <Form.Control value={updatingBrand} onChange={(event) => setUpdatingBrand(event.target.value)}/>
                     <Form.Label>Serial number</Form.Label>
                     <Form.Control value={updatingSerialNumber} onChange={(event) => setUpdatingSerialNumber(event.target.value)} />
-                    <Form.Label>Department</Form.Label>
-                    <Form.Control value={updatingDepartment} onChange={(event) => setUpdatingDepartment(event.target.value)} />
-                    <Form.Label>Building</Form.Label>
-                    <Form.Control value={updatingBuilding} onChange={(event) => setUpdatingBuilding(event.target.value)} />
-                    <Form.Label>Floor</Form.Label>
-                    <Form.Control value={updatingFloor} onChange={(event) => setUpdatingFloor(event.target.value)} />
-                    <Form.Label>Room number</Form.Label>
-                    <Form.Control value={updatingRoomNumber} onChange={(event) => setUpdatngRoomNumber(event.target.value)} />
-                    
                     <Button style={{width:"100%", marginTop: "10px"}} className='button' onClick={() => sendCreateNewEquipmentRequest()}>Update</Button>
                 </div>            
             </div>   

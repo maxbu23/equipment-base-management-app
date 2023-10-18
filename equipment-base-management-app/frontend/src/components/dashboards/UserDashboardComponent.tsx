@@ -28,7 +28,7 @@ const UserDashboardComponent = () => {
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList showAdminActions={false} equipments ={equipments} refreshData={() => {}}/>)
+        setTable(<EquipmentList showAdminActions={false} showOwnerEmail={false} equipments={equipments} refreshData={() => {}}/>)
     }, [equipments])
 
     return(
