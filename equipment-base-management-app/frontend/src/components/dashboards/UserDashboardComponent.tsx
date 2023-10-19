@@ -4,12 +4,14 @@ import axios, { AxiosResponse } from "axios";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Equipment, EquipmentWithLocalization } from "../../model/Models";
 import EquipmentList from "../lists/EquipmentList";
+import Profile from "../details/Profile";
 
 const UserDashboardComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [id, setId] = useLocalState(-1, "id");
     const [equipments, setEquipments] = useState(Array<Equipment>)
     const [table, setTable] = useState<JSX.Element>()
+    const [profileModalShow, setProfileModalShow] = useState(false);
 
     useEffect(() => {
         console.log("CALLING ")
@@ -33,14 +35,11 @@ const UserDashboardComponent = () => {
 
     return(
         <div>
-            <Navbar className="set-to-left" bg="dark" data-bs-theme="dark">
+            <Navbar data-bs-theme="dark">
                 <Container>
-                    <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-                        <Nav className="me-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-                            <Nav.Link href="#features">Features</Nav.Link>
-                            <Nav.Link href="#pricing">Pricing</Nav.Link>
-                        </Nav>
+                    <Nav>
+                        <Nav.Link onClick={() => setProfileModalShow(true)}>Profile</Nav.Link>
+                    </Nav>
                 </Container>
             </Navbar>
             <div className="center-top">
@@ -48,6 +47,10 @@ const UserDashboardComponent = () => {
                 </div>
                 {table}
             </div>
+            <Profile
+                show={profileModalShow}
+                onHide={() => setProfileModalShow(false)}
+            />
         </div>
     );
 }
