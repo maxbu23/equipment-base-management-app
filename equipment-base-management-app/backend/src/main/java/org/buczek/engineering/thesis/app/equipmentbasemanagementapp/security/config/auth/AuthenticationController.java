@@ -1,9 +1,10 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.AuthenticationRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.ChangePasswordRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,5 +26,10 @@ public class AuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest registerRequest) {
         return ResponseEntity.ok(authenticateService.authenticate(registerRequest));
+    }
+
+    @PostMapping("/changePassword")
+    public void changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        authenticateService.changePassword(changePasswordRequest);
     }
 }

@@ -5,6 +5,7 @@ import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Equipment, EquipmentWithLocalization, User } from "../../model/Models";
 import EquipmentList from "../lists/EquipmentList";
 import UserList from "../lists/UserList";
+import Profile from "../details/Profile";
 
 const AdminDashboardComponent = () => {
 
@@ -12,6 +13,8 @@ const AdminDashboardComponent = () => {
     const [equipments, setEquipments] = useState(Array<Equipment>)
     const [users, setUsers] = useState(Array<User>)
     const [table, setTable] = useState<JSX.Element>()
+    const [profileModalShow, setProfileModalShow] = useState(false);
+
 
     useEffect(() => {
         fetchAndSetEquipments()
@@ -81,12 +84,17 @@ const AdminDashboardComponent = () => {
         <div>
             <Navbar data-bs-theme="dark">
                 <Container>
-                        <Nav >
-                            <Nav.Link href="/registration-form">Add new user</Nav.Link>
-                            <Nav.Link  href="/add-new-equipment">Add new equipment</Nav.Link>
-                        </Nav>
+                    <Nav className="me-auto">
+                        <Nav.Link href="/registration-form">Add new user</Nav.Link>
+                        <Nav.Link href="/add-new-equipment">Add new equipment</Nav.Link>
+                    </Nav>
+                    <Nav>
+                        <Nav.Link onClick={() => setProfileModalShow(true)}>Profile</Nav.Link>
+                    </Nav>
                 </Container>
             </Navbar>
+
+            
             <div className="center-top">
                 <div>
                     <button className="button" onClick={() => fetchAndSetEquipments()}>Equipments</button>
@@ -96,6 +104,10 @@ const AdminDashboardComponent = () => {
             </div>
             {/* <input type="file" onChange={handleFileChange}></input>
             <button onClick={handleUpload}>UPLOAD</button> */}
+            <Profile
+                show={profileModalShow}
+                onHide={() => setProfileModalShow(false)}
+            />
         </div>
     );
 }

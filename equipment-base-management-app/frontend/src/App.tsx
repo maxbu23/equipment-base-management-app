@@ -30,7 +30,7 @@ function App() {
         <AdminRoute>
             <AddNewUserComponent />
         </AdminRoute>
-      }/>  
+      }/> 
       <Route path="/" element={<LoginComponent />}/>
       <Route path="/login" element={<LoginComponent />}/>   
     </Routes>

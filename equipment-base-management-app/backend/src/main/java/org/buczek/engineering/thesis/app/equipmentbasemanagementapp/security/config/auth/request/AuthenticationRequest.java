@@ -1,4 +1,4 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
