@@ -1,7 +1,7 @@
 import { Form, Modal, Table } from "react-bootstrap";
 import useLocalState from "../../util/useLocalStorage";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 type FunctionType = () => void;
 
@@ -27,30 +27,40 @@ const ChangePassword = (props: Props) => {
     const [equalsPasswordMessage, setEqualsPasswordMessage] = useState("")
 
     useEffect(() => {
-        if (newPassword !== confirmedPassword) {
+        if (newPassword !== confirmedPassword && newPassword !== "") {
             setEqualsPasswordMessage("Password are not identical!")
         } else {
             setEqualsPasswordMessage("");
         }
-    }, [confirmedPassword])
+    }, [confirmedPassword, newPassword])
 
     function sendChangePasswordRequest() {
-        const request: ChnagePasswordRequest = createChnagePasswordRequest();
-        axios.post(
-            `/api/v1/auth/changePassword`,
-            request,
-            {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                    Accept: "application/json"
+        if (isNewPasswordValid()) {
+            const request: ChnagePasswordRequest = createChnagePasswordRequest();
+            axios.post(
+                `/api/v1/auth/changePassword`,
+                request,
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        Accept: "application/json"
+                    }
                 }
-            }
-        ).then((response) => {
-            if (response.status === 200) {
-                alert("Password has been changed.")
-                props.onHide();
-            }
-        })
+            ).then((response) => {
+                if (response.status === 200) {
+                    alert("Password has been changed.")
+                    props.onHide();
+                }
+            }).catch((error: AxiosError) => {
+                if (error.response) {
+                    if (error.response.status === 401) {
+                        alert(error.response.data);
+                    }
+                } else {
+                    alert(error)
+                }
+            })
+        }
     }
 
     function createChnagePasswordRequest(): ChnagePasswordRequest {
@@ -61,6 +71,20 @@ const ChangePassword = (props: Props) => {
         }
 
         return request;
+    }
+
+    function isNewPasswordValid(): boolean {
+        if (newPassword === "" || confirmedPassword === "") {
+            alert("New password cannot be empty!");
+            return false;
+        }
+
+        if (newPassword !== confirmedPassword) {
+            alert("New password and confirmed password are not equals!");
+            return false;
+        }
+
+        return true;
     }
 
     return(

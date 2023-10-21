@@ -3,6 +3,7 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.co
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config.exception.IncorrectPasswordException;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
@@ -13,6 +14,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.con
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.PasswordGenerator;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -69,12 +71,12 @@ public class AuthenticateService {
             throw new EntityNotFoundException("Cannot find user with id: " + changePasswordRequest.userId());
         }
         User user = userOptional.get();
-        if (passwordEncoder.matches(changePasswordRequest.currentPassword(), user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
-            userRepository.save(user);
-            log.info("Password has been changed successfully");
+        if (!passwordEncoder.matches(changePasswordRequest.currentPassword(), user.getPassword())) {
+            throw new IncorrectPasswordException();
         }
-
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
+        userRepository.save(user);
+        log.info("Password has been changed successfully");
     }
 
     private AuthenticationResponse generateAuthenticationResponse(User user) {
