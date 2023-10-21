@@ -40,14 +40,7 @@ public class EquipmentService {
     private final EquipmentMapper equipmentMapper;
 
     public void saveNewEquipment(EquipmentDto equipmentDto) {
-        Long userId = equipmentDto.userId();
-
-        if (userId != null) {
-            Optional<User> user = userRepository.findById(userId);
-            user.ifPresent(value -> equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, value)));
-        } else {
-            equipmentRepository.save(mapEquipmentDtoToEntity(equipmentDto, null));
-        }
+        equipmentRepository.save(equipmentMapper.dtoToEntity(equipmentDto));
     }
 
     public List<EquipmentDto> getAllEquipments() {
@@ -126,16 +119,6 @@ public class EquipmentService {
         equipment.setOwner(null);
         equipment.setLocalization(null);
         equipment.setEquipmentState(EquipmentState.NOT_ASSIGNED);
-    }
-
-    private Equipment mapEquipmentDtoToEntity(EquipmentDto equipmentDto, User user) {
-        return Equipment.builder()
-                .name(equipmentDto.name())
-                .brand(equipmentDto.brand())
-                .equipmentType(equipmentDto.equipmentType())
-                .serialNumber(equipmentDto.serialNumber())
-                .owner(user)
-                .build();
     }
 
     private EquipmentDto mapEquipmentEntityToDto(Equipment equipment) {

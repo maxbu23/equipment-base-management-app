@@ -75,28 +75,16 @@ const RegistrationComponent = () => {
                     </Container>
                 </Navbar>
             </div>
-            <div className='registration-form-user'>
+            <div className='creating-form'>
                 <Form.Label>Firstname</Form.Label>
                 <Form.Control onChange={(event) => setFirstname(event.target.value) }/>
                 <Form.Label>Lastname</Form.Label>
                 <Form.Control onChange={(event) => setLastname(event.target.value)}/>
                 <Form.Label>Email</Form.Label>
                 <Form.Control onChange={(event) => setEmail(event.target.value)} />
-            </div>
-            <div className='registration-form-equipments'>
-                {/* {equipments.map(e => e.brand)} */}
-                <Form>
-                {equipments.map((equipment) => (
-                    <div className="mb-3">
-                        <Form.Check // prettier-ignore
-                            id={equipment.id as unknown as string}
-                            label={equipment.name}
-                            onChange={(event) => addEquipment(event.target.id)}
-                        />
-                    </div>
-                ))}
-                </Form>
-                <Button className='submit-button' onClick={() => sendCreateNewUserRequest()}>Add</Button>
+                <div style={{padding: "10px"}}>
+                    <button className='button' onClick={() => sendCreateNewUserRequest()}>Add</button>
+                </div>
             </div>
         </div>   
         )

@@ -50,7 +50,7 @@ const AddNewUserComponent = () => {
                     </Container>
                 </Navbar>
             </div>
-            <div className='registration-form-user'>
+            <div className='creating-form'>
                 <Form.Label>Name</Form.Label>
                 <Form.Control onChange={(event) => setName(event.target.value) }/>
                 <Form.Label>Equipment type</Form.Label>
@@ -64,9 +64,9 @@ const AddNewUserComponent = () => {
                 <Form.Control onChange={(event) => setBrand(event.target.value)}/>
                 <Form.Label>Serial number</Form.Label>
                 <Form.Control onChange={(event) => setSerialNumber(event.target.value)} />
-                <div>
-                <button className='button' onClick={() => sendCreateNewEquipmentRequest()}>button</button>
-            </div>
+                <div style={{padding: "10px"}}>
+                    <button className='button' onClick={() => sendCreateNewEquipmentRequest()}>Add</button>
+                </div>
             </div>            
             
         </div>   
