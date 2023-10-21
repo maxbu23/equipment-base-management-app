@@ -38,6 +38,7 @@ dependencies {
     implementation group: 'org.passay', name: 'passay', version: '1.6.3'
 
     implementation 'com.h2database:h2'
+    implementation 'org.postgresql:postgresql'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 }
