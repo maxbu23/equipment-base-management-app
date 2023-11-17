@@ -87,6 +87,7 @@ const AdminDashboardComponent = () => {
                     <Nav className="me-auto">
                         <Nav.Link href="/registration-form">Add new user</Nav.Link>
                         <Nav.Link href="/add-new-equipment">Add new equipment</Nav.Link>
+                        <Nav.Link href="/backup-import">Backup/Import</Nav.Link>
                     </Nav>
                     <Nav>
                         <Nav.Link onClick={() => setProfileModalShow(true)}>Profile</Nav.Link>

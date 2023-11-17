@@ -7,6 +7,7 @@ import UserDashboardComponent from "./components/dashboards/UserDashboardCompone
 import RegistrationComponent from "./components/AddNewUserComponent";
 import AddNewUserComponent from "./components/AddNewEquipmentComponent";
 import "./style/Buttons.css"
+import ImportFile from "./components/export/ImportFile";
 
 function App() {
   return(
@@ -29,6 +30,11 @@ function App() {
       <Route path="add-new-equipment" element={
         <AdminRoute>
             <AddNewUserComponent />
+        </AdminRoute>
+      }/> 
+      <Route path="/backup-import" element={
+        <AdminRoute>
+            <ImportFile />
         </AdminRoute>
       }/> 
       <Route path="/" element={<LoginComponent />}/>

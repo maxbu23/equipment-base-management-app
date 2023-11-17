@@ -7,10 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -30,6 +28,14 @@ public class ExportController {
                 generateHeadersWithContent(generatedFileInBytes),
                 HttpStatus.OK
         );
+    }
+
+    @PostMapping("/import")
+    public void importFile(@RequestParam("file") MultipartFile multipartFile) {
+//        System.out.println(multipartFile);
+        System.out.println(multipartFile.getName());
+        System.out.println(multipartFile.getContentType());
+        System.out.println(multipartFile.getOriginalFilename());
     }
 
     private HttpHeaders generateHeadersWithContent(byte[] generatedFileInBytes) {

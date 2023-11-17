@@ -71,12 +71,12 @@ public class InitConfig implements CommandLineRunner {
         userRepository.save(user);
         saveInitUsers();
         saveInitEquipments();
-
-
-        List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
-        localizationRepository.saveAll(localizationDtos.stream().map(localizationMapper::dtoToEntity).toList());
-        List<EquipmentDto> equipmentDtos = xlsxReader.readEquipmentsFromXLSXFile();
-        equipmentRepository.saveAll(equipmentDtos.stream().map(equipmentMapper::dtoToEntity).toList());
+//
+//
+//        List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
+//        localizationRepository.saveAll(localizationDtos.stream().map(localizationMapper::dtoToEntity).toList());
+//        List<EquipmentDto> equipmentDtos = xlsxReader.readEquipmentsFromXLSXFile();
+//        equipmentRepository.saveAll(equipmentDtos.stream().map(equipmentMapper::dtoToEntity).toList());
     }
 
     private void saveInitEquipments() {
