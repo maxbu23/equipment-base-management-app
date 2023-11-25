@@ -2,6 +2,7 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.controller.
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.EquipmentService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.export.ExportService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import java.io.IOException;
 public class ExportController {
 
     private final ExportService exportService;
+    private final EquipmentService equipmentService;
+
     @GetMapping("/export/equipments")
     public ResponseEntity<byte[]> exportXlsxFile() throws IOException {
         byte[] generatedFileInBytes = exportService.generateFile();
@@ -28,14 +31,6 @@ public class ExportController {
                 generateHeadersWithContent(generatedFileInBytes),
                 HttpStatus.OK
         );
-    }
-
-    @PostMapping("/import")
-    public void importFile(@RequestParam("file") MultipartFile multipartFile) {
-//        System.out.println(multipartFile);
-        System.out.println(multipartFile.getName());
-        System.out.println(multipartFile.getContentType());
-        System.out.println(multipartFile.getOriginalFilename());
     }
 
     private HttpHeaders generateHeadersWithContent(byte[] generatedFileInBytes) {

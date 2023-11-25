@@ -8,12 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     List<Equipment> findByOwnerId(Long ownerId);
-
+    Optional<Equipment> findByBarcode(String barcode);
     @Query("SELECT e FROM Equipment e WHERE e.owner.id = null")
     List<Equipment> getAllAvailableEquipments();
 

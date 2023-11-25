@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Dropdown, Form, Table } from "react-bootstrap"
+import { Dropdown, Form, Pagination, Table } from "react-bootstrap"
 import { User } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
@@ -133,6 +133,8 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                         </tr> 
                     ): <></>} 
                     </tbody>
+                    
+                    
                 </Table>
                 <UpdateUser
                     user={selectedUser}

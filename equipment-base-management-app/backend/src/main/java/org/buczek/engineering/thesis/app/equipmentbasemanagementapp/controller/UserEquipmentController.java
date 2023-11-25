@@ -22,4 +22,9 @@ public class UserEquipmentController {
         log.info("Id: {} Equipments: {}", userId, allEquipmentsByUserId);
         return allEquipmentsByUserId;
     }
+
+    @GetMapping("/equipments/barcodes/{barcode}")
+    public EquipmentDto getEquipmentByBarcode(@PathVariable("barcode") String barcode) {
+        return equipmentService.getEquipmentByBarcode(barcode);
+    }
 }

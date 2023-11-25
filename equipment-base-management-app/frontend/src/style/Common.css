@@ -1,8 +1,14 @@
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 .background {
     margin: 0px;
     padding: 0px;
     background: linear-gradient(12deg, #313639, #a097a4);
-    height: 100vh;
+    height: 1000vh;
     overflow: hidden;
 }
 

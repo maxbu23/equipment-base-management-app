@@ -12,6 +12,9 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,6 +30,10 @@ public class Equipment {
     private String name;
     private String brand;
     private String serialNumber;
+    private String inventoryNumber;
+    private BigDecimal value;
+    private LocalDate boughtDate;
+    private String barcode;
     @Enumerated(EnumType.STRING)
     private EquipmentType equipmentType;
     @Enumerated(EnumType.STRING)
@@ -35,5 +42,6 @@ public class Equipment {
     private User owner;
     @ManyToOne
     private Localization localization;
+    private String elements;
 
 }

@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import {isMobile} from 'react-device-detect';
 import useLocalState from "../util/useLocalStorage";
 import "../style/Common.css"
 
@@ -42,11 +43,16 @@ const LoginComponent = () => {
                 lastname: body.lastname,
                 email: body.email
             });
-            if (body.role === 'ADMIN' ) {
-                window.location.href = "/admin-dashboard";
+            if (isMobile) {
+                window.location.href = "/mobile-dashboard"
             } else {
-                window.location.href = "/user-dashboard";
+                if (body.role === 'ADMIN' ) {
+                    window.location.href = "/admin-dashboard";
+                } else {
+                    window.location.href = "/user-dashboard";
+                }
             }
+            
           }).catch((message: string) => {
             alert(message);
           });
@@ -79,7 +85,9 @@ const LoginComponent = () => {
                         <button className="submit-button" id="submit" type="button" onClick={() => sendLoginRequest()}>Login</button>
                     </div>
                 </div>
+    
             </div>
+            
         </>
     );
 };

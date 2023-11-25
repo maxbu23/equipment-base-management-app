@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react"
-import { Dropdown, Form, Table, Tooltip } from "react-bootstrap"
+import { Dropdown, Form, Pagination, Table, Tooltip } from "react-bootstrap"
 import { Equipment, EquipmentWithLocalization, EquipmentType, User } from "../../model/Models"
 import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
@@ -36,7 +36,7 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
         const [filterColumn, setFilterColumn] = useState("Name");
         const [filterValue, setFilterValue] = useState("");
 
-        const [equipmentsToShow, setEquipmentsToShow] = useState<Array<Equipment>>();
+        const [equipmentsToShow, setEquipmentsToShow] = useState<Array<Equipment>>([]);
         const [equipmentToUpdate, setEquipmentToUpdate] = useState<Equipment>(
             {   
                
@@ -65,10 +65,36 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                 equipmentType: EquipmentType.PC
             }
         );
+        
+        const [currentPage, setCurrentPage] = useState<number>(1);
+        const [pageCount, setPageCount] = useState<number>(0);
+        const [paginationItems, setPaginationItems] = useState<Array<React.ReactNode>>();
 
         useEffect(() => {
-            setEquipmentsToShow(equipments);
+            // setEquipmentsToShow(equipments);
+            setEquipmentsToShow(equipments?.slice(0,  10))
+            setPageCount((equipments.length / 2) + 1);
         }, [equipments])
+
+        useEffect(() => {
+            let items = [];
+            let start = currentPage ? currentPage : 1;
+            if (start <= 5) {
+                for (let i = 1; i <= start + 5 && i < pageCount; i++) {
+                    items.push(
+                        <Pagination.Item key={i} onClick={() => changePage(i)} active={currentPage === i}>{i}</Pagination.Item>
+                    )
+                }
+            } else {
+                for (let i = start - 5; i <= start + 5 && i < pageCount; i++) {
+                    items.push(
+                        <Pagination.Item key={i} onClick={() => changePage(i)} active={currentPage === i}>{i}</Pagination.Item>
+                    )
+                }
+            }
+            
+            setPaginationItems(items);
+        }, [pageCount, currentPage])
 
         useMemo(() => {
             const regex = new RegExp(filterValue, 'i');
@@ -125,6 +151,14 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
         function showUserDetails(user: User) {
             setSelectedUser(user);
             setUserDetailsModalShow(true);
+        }
+        
+        function changePage(page: number) {
+            var pageSize = 10;
+            setCurrentPage(page);
+            setEquipmentsToShow(
+                equipments?.slice((page - 1) * pageSize, ((page - 1) * pageSize) + pageSize)
+            )
         }
 
         function removeAssingnment(equipmentId: string) {
@@ -281,7 +315,17 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                         />
                         </tbody>
                     </Table>
-                
+                    <div>
+                    </div>
+                </div>
+                <div>
+                    <Pagination style={{display: "flex", justifyContent: "center"}}>
+                        {paginationItems}
+                        {/* <Pagination.Item key={1} onClick={() => changePage(1)}>1</Pagination.Item>
+                        <Pagination.Item key={2} onClick={() => changePage(2)}>2</Pagination.Item>
+                        <Pagination.Item key={3} onClick={() => changePage(3)}>3</Pagination.Item>
+                        <Pagination.Item key={4} onClick={() => changePage(4)}>4</Pagination.Item> */}
+                    </Pagination>
                 </div>
                 
             </>

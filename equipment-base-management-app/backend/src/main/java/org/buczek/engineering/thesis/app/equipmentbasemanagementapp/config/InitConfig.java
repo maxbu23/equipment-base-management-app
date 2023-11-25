@@ -71,6 +71,9 @@ public class InitConfig implements CommandLineRunner {
         userRepository.save(user);
         saveInitUsers();
         saveInitEquipments();
+
+        List<Equipment> initEquipments = xlsxReader.readEquipmentsFromXLSXFile();
+        equipmentRepository.saveAll(initEquipments);
 //
 //
 //        List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();

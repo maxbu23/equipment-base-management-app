@@ -17,8 +17,12 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.E
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.LocalizationRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.export.ExportService;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.XLSXReader;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,14 +34,15 @@ import java.util.stream.Collectors;
 public class EquipmentService {
 
     private final EquipmentRepository equipmentRepository;
-    private final UserRepository userRepository;
-    private final LocalizationRepository localizationRepository;
 
     private final UserService userService;
     private final LocalizationService localizationService;
+
     private final UserMapper userMapper;
     private final LocalizationMapper localizationMapper;
     private final EquipmentMapper equipmentMapper;
+
+    private XLSXReader xlsxReader;
 
     public void saveNewEquipment(EquipmentDto equipmentDto) {
         equipmentRepository.save(equipmentMapper.dtoToEntity(equipmentDto));
@@ -134,58 +139,21 @@ public class EquipmentService {
                 .build();
     }
 
-    private EquipmentWithLocalizationDto mapEquipmentEntityToEquipmentWithLocalizationDto(Equipment equipment) {
+    public EquipmentDto getEquipmentByBarcode(String barcode) {
+        Optional<Equipment> equipmentOptional = equipmentRepository.findByBarcode(barcode);
 
-        EquipmentDto equipmentDto = EquipmentDto.builder()
-                .id(equipment.getId())
-                .name(equipment.getName())
-                .brand(equipment.getBrand())
-                .equipmentType(equipment.getEquipmentType())
-                .serialNumber(equipment.getSerialNumber())
-                .userId(equipment.getOwner() != null ? equipment.getOwner().getId() : -1)
-                .equipmentState(equipment.getEquipmentState())
-                .build();
-
-        Localization localization = equipment.getLocalization();
-        LocalizationDto localizationDto = null;
-        if (localization != null) {
-            localizationDto = LocalizationDto.builder()
-                    .department(localization.getDepartment())
-                    .floor(Math.toIntExact(localization.getFloor()))
-                    .building(localization.getBuilding())
-                    .roomNumber(Math.toIntExact(localization.getRoomNumber()))
-                    .build();
+        if (equipmentOptional.isEmpty()) {
+            throw new EntityNotFoundException();
         }
 
-
-        return new EquipmentWithLocalizationDto(
-                equipmentDto,
-                localizationDto
-        );
+        return equipmentMapper.entityToDto(equipmentOptional.get());
     }
 
-    private Equipment mapEquipmentWithLocalizationDtoToEquipmentEntity(
-            EquipmentWithLocalizationDto equipmentWithLocalizationDto,
-            Long localizationId
-    ) {
-        Localization localization = mapLocalizationDtoToEntity(equipmentWithLocalizationDto.localization());
-        localization.setId(localizationId);
-        return Equipment.builder()
-                .id(equipmentWithLocalizationDto.equipment().id())
-                .name(equipmentWithLocalizationDto.equipment().name())
-                .equipmentType(equipmentWithLocalizationDto.equipment().equipmentType())
-                .brand(equipmentWithLocalizationDto.equipment().brand())
-                .serialNumber(equipmentWithLocalizationDto.equipment().serialNumber())
-                .localization(localization)
-                .build();
-    }
-
-    private Localization mapLocalizationDtoToEntity(LocalizationDto localizationDto) {
-        return Localization.builder()
-                .department(localizationDto.department())
-                .building(localizationDto.building())
-                .floor(localizationDto.floor())
-                .roomNumber(localizationDto.roomNumber())
-                .build();
+    public void saveImportedEquipments(MultipartFile multipartFile) {
+        try {
+            xlsxReader.readEquipmentsFromXLSXFile(multipartFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
