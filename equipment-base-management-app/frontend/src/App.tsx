@@ -1,7 +1,7 @@
 import useLocalState from "./util/useLocalStorage";
 import { Routes, Route } from "react-router-dom";
 import AdminDashboard from "./components/dashboards/AdminDashboardComponent";
-import LoginComponent from "./components/LoginComponent";
+import LoginComponent from "./components/authorization/LoginComponent";
 import { PrivateRoute, AdminRoute } from "./util/Routes";
 import UserDashboardComponent from "./components/dashboards/UserDashboardComponent";
 import RegistrationComponent from "./components/AddNewUserComponent";

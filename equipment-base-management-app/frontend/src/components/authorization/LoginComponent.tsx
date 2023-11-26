@@ -1,7 +1,10 @@
 import { ChangeEvent, useState } from "react";
 import {isMobile} from 'react-device-detect';
-import useLocalState from "../util/useLocalStorage";
-import "../style/Common.css"
+import useLocalState from "../../util/useLocalStorage";
+import "../../style/Common.css"
+import { Nav } from "react-bootstrap";
+import RegistrationComponent from "./RegistrationComponent";
+import ForgottenPassword from "./ForgottenPassword";
 
 const LoginComponent = () => {
 
@@ -11,6 +14,9 @@ const LoginComponent = () => {
     const [id, setId] = useLocalState(-1, "id")
     const [role, setRole] = useLocalState("", "role")
     const [user, setUser] = useLocalState("", "userData")
+
+    const [registrationModalShow, setRegistrationModalShow] = useState(false);
+    const [forgottenPasswordModalShow, setForgottenPasswordModalShow] = useState(false);
 
     function sendLoginRequest() {
         const reqBody = {
@@ -82,12 +88,24 @@ const LoginComponent = () => {
                         />
                     </div>
                     <div>
-                        <button className="submit-button" id="submit" type="button" onClick={() => sendLoginRequest()}>Login</button>
+                        <button className="button" id="submit" type="button" onClick={() => sendLoginRequest()}>Login</button>
                     </div>
+                        <Nav variant="underline">
+                            <Nav.Item as="p">
+                                <Nav.Link onClick={() => setForgottenPasswordModalShow(true)}>I have forgotten my password</Nav.Link>
+                                <Nav.Link onClick={() => setRegistrationModalShow(true)}>Register</Nav.Link>
+                            </Nav.Item>
+                        </Nav>
                 </div>
-    
             </div>
-            
+            <RegistrationComponent
+                show={registrationModalShow}
+                onHide={() => setRegistrationModalShow(false)}
+            />
+            <ForgottenPassword
+                show={forgottenPasswordModalShow}
+                onHide={() => setForgottenPasswordModalShow(false)}
+            />
         </>
     );
 };

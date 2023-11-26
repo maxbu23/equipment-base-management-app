@@ -16,8 +16,8 @@ public class AuthenticationController {
     private final AuthenticateService authenticateService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authenticateService.register(registerRequest));
+    public void register(@RequestBody RegisterRequest registerRequest) {
+        authenticateService.register(registerRequest);
     }
 
     @PostMapping("/authenticate")
@@ -28,5 +28,10 @@ public class AuthenticationController {
     @PostMapping("/changePassword")
     public void changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         authenticateService.changePassword(changePasswordRequest);
+    }
+
+    @PostMapping("/recoverPassword")
+    public void recoverPassword(@RequestBody String email) {
+        authenticateService.recoverPassword(email);
     }
 }

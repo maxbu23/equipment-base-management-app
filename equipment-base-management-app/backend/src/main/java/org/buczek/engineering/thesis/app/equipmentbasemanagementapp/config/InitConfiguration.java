@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.EquipmentMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Localization;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
@@ -15,6 +12,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.L
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.email.EmailSenderService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.XLSXReader;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -26,7 +24,7 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class InitConfig implements CommandLineRunner {
+public class InitConfiguration implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -48,8 +46,14 @@ public class InitConfig implements CommandLineRunner {
     @Value("${application.credentials.user1.password}")
     private String user1Password;
 
+
+    private final EmailSenderService senderService;
+
     @Override
     public void run(String... args) throws Exception {
+
+        senderService.sendEmail("max.buczek@yahoo.com", "Testowy email", "Hello world!");
+
         User admin = User.builder()
                 .email(admin1Email)
                 .firstname("Bob")

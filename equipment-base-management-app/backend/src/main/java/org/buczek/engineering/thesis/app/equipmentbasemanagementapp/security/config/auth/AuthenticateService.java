@@ -4,23 +4,19 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config.exception.IncorrectPasswordException;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.JwtService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.AuthenticationRequest;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.ChangePasswordRequest;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.email.EmailSenderService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.PasswordGenerator;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,28 +25,23 @@ import java.util.Optional;
 public class AuthenticateService {
 
     private final UserRepository userRepository;
-    private final EquipmentRepository equipmentRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordGenerator passwordGenerator;
+    private final EmailSenderService emailSenderService;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest registerRequest) {
+        String password = passwordGenerator.generatePassword();
         User user = User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
                 .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(passwordGenerator.generatePassword()))
+                .password(passwordEncoder.encode(password))
                 .role(Role.USER)
                 .build();
-        User savedUser = userRepository.save(user);
-
-        List<Equipment> equipmentsToAssign = equipmentRepository.findAllById(registerRequest.getEquipmentIds());
-        equipmentsToAssign.forEach(e -> e.setOwner(savedUser));
-        equipmentsToAssign.forEach(e -> e.setEquipmentState(EquipmentState.ASSIGNED));
-        equipmentRepository.saveAll(equipmentsToAssign);
-
-        return generateAuthenticationResponse(user);
+        userRepository.save(user);
+        emailSenderService.sendEmail(registerRequest.getEmail(), "Registration", "Password: " + password);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest registerRequest) {
@@ -77,6 +68,20 @@ public class AuthenticateService {
         user.setPassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
         userRepository.save(user);
         log.info("Password has been changed successfully");
+    }
+
+    public void recoverPassword(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User with email {} does not exist: " + email);
+        }
+
+        User user = userOptional.get();
+        String newPassword = passwordGenerator.generatePassword();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+
+        emailSenderService.sendEmail(email, "Recovery password", "New password: " + newPassword);
     }
 
     private AuthenticationResponse generateAuthenticationResponse(User user) {
