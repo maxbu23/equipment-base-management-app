@@ -16,15 +16,15 @@ public class PasswordGenerator {
         org.passay.PasswordGenerator passwordGenerator = new org.passay.PasswordGenerator();
         CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
         CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
-        lowerCaseRule.setNumberOfCharacters(2);
+        lowerCaseRule.setNumberOfCharacters(3);
 
         CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
         CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
-        upperCaseRule.setNumberOfCharacters(2);
+        upperCaseRule.setNumberOfCharacters(3);
 
         CharacterData digitChars = EnglishCharacterData.Digit;
         CharacterRule digitRule = new CharacterRule(digitChars);
-        digitRule.setNumberOfCharacters(2);
+        digitRule.setNumberOfCharacters(3);
 
         CharacterData specialChars = new CharacterData() {
             public String getErrorCode() {
@@ -38,7 +38,7 @@ public class PasswordGenerator {
         CharacterRule splCharRule = new CharacterRule(specialChars);
         splCharRule.setNumberOfCharacters(2);
 
-        String password = passwordGenerator.generatePassword(8, splCharRule, lowerCaseRule,
+        String password = passwordGenerator.generatePassword(11, splCharRule, lowerCaseRule,
                 upperCaseRule, digitRule);
 
         log.info("Generated password: {}", password);
