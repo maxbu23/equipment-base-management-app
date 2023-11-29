@@ -4,12 +4,11 @@ import Profile from "../details/Profile";
 import BarcodeScanner from "../BarcodeScanner";
 import { Route, Routes } from "react-router";
 import Scanner from "../Scanner";
-import LoginComponent from "../authorization/LoginComponent";
 
 const MobileComponent = () => {
 
     const [profileModalShow, setProfileModalShow] = useState(false);
-
+    
     return(
         
         <>

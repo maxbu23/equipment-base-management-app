@@ -24,7 +24,7 @@ public class UserEquipmentController {
     }
 
     @GetMapping("/equipments/barcodes/{barcode}")
-    public EquipmentDto getEquipmentByBarcode(@PathVariable("barcode") String barcode) {
+    public EquipmentDto getEquipmentByBarcode(@PathVariable String barcode) {
         return equipmentService.getEquipmentByBarcode(barcode);
     }
 }

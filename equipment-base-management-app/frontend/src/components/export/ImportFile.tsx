@@ -80,9 +80,20 @@ const ImportFile = () => {
             </div>
             <div className='creating-form'>
                 <div style={{padding: "10px"}}>
-                    {/* <button className='button' onClick={() => null}>Import</button> */}
-                    <input type="file" onChange={handleFileChange} />
-                    <button onClick={handleUpload}>Upload</button>
+                  <Form.Group controlId="formFile">
+                    <Form.Label>Upload</Form.Label>
+                    <div style={{display: "flex"}}>
+                    <Form.Control type="file" style={{marginBottom: "10px"}}/>
+                    <Form.Check
+                      type="switch"
+                      id="custom-switch"
+                      label="Force"
+                      style={{marginLeft: "10px"}}
+                    />
+                    </div>
+                  </Form.Group>
+                  
+                <button className="button" onClick={handleUpload}>Upload</button>
                 </div>
             </div>            
             

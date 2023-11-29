@@ -43,6 +43,20 @@
     margin: 1px;
 }
 
+.file-input {
+    display: none;
+}
+
+.file-upload-label {
+    border: 1px solid;
+    color: white;
+    background-color: #232F34;
+    cursor: pointer;
+    border-radius: 10px;
+    border-color: #232F34;
+    margin: 1px;
+}
+
 .navbar {
     background-color: #232F34;
 }

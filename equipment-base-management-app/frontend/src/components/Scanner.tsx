@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Form, Modal, Nav, Navbar, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faL } from '@fortawesome/free-solid-svg-icons';
 import useLocalState from "../util/useLocalStorage";
 import ChangePassword from "./details/ChangePassword";
 import BarcodeScanner from "./BarcodeScanner";
+import axios, { AxiosResponse } from "axios";
+import { Equipment } from "../model/Models";
+import EquipmentDetails from "./details/EquipmentDetails";
 
 const Scanner = () => {
     const [jwt, setJwt] = useLocalState("", "jwt")
@@ -13,15 +16,39 @@ const Scanner = () => {
     const [barcode, setBarcode] = useState("");
     const [isScanning, setIsScanning] = useState(false);
 
+    const [equipmentDetailsModalShow, setEquipmentDetailModalShow] = useState(false);
+    const [currentEquipment, setCurrentEquipment] = useState<Equipment>();
+
     function handleBarcodeDetected(barcode: string) {
         setBarcode(barcode);
         setIsScanning(false);
         console.log(`Detected barcode: ${barcode}`);
     };
 
-    function getEquipmentByBarcode() {
+    function sendGetEquipmentByBarcodeRequest() {
         alert("Barcode: " + barcode);
-    } 
+        axios.get<Equipment>(
+            `api/v1/user/equipments/barcodes/${barcode}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    Accept: "application/json"
+                }
+            }
+        ).then((response: AxiosResponse<Equipment>) => {
+            alert(response.data);
+            setCurrentEquipment(response.data);
+            setEquipmentDetailModalShow(true);
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+
+    function turnOffScanner() {
+        setEquipmentDetailModalShow(false);
+        setIsScanning(false);
+        setBarcode("");
+    }
 
     return (
         <div>
@@ -40,7 +67,7 @@ const Scanner = () => {
                                     <div>
                                         <Nav>
                                             <Nav.Link onClick={() => setIsScanning(true)}>Scan again</Nav.Link>
-                                            <Nav.Link onClick={() => getEquipmentByBarcode()}>Get equipment info</Nav.Link>
+                                            <Nav.Link onClick={() => sendGetEquipmentByBarcodeRequest()}>Get equipment info</Nav.Link>
                                         </Nav> 
                                     </div>
                                 )
@@ -63,6 +90,11 @@ const Scanner = () => {
                 })()
                 }   
         </div>
+        <EquipmentDetails
+            show={equipmentDetailsModalShow}
+            onHide={() => turnOffScanner()}
+            equipment={currentEquipment}
+        />
         </div>
       );
 }
