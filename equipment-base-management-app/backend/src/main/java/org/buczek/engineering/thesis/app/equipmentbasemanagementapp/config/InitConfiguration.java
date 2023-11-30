@@ -52,7 +52,7 @@ public class InitConfiguration implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        senderService.sendEmail("max.buczek@yahoo.com", "Testowy email", "Hello world!");
+//        senderService.sendEmail("max.buczek@yahoo.com", "Testowy email", "Hello world!");
 
         User admin = User.builder()
                 .email(admin1Email)

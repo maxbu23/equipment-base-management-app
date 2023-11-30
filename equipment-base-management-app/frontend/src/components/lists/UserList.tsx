@@ -5,6 +5,7 @@ import axios from "axios";
 import useLocalState from "../../util/useLocalStorage";
 import AllEquipments from "../modals/AllEquipments";
 import UpdateUser from "../update/UpdateUser";
+import { start } from "repl";
 
 type FunctionType = () => void;
 
@@ -34,9 +35,35 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
         }
     )
 
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageCount, setPageCount] = useState<number>(0);
+    const [paginationItems, setPaginationItems] = useState<Array<React.ReactNode>>();
+
     useEffect(() => {
-        setUsersToShow(users);
+        setUsersToShow(users.slice(0, 10));
+        setPageCount((users.length / 2) + 1);
     }, [users])
+
+
+    useEffect(() => {
+        let items = [];
+        let start = currentPage ? currentPage : 1;
+        if (start <= 5) {
+            for (let i = 1; i <= start + 5 && i < pageCount; i++) {
+                items.push(
+                    <Pagination.Item key={i} onClick={() => changePage(i)} active={currentPage === i}>{i}</Pagination.Item>
+                )
+            }
+        } else {
+            for (let i = start - 5; i <= start + 5 && i < pageCount; i++) {
+                items.push(
+                    <Pagination.Item key={i} onClick={() => changePage(i)} active={currentPage === i}>{i}</Pagination.Item>
+                )
+            }
+        }
+        
+        setPaginationItems(items);
+    }, [pageCount, currentPage])
 
     useEffect(() => {
         const regex = new RegExp(filterValue, 'i');
@@ -56,7 +83,18 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                 break;
         }
 
-    }, [filterValue])
+        setPageCount(Math.ceil(filterdUsers.length / 10));
+        const start = (currentPage - 1) * 10;
+        setUsersToShow(filterdUsers.slice(start, start + 10));
+    }, [filterValue, users, currentPage, filterColumn])
+
+    function changePage(page: number) {
+        var pageSize = 10;
+        setCurrentPage(page);
+        setUsersToShow(
+            users?.slice((page - 1) * pageSize, ((page - 1) * pageSize) + pageSize)
+        )
+    }
 
     function deleteUser(id: string | undefined | number) {
         axios.delete(
@@ -136,6 +174,11 @@ const UserList: React.FC<MyProps> = ({users, refreshData}) => {
                     
                     
                 </Table>
+                <div>
+                    <Pagination style={{display: "flex", justifyContent: "center"}}>
+                        {paginationItems}
+                    </Pagination>
+                </div>
                 <UpdateUser
                     user={selectedUser}
                     show={updateUserModalShow}

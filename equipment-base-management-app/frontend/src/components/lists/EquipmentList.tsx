@@ -71,7 +71,6 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
         const [paginationItems, setPaginationItems] = useState<Array<React.ReactNode>>();
 
         useEffect(() => {
-            // setEquipmentsToShow(equipments);
             setEquipmentsToShow(equipments?.slice(0,  10))
             setPageCount((equipments.length / 2) + 1);
         }, [equipments])
@@ -98,23 +97,28 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
 
         useMemo(() => {
             const regex = new RegExp(filterValue, 'i');
-            let filterdEquipments;
+            let filteredEquipments;
             switch (filterColumn) {
                 case "Name":
-                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.name))
-                    setEquipmentsToShow(filterdEquipments)
+                    filteredEquipments = equipments.filter(equipment => regex.test(equipment.name));
                     break;
                 case "Brand":
-                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.brand))
-                    setEquipmentsToShow(filterdEquipments)
+                    filteredEquipments = equipments.filter(equipment => regex.test(equipment.brand));
                     break;
                 case "SerialNumber":
-                    filterdEquipments = equipments.filter(equipment => regex.test(equipment.serialNumber))
-                    setEquipmentsToShow(filterdEquipments)
+                    filteredEquipments = equipments.filter(equipment => regex.test(equipment.serialNumber));
                     break;
+                default:
+                    filteredEquipments = [...equipments];
             }
+        
+            setPageCount(Math.ceil(filteredEquipments.length / 10));
+                
+            const start = (currentPage - 1) * 10;
+            setEquipmentsToShow(filteredEquipments.slice(start, start + 10));
+        }, [filterValue, equipments, currentPage, filterColumn]);
+        
 
-        }, [filterValue])
 
         function deleteEquipment(id: string) {
             axios.delete(

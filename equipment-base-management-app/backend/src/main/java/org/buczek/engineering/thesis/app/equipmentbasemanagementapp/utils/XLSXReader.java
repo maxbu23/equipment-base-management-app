@@ -143,8 +143,18 @@ public class XLSXReader {
                 .equipmentType(EquipmentType.fromValue(row.getCell(3).getStringCellValue()))
                 .value(BigDecimal.valueOf(row.getCell(4).getNumericCellValue()))
                 .barcode(row.getCell(6).getStringCellValue())
-                .serialNumber(row.getCell(7).getStringCellValue())
-                .elements(row.getCell(8).getStringCellValue())
+                .serialNumber(row.getCell(8).getStringCellValue())
+//                .elements(row.getCell(9).getStringCellValue())
                 .build();
+
+        //1 -> name
+        //2 -> nr inwentarzowy
+        //3 -> typ
+        //4 -> wartosc poczatkowa
+        //5 -> data nabycia
+        //6 -> kod kreskowy
+        //7 -> miejsce uzytkowania pewlna galaz
+        //8 -> numer seryjny
+        //9 -> elementy skladowe
     }
 }
