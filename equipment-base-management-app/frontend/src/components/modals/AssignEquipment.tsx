@@ -59,7 +59,7 @@ const AssignEquipment = (props: Props) => {
 
     function fetchAndSetAvailableLocalizations() {
         axios.get<Localization[]>(
-            `api/v1/admin/localizations`,
+            `api/v1/localizations`,
             {
                 headers: {
                     Authorization: `Bearer ${jwt}`,

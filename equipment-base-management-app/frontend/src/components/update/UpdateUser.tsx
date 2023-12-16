@@ -21,9 +21,7 @@ const UpdateUser = (props: Props) => {
     const [updatingLastname, setUpdatingLastname] = useState(props.user.lastname);
     const [updatingEmail, setUpdatingEmail] = useState(props.user.email)
     const [updatingEquipmentIds, setUpdatingEquipmentIds] = useState<string[]>([]);
-    const [equipments, setEquipments] = useState<Equipment[]>([]);
 
-    const [equipmentsForm, setEquipmentForm] = useState<JSX.Element>()
 
     // in case user to update was sent later
     useEffect(() => {
@@ -34,17 +32,6 @@ const UpdateUser = (props: Props) => {
         
     }, [props])
     
-    useEffect(() => {
-        if (userId !== "") {
-            getAllUserAndAvailableEquipments();
-        }
-    }, [userId])
-
-    useEffect(() => {
-        const assignedEquipmentIds: string[] = equipments ? equipments.filter(e => e.equipmentState === "ASSIGNED").map(e => e.id.toString()) : [];
-            setUpdatingEquipmentIds(assignedEquipmentIds);
-    }, [equipments])
-
     function sendUpdateUserRequest() {
         const updatedUser: UserAndEquipmentsIds = createUpdatedUser()
         axios.put(
@@ -60,22 +47,6 @@ const UpdateUser = (props: Props) => {
             if (response.status === 200) {
                 window.location.href = 'admin-dashboard'
             }
-        })
-    }
-
-    function getAllUserAndAvailableEquipments() {
-        axios.get<Equipment[]>(
-            `api/v1/admin/equipments/userAndAvailable/${userId}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                    Accept: "application/json"
-                }
-            }
-        ).then((response: AxiosResponse<Equipment[]>) => {
-            setEquipments(response.data);
-        }).catch((error) => {
-            console.log(error)
         })
     }
 

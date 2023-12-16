@@ -77,7 +77,9 @@ public class XLSXReader {
             if (i++ < 2) {
                 continue;
             }
-            equipments.add(mapRowToEquipmentObject(row));
+            Equipment equipment = mapRowToEquipmentObject(row);
+            equipment.setEquipmentState(EquipmentState.NOT_ASSIGNED);
+            equipments.add(equipment);
         }
 
         return equipments;

@@ -10,23 +10,7 @@ const RegistrationComponent = () => {
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
-    const [equipments, setEquipments] = useState(Array<Equipment>)
     const [equipmentIds, setEquipmentIds] = useState(Array<string>)
-
-    useEffect(() => {
-        axios.get<Equipment[]>(
-            `/api/v1/admin/equipments/available`,
-            {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                    Accept: "application/json"
-                }
-            }
-        ).then((response: AxiosResponse<Equipment[]>) => {
-            console.log(response.data)
-            setEquipments(response.data)
-        })
-    }, [])
 
     function addEquipment(id: string) {
         if (equipmentIds.includes(id)) {

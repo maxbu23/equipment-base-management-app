@@ -6,7 +6,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity
 import org.springframework.stereotype.Component;
 
 @Component
-public class LocalizationMapper implements Mapper<Localization, LocalizationDto>{
+public class LocalizationMapper {
 
     public Localization dtoToEntity(LocalizationDto localizationDto) {
         return Localization.builder()

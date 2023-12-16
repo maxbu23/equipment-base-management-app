@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1/admin")
+@RequestMapping("/api/v1")
 public class LocalizationController {
 
     private final LocalizationService localizationService;

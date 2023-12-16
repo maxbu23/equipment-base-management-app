@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import UserDetails from "../details/UserDetails";
+import ChangeLocalization from "../modals/ChangeLocalization";
 
 type FunctionType = () => void;
 
@@ -18,10 +19,11 @@ interface Props {
     equipments: Equipment[];
     showAdminActions: boolean;
     showOwnerEmail: boolean;
+    showChangeLocalization: boolean;
     refreshData: FunctionType;
 }
 
-const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData, showAdminActions}) => {
+const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData, showAdminActions, showChangeLocalization}) => {
         
         const [jwt, setJwt] = useLocalState("", "jwt");
         
@@ -30,6 +32,7 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
         const [exportModalShow, setExportModalShow] = useState(false);
         const [assignModalShow, setAssignModalShow] = useState(false);
         const [userDetailsModalShow, setUserDetailsModalShow] = useState(false);
+        const [changeLocalizationModalShow, setChangeLocalizationModalShow] = useState(false);
 
         const [selectedUser, setSelectedUser] = useState<User>();
 
@@ -91,11 +94,21 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                     )
                 }
             }
-            
             setPaginationItems(items);
         }, [pageCount, currentPage])
 
         useMemo(() => {
+
+            equipments.sort((a, b) => {
+                if (a.equipmentState === 'ASSIGNED' && b.equipmentState !== 'ASSIGNED') {
+                    return -1;
+                }
+                if (a.equipmentState !== 'ASSIGNED' && b.equipmentState === 'ASSIGNED') {
+                    return 1;
+                }
+                return 0;
+            });
+
             const regex = new RegExp(filterValue, 'i');
             let filteredEquipments;
             switch (filterColumn) {
@@ -111,15 +124,14 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                 default:
                     filteredEquipments = [...equipments];
             }
+
+
         
             setPageCount(Math.ceil(filteredEquipments.length / 10));
-                
             const start = (currentPage - 1) * 10;
             setEquipmentsToShow(filteredEquipments.slice(start, start + 10));
         }, [filterValue, equipments, currentPage, filterColumn]);
         
-
-
         function deleteEquipment(id: string) {
             axios.delete(
                 `/api/v1/admin/equipments/${id}`,
@@ -150,6 +162,12 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
         function assignEquipment(equipment: Equipment) {
             setEquipmentToAssign(equipment);
             setAssignModalShow(true);
+        }
+        
+        function changeLocalization(equipment: Equipment) {
+            alert("Equipment: " + equipment.name)
+            setChangeLocalizationModalShow(true);
+            setEquipmentToUpdate(equipment)
         }
 
         function showUserDetails(user: User) {
@@ -210,94 +228,142 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                 <div>
                     <Table className="" striped borderless size="sm">
                         <thead>
+                            {showAdminActions ? 
                             <tr>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Name</th>
-                                <th>Brand</th>
-                                <th>Serial number</th>
-                                {showOwnerEmail ? <th>Owner</th> : <></>}
-                                <th>Department</th>
-                                <th>Building</th>
-                                <th>Floor</th>
-                                <th>Room</th>
-                                {showAdminActions ? 
-                                <th colSpan={3} style={{border:"none"}}>                
-                                    <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
-                                </th> : <></>}
-                            </tr>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Serial number</th>
+                            {showOwnerEmail ? <th>Owner</th> : <></>}
+                            <th>Department</th>
+                            <th>Building</th>
+                            <th>Floor</th>
+                            <th>Room</th>
+                            {showAdminActions ? 
+                            <th colSpan={3} style={{border:"none"}}>                
+                                <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
+                            </th> : <></>}
+                            <th></th>
+                        </tr>: 
+                        <tr>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Name</th>
+                            <th>Brand</th>
+                            <th>Serial number</th>
+                            <th>Department</th>
+                            <th>Building</th>
+                            <th>Floor</th>
+                            <th>Room</th>
+                            <th></th>
+                        </tr>}
+                           
                         </thead>
                         <tbody>
-                        {equipmentsToShow ? equipmentsToShow.map((equipment) =>
-                                <tr className="table-row" key={equipment.id}>
-                                    <td>{equipment.equipmentType}</td>
-                                    <td>{equipment.equipmentState}</td>
-                                    <td>
-                                    <OverlayTrigger
-                                        overlay={<Tooltip id="button-tooltip-2">{equipment.name}</Tooltip>}
-                                        placement="top-start"
-                                    >
-                                        <span>{equipment.name}</span>
-                                    </OverlayTrigger>
-                                        
-                                    </td>
-                                    <td>{equipment.brand}</td>
-                                    <td>{equipment.serialNumber}</td>
-                                    {showOwnerEmail && equipment.owner ? 
-                                        <td onClick={() => showUserDetails(equipment.owner as User)}> 
-                                            <OverlayTrigger
-                                                overlay={<Tooltip id="button-tooltip-2">{equipment.owner?.email}</Tooltip>}
-                                                placement="top-start"
-                                            >
-                                                <span>{equipment.owner?.email}</span>
-                                            </OverlayTrigger>
-                                        </td> : <td></td>
-                                    }
-                                    <td>
-                                        {equipment.localization ? equipment.localization.department : ""}
-                                    </td>
-                                    <td>
-                                        {equipment.localization ? equipment.localization.building : ""}
-                                    </td>
-                                    <td>
-                                        {equipment.localization ? equipment.localization.floor : ""}
-                                    </td>
-                                    <td>
-                                        {equipment.localization ? equipment.localization.roomNumber : ""}
-                                    </td>
-                                    {showAdminActions ? 
-                                        <>
-                                            {equipment.equipmentState === "BROKEN" || equipment.equipmentState == "IN_SERVICE" ? 
+                            {showAdminActions ? <>
+                                {equipmentsToShow ? equipmentsToShow.map((equipment) =>         
+                                    <tr className="table-row" key={equipment.id}>
+                                        <td>{equipment.equipmentType}</td>
+                                        <td>{equipment.equipmentState}</td>
+                                        <td>
+                                        <OverlayTrigger
+                                            overlay={<Tooltip id="button-tooltip-2">{equipment.name}</Tooltip>}
+                                            placement="top-start"
+                                        >
+                                            <span>{equipment.name}</span>
+                                        </OverlayTrigger>
+                                            
+                                        </td>
+                                        <td>{equipment.brand}</td>
+                                        <td>{equipment.serialNumber}</td>
+                                        {showOwnerEmail && equipment.owner ? 
+                                            <td onClick={() => showUserDetails(equipment.owner as User)}> 
+                                                <OverlayTrigger
+                                                    overlay={<Tooltip id="button-tooltip-2">{equipment.owner?.email}</Tooltip>}
+                                                    placement="top-start"
+                                                >
+                                                    <span>{equipment.owner?.email}</span>
+                                                </OverlayTrigger>
+                                            </td> : <></>
+                                        }
+                                        <td>
+                                            {equipment.localization ? equipment.localization.department : ""}
+                                        </td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.building : ""}
+                                        </td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.floor : ""}
+                                        </td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.roomNumber : ""}
+                                        </td>
                                             <>
-                                                <td>
-                                                    <button disabled className="disabled-button" onClick={() => assignEquipment(equipment)}>Assign</button>
-                                                </td>
-                                            </> 
-                                            : 
-                                            <>
-                                                {equipment.equipmentState === 'ASSIGNED' ? 
-                                                    <td>
-                                                        <button className="button" onClick={() => removeAssingnment(equipment.id)}>Remove assignment</button>
-                                                    </td>
+                                                {equipment.equipmentState === "BROKEN" || equipment.equipmentState == "IN_SERVICE" ? 
+                                                    <>
+                                                        <td>
+                                                            <button disabled className="disabled-button" onClick={() => assignEquipment(equipment)}>Assign</button>
+                                                        </td>
+                                                    </> 
                                                     : 
-                                                    <td>
-                                                        <button className="button" onClick={() => assignEquipment(equipment)}>Assign</button>
-                                                    </td>
+                                                    <>
+                                                        {equipment.equipmentState === 'ASSIGNED' ? 
+                                                            <td>
+                                                                <button className="button" onClick={() => removeAssingnment(equipment.id)}>Remove assignment</button>
+                                                            </td>
+                                                            : 
+                                                            <td>
+                                                                <button className="button" onClick={() => assignEquipment(equipment)}>Assign</button>
+                                                            </td>
+                                                        }
+                                                    </>
                                                 }
+                                        
+                                                <td>
+                                                    <button className="button" onClick={() => updateEquipment(equipment)}>Update</button>
+                                                </td>
+                                                <td>
+                                                    <button className="button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
+                                                </td>
+                                            </>
+                                    </tr>
+                            ): <></>} </> 
+                            : <>
+                                {equipmentsToShow ? equipmentsToShow.map((equipment) =>
+                                    <tr className="table-row" key={equipment.id}>
+                                        <td>{equipment.equipmentType}</td>
+                                        <td>{equipment.equipmentState}</td>
+                                        <td>
+                                        <OverlayTrigger
+                                            overlay={<Tooltip id="button-tooltip-2">{equipment.name}</Tooltip>}
+                                            placement="top-start"
+                                        >
+                                            <span>{equipment.name}</span>
+                                        </OverlayTrigger>
                                             
-                                            </>}
-                                           
-                                            
-                                            <td>
-                                                <button className="button" onClick={() => updateEquipment(equipment)}>Update</button>
-                                            </td>
-                                            <td>
-                                                <button className="button" onClick={() => deleteEquipment(equipment.id)}>Delete</button>
-                                            </td>
-                                        </>
-                                    : <></>}   
-                                </tr>
-                        ): <></>} 
+                                        </td>
+                                        <td>{equipment.brand}</td>
+                                        <td>{equipment.serialNumber}</td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.department : ""}
+                                        </td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.building : ""}
+                                        </td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.floor : ""}
+                                        </td>
+                                        <td>
+                                            {equipment.localization ? equipment.localization.roomNumber : ""}
+                                        </td>
+                                        <td>
+                                            {showChangeLocalization ? <><td><button className="button" onClick={() => changeLocalization(equipment)}>Change localization</button></td></> : <td></td>}
+                                        </td>
+                                    </tr>
+                                ): <></>} 
+                            </>}
+                        
                         <UpdateEquipment
                             equipment={equipmentToUpdate}
                             show={updateEquipmentModalShow}
@@ -317,19 +383,20 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                             onHide={() => setUserDetailsModalShow(false)}
                             user={selectedUser as User}
                         />
+                        <ChangeLocalization 
+                            show={changeLocalizationModalShow}
+                            equipment={equipmentToUpdate}
+                            onHide={() => setChangeLocalizationModalShow(false)}
+                        />
                         </tbody>
                     </Table>
                     <div>
                     </div>
                 </div>
                 <div>
-                    <Pagination style={{display: "flex", justifyContent: "center"}}>
+                    {pageCount >10 ? <Pagination style={{display: "flex", justifyContent: "center"}}>
                         {paginationItems}
-                        {/* <Pagination.Item key={1} onClick={() => changePage(1)}>1</Pagination.Item>
-                        <Pagination.Item key={2} onClick={() => changePage(2)}>2</Pagination.Item>
-                        <Pagination.Item key={3} onClick={() => changePage(3)}>3</Pagination.Item>
-                        <Pagination.Item key={4} onClick={() => changePage(4)}>4</Pagination.Item> */}
-                    </Pagination>
+                    </Pagination> : <></>}
                 </div>
                 
             </>

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.EquipmentMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
@@ -31,8 +32,9 @@ public class InitConfiguration implements CommandLineRunner {
 
     private final EquipmentRepository equipmentRepository;
     private final LocalizationRepository localizationRepository;
-    private final LocalizationMapper localizationMapper;
+
     private final EquipmentMapper equipmentMapper;
+    private final LocalizationMapper localizationMapper;
 
     private final XLSXReader xlsxReader;
 
@@ -53,7 +55,7 @@ public class InitConfiguration implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
 //        senderService.sendEmail("max.buczek@yahoo.com", "Testowy email", "Hello world!");
-
+        localizationRepository.deleteAll();
         User admin = User.builder()
                 .email(admin1Email)
                 .firstname("Bob")
@@ -76,27 +78,27 @@ public class InitConfiguration implements CommandLineRunner {
         saveInitUsers();
         saveInitEquipments();
 
-        List<Equipment> initEquipments = xlsxReader.readEquipmentsFromXLSXFile();
-        equipmentRepository.saveAll(initEquipments);
-//
-//
-//        List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
-//        localizationRepository.saveAll(localizationDtos.stream().map(localizationMapper::dtoToEntity).toList());
+//        List<Equipment> initEquipments = xlsxReader.readEquipmentsFromXLSXFile();
+//        equipmentRepository.saveAll(initEquipments);
+////
+////
+        List<LocalizationDto> localizationDtos = xlsxReader.readLocationsFromXLSXFile();
+        localizationRepository.saveAll(localizationDtos.stream().map(localizationMapper::dtoToEntity).toList());
 //        List<EquipmentDto> equipmentDtos = xlsxReader.readEquipmentsFromXLSXFile();
 //        equipmentRepository.saveAll(equipmentDtos.stream().map(equipmentMapper::dtoToEntity).toList());
     }
 
     private void saveInitEquipments() {
         Equipment equipment1 = Equipment.builder()
-                .name("Mac Book Pro 13")
+                .name("Lenovo ThinkStation PS212")
                 .equipmentType(EquipmentType.PC)
-                .serialNumber("ASD-1234-2345")
-                .brand("Apple")
+                .serialNumber("ADS-2312-222")
+                .brand("Lenovo")
                 .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment2 = Equipment.builder()
                 .name("Mac Book Air 14")
-                .equipmentType(EquipmentType.PC)
+                .equipmentType(EquipmentType.LAPTOP)
                 .serialNumber("ASD-8989-2345")
                 .brand("Apple")
                 .equipmentState(EquipmentState.NOT_ASSIGNED)
@@ -109,10 +111,10 @@ public class InitConfiguration implements CommandLineRunner {
                 .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment4 = Equipment.builder()
-                .name("Mac Book Pro 13")
-                .equipmentType(EquipmentType.PC)
-                .serialNumber("ASD-1234-78721")
-                .brand("Apple")
+                .name("Table Samsung Galaxy S10")
+                .equipmentType(EquipmentType.TABLET)
+                .serialNumber("ASD-2312-78721")
+                .brand("Samsung")
                 .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
         Equipment equipment5 = Equipment.builder()
@@ -122,7 +124,84 @@ public class InitConfiguration implements CommandLineRunner {
                 .brand("Brother")
                 .equipmentState(EquipmentState.NOT_ASSIGNED)
                 .build();
-        equipmentRepository.saveAll(List.of(equipment4, equipment1, equipment3, equipment2, equipment5));
+        Equipment equipment6 = Equipment.builder()
+                .name("Lenovo ThinkStation PS212")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("ADS-2312-224")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment7 = Equipment.builder()
+                .name("Lenovo ThinkStation PS212")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("ADS-2312-225")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment8 = Equipment.builder()
+                .name("Lenovo ThinkStation PS212")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("ADS-2312-226")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment9 = Equipment.builder()
+                .name("Lenovo ThinkStation PS212")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("ADS-2312-226")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment10 = Equipment.builder()
+                .name("HP G9 Tower")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("BAA-2312-001")
+                .brand("HP")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment11 = Equipment.builder()
+                .name("HP G9 Tower")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("BAA-2312-002")
+                .brand("HP")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment12 = Equipment.builder()
+                .name("HP G9 Tower")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("BAA-2312-003")
+                .brand("HP")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment13 = Equipment.builder()
+                .name("Lenovo Yoga")
+                .equipmentType(EquipmentType.PC)
+                .serialNumber("CAA-2312-010")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment14 = Equipment.builder()
+                .name("Lenovo Yoga")
+                .equipmentType(EquipmentType.LAPTOP)
+                .serialNumber("CAA-2312-011")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment15 = Equipment.builder()
+                .name("Lenovo Yoga")
+                .equipmentType(EquipmentType.LAPTOP)
+                .serialNumber("CAA-2312-012")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        Equipment equipment16 = Equipment.builder()
+                .name("Lenovo Yoga")
+                .equipmentType(EquipmentType.LAPTOP)
+                .serialNumber("CAA-2312-013")
+                .brand("Lenovo")
+                .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .build();
+        equipmentRepository.saveAll(List.of(equipment4, equipment1, equipment3, equipment2, equipment5, equipment6, equipment7, equipment8, equipment9, equipment10, equipment11, equipment12, equipment13, equipment14, equipment15, equipment16));
     }
 
     private void saveInitUsers() {

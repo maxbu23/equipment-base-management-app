@@ -10,11 +10,15 @@ const UserDashboardComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [id, setId] = useLocalState(-1, "id");
     const [equipments, setEquipments] = useState(Array<Equipment>)
+    const [allEquipments, setAllEquipments] = useState(Array<Equipment>)
     const [table, setTable] = useState<JSX.Element>()
     const [profileModalShow, setProfileModalShow] = useState(false);
-
+    
     useEffect(() => {
-        console.log("CALLING ")
+        fetchAndSetUserEquipments();
+    }, [])
+
+    function fetchAndSetUserEquipments() {
         axios.get<Equipment[]>(
             `/api/v1/user/equipments/${id}`,
             {
@@ -24,26 +28,42 @@ const UserDashboardComponent = () => {
                 }
             }
         ).then((response: AxiosResponse<Equipment[]>) => {
-            console.log(response.data)
             setEquipments(response.data)
         })
-    }, [])
+    }
 
     useEffect(() => {
-        setTable(<EquipmentList showAdminActions={false} showOwnerEmail={false} equipments={equipments} refreshData={() => {}}/>)
+        setTable(<EquipmentList showAdminActions={false} showOwnerEmail={false} equipments={equipments} showChangeLocalization={true} refreshData={fetchAndSetUserEquipments}/>)
     }, [equipments])
+
+    function fetchAndSetAllEquipments() {
+        axios.get<Equipment[]>(
+            '/api/v1/equipments',
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                    Accept: "application/json"
+                }
+            }
+        ).then((response: AxiosResponse<Equipment[]>) => {
+            setAllEquipments(response.data)
+        })
+        setTable(<EquipmentList showAdminActions={false} showOwnerEmail={false} equipments={allEquipments} showChangeLocalization={false} refreshData={fetchAndSetAllEquipments}/>)
+    } 
 
     return(
         <div>
             <Navbar data-bs-theme="dark">
                 <Container>
-                    <Nav>
+                    <Nav className="ms-auto">
                         <Nav.Link onClick={() => setProfileModalShow(true)}>Profile</Nav.Link>
                     </Nav>
                 </Container>
             </Navbar>
             <div className="center-top">
-                <div>
+            <div>
+                    <button className="button" onClick={() => fetchAndSetUserEquipments()}>My equipments</button>
+                    <button className="button" onClick={() => fetchAndSetAllEquipments()}>All equipments</button>
                 </div>
                 {table}
             </div>

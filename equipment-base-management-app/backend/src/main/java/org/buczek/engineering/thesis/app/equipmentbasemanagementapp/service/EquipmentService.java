@@ -7,26 +7,20 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.Equip
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.UserMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentWithLocalizationDto;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Localization;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.AssignEquipmentRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.ChangeEquipmentLocalization;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.LocalizationRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.export.ExportService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.XLSXReader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -55,27 +49,9 @@ public class EquipmentService {
                 .toList();
     }
 
-    public List<EquipmentDto> getUserEquipments(Long ownerId) {
+    public List<EquipmentDto> getEquipmentsByUserId(Long ownerId) {
         return equipmentRepository.findByOwnerId(ownerId).stream()
                 .map(equipmentMapper::entityToDto).toList();
-    }
-
-    public List<EquipmentDto> getAllAvailableEquipments() {
-        return equipmentRepository.getAllAvailableEquipments().stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
-    }
-
-    public List<EquipmentDto> getUserAndAllAvailableEquipments(long userId) {
-        List<EquipmentDto> availableEquipments = equipmentRepository.getAllAvailableEquipments().stream().map(this::mapEquipmentEntityToDto).toList();
-        List<EquipmentDto> userEquipments = equipmentRepository.findByOwnerId(userId).stream().map(this::mapEquipmentEntityToDto).toList();
-
-        ArrayList<EquipmentDto> userAndAvailableEquipments = new ArrayList<>();
-        userAndAvailableEquipments.addAll(userEquipments);
-        userAndAvailableEquipments.addAll(availableEquipments);
-        return userAndAvailableEquipments;
-    }
-
-    public List<EquipmentDto> getAllEquipmentsByUserId(long userId) {
-        return equipmentRepository.findByOwnerId(userId).stream().map(this::mapEquipmentEntityToDto).collect(Collectors.toList());
     }
 
     public void updateEquipment(EquipmentDto equipmentDto) {
@@ -114,6 +90,38 @@ public class EquipmentService {
         equipmentRepository.deleteById(equipmentId);
     }
 
+    public EquipmentDto getEquipmentByBarcode(String barcode) {
+        Optional<Equipment> equipmentOptional = equipmentRepository.findByBarcode(barcode);
+
+        if (equipmentOptional.isEmpty()) {
+            throw new EntityNotFoundException();
+        }
+
+        return equipmentMapper.entityToDto(equipmentOptional.get());
+    }
+
+    public void saveImportedEquipments(MultipartFile multipartFile) {
+        try {
+            log.info("Importing equipment data...");
+            List<Equipment> equipments = xlsxReader.readEquipmentsFromXLSXFile(multipartFile);
+            equipmentRepository.saveAll(equipments);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void changeEquipmentLocalization(ChangeEquipmentLocalization request) {
+        Optional<Equipment> equipmentOptional = equipmentRepository.findById(request.equipmentId());
+        if (equipmentOptional.isEmpty()) {
+            throw new EntityNotFoundException("Equipment with ID " + request.equipmentId() + " does not exists.");
+        }
+        Localization localization = localizationService.findLocalizationById(request.localizationId());
+        Equipment equipment = equipmentOptional.get();
+        equipment.setLocalization(localization);
+        equipmentRepository.save(equipment);
+
+    }
+
     private void prepareEquipmentToAssignment(Equipment equipment, User owner, Localization localization) {
         equipment.setOwner(owner);
         equipment.setLocalization(localization);
@@ -139,21 +147,4 @@ public class EquipmentService {
                 .build();
     }
 
-    public EquipmentDto getEquipmentByBarcode(String barcode) {
-        Optional<Equipment> equipmentOptional = equipmentRepository.findByBarcode(barcode);
-
-        if (equipmentOptional.isEmpty()) {
-            throw new EntityNotFoundException();
-        }
-
-        return equipmentMapper.entityToDto(equipmentOptional.get());
-    }
-
-    public void saveImportedEquipments(MultipartFile multipartFile) {
-        try {
-            xlsxReader.readEquipmentsFromXLSXFile(multipartFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

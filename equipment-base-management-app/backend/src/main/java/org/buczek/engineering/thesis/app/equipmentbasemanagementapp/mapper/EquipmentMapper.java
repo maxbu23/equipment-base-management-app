@@ -8,11 +8,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class EquipmentMapper implements Mapper<Equipment, EquipmentDto>{
+public class EquipmentMapper {
 
     private final LocalizationMapper localizationMapper;
 
-    @Override
     public Equipment dtoToEntity(EquipmentDto equipmentDto) {
         return Equipment.builder()
                 .id(equipmentDto.id())
@@ -24,9 +23,9 @@ public class EquipmentMapper implements Mapper<Equipment, EquipmentDto>{
                 .build();
     }
 
-    @Override
     public EquipmentDto entityToDto(Equipment equipment) {
         return EquipmentDto.builder()
+                .id(equipment.getId())
                 .equipmentType(equipment.getEquipmentType())
                 .name(equipment.getName())
                 .brand(equipment.getBrand())

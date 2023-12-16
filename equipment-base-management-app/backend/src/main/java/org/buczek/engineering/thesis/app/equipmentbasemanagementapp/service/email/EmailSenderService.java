@@ -12,7 +12,6 @@ public class EmailSenderService {
     private final JavaMailSender mailSender;
 
     public void sendEmail(String toEmail, String subject, String body) {
-
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("maxbutest@gmail.com");
         message.setTo(toEmail);
@@ -20,7 +19,5 @@ public class EmailSenderService {
         message.setSubject(subject);
 
         mailSender.send(message);
-
-        System.out.println("Mail sent successfully");
     }
 }

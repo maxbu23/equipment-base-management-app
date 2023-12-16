@@ -2,7 +2,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Container, Form, Navbar } from 'react-bootstrap';
 import useLocalState from "./../../util/useLocalStorage";
-import { Equipment, EquipmentType } from './../../model/Models';
 
 const ImportFile = () => {
     
@@ -15,59 +14,30 @@ const ImportFile = () => {
     };
 
     const handleUpload = () => {
-        // Use a function to send the file to the Spring Boot backend
-        sendFileToSpringBoot(file);
+        sendFileToServer(file);
       };
     
-      const sendFileToSpringBoot = async (file: any) => {
-        try {
-          const formData = new FormData();
-          formData.append('file', file);
-      
-          // Make a POST request to the Spring Boot endpoint
-          const response = await axios.post('/api/v1/admin/import', 
-          formData, 
-          {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                Authorization: `Bearer ${jwt}`,
-                Accept: "application/json"
-            },
-          });
-      
-          console.log('File uploaded successfully:', response.data);
-        } catch (error) {
-          console.error('Error uploading file:', error);
-        }
-      };
-    // function sendCreateNewEquipmentRequest() {
-    //     const newEquipment: Equipment = createNewEquipment()
-    //     axios.post(
-    //         `/api/v1/admin/equipments`,
-    //         newEquipment,
-    //         {
-    //             headers: {
-    //                 Authorization: `Bearer ${jwt}`,
-    //                 Accept: "application/json"
-    //             }
-    //         }
-    //     ).then((response) => {
-    //         if (response.status === 200) {
-    //             window.location.href = 'admin-dashboard'
-    //         }
-    //     })
-    // }
-
-    // function createNewEquipment() : Equipment {
-    //     let newEquipment = {
-    //         id: "",
-    //         name: name,
-    //         brand: brand,
-    //         serialNumber: serialNumber,
-    //         equipmentType: equipmentType as EquipmentType
-    //     }
-    //     return newEquipment;
-    // }
+    const sendFileToServer = async (file: any) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      axios.post('/api/v1/admin/import', 
+      formData, 
+      {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${jwt}`,
+            Accept: "application/json"
+        },
+      }).then((response) => {
+        if (response.status === 200) {
+          window.location.href = 'admin-dashboard'
+      }
+      }).catch((error) => {
+        console.error('Error uploading file:', error);
+        alert("Something went wrong. Please try again later.")
+        window.location.href = 'admin-dashboard'
+        });
+    };
 
     return(
         <div> 
@@ -83,7 +53,7 @@ const ImportFile = () => {
                   <Form.Group controlId="formFile">
                     <Form.Label>Upload</Form.Label>
                     <div style={{display: "flex"}}>
-                    <Form.Control type="file" style={{marginBottom: "10px"}}/>
+                    <Form.Control onChange={handleFileChange} type="file" style={{marginBottom: "10px"}}/>
                     <Form.Check
                       type="switch"
                       id="custom-switch"
@@ -92,7 +62,6 @@ const ImportFile = () => {
                     />
                     </div>
                   </Form.Group>
-                  
                 <button className="button" onClick={handleUpload}>Upload</button>
                 </div>
             </div>            

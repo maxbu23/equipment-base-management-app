@@ -5,14 +5,12 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.mod
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements Mapper<User, UserDto> {
+public class UserMapper {
 
-    @Override
     public User dtoToEntity(UserDto userDto) {
         return User.builder().build();
     }
 
-    @Override
     public UserDto entityToDto(User user) {
         if (user != null) {
             return UserDto.builder()

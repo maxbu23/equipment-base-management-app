@@ -22,12 +22,12 @@ const AdminDashboardComponent = () => {
     }, [])
 
     useEffect(() => {
-        setTable(<EquipmentList showAdminActions={true} showOwnerEmail={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showAdminActions={true} showOwnerEmail={true} equipments={equipments} showChangeLocalization={false} refreshData={fetchAndSetEquipments}/>)
     }, [equipments])
 
     function fetchAndSetEquipments() {
         axios.get<Equipment[]>(
-            '/api/v1/admin/equipments',
+            '/api/v1/equipments',
             {
                 headers: {
                     Authorization: `Bearer ${jwt}`,
@@ -37,7 +37,7 @@ const AdminDashboardComponent = () => {
         ).then((response: AxiosResponse<Equipment[]>) => {
             setEquipments(response.data)
         })
-        setTable(<EquipmentList showAdminActions={true} showOwnerEmail={true} equipments={equipments} refreshData={fetchAndSetEquipments}/>)
+        setTable(<EquipmentList showAdminActions={true} showOwnerEmail={true} equipments={equipments} showChangeLocalization={false} refreshData={fetchAndSetEquipments}/>)
     } 
 
     function fetchAndSetUsers() {
