@@ -33,7 +33,7 @@ const UserDashboardComponent = () => {
     }
 
     useEffect(() => {
-        setTable(<EquipmentList showAdminActions={false} showOwnerEmail={false} equipments={equipments} showChangeLocalization={true} refreshData={fetchAndSetUserEquipments}/>)
+        setTable(<EquipmentList equipments={equipments} isAdminDashboard={false} showChangeLocalization={true} refreshData={fetchAndSetUserEquipments}/>)
     }, [equipments])
 
     function fetchAndSetAllEquipments() {
@@ -48,7 +48,7 @@ const UserDashboardComponent = () => {
         ).then((response: AxiosResponse<Equipment[]>) => {
             setAllEquipments(response.data)
         })
-        setTable(<EquipmentList showAdminActions={false} showOwnerEmail={false} equipments={allEquipments} showChangeLocalization={false} refreshData={fetchAndSetAllEquipments}/>)
+        setTable(<EquipmentList equipments={allEquipments} isAdminDashboard={false} showChangeLocalization={false} refreshData={fetchAndSetAllEquipments}/>)
     } 
 
     return(

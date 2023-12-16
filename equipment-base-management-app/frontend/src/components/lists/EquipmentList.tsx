@@ -17,13 +17,12 @@ type FunctionType = () => void;
 
 interface Props {
     equipments: Equipment[];
-    showAdminActions: boolean;
-    showOwnerEmail: boolean;
+    isAdminDashboard: boolean;
     showChangeLocalization: boolean;
     refreshData: FunctionType;
 }
 
-const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData, showAdminActions, showChangeLocalization}) => {
+const EquipmentList: React.FC<Props> = ({equipments, isAdminDashboard, showChangeLocalization, refreshData}) => {
         
         const [jwt, setJwt] = useLocalState("", "jwt");
         
@@ -228,40 +227,40 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                 <div>
                     <Table className="" striped borderless size="sm">
                         <thead>
-                            {showAdminActions ? 
-                            <tr>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Name</th>
-                            <th>Brand</th>
-                            <th>Serial number</th>
-                            {showOwnerEmail ? <th>Owner</th> : <></>}
-                            <th>Department</th>
-                            <th>Building</th>
-                            <th>Floor</th>
-                            <th>Room</th>
-                            {showAdminActions ? 
-                            <th colSpan={3} style={{border:"none"}}>                
-                                <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
-                            </th> : <></>}
-                            <th></th>
-                        </tr>: 
-                        <tr>
-                            <th>Type</th>
-                            <th>Status</th>
-                            <th>Name</th>
-                            <th>Brand</th>
-                            <th>Serial number</th>
-                            <th>Department</th>
-                            <th>Building</th>
-                            <th>Floor</th>
-                            <th>Room</th>
-                            <th></th>
-                        </tr>}
-                           
+                            {isAdminDashboard ? 
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Serial number</th>
+                                    <th>Owner</th>
+                                    <th>Department</th>
+                                    <th>Building</th>
+                                    <th>Floor</th>
+                                    <th>Room</th>
+                                    <th colSpan={3} style={{border:"none"}}>                
+                                        <button className="button" onClick={() => exportEquipmentsToXlsxFile()}>Export to .xslx</button>
+                                    </th>
+                                </tr>
+                                :
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Name</th>
+                                    <th>Brand</th>
+                                    <th>Serial number</th>
+                                    <th>Department</th>
+                                    <th>Building</th>
+                                    <th>Floor</th>
+                                    <th>Room</th>
+                                    <th></th>
+                            </tr>
+                            }
                         </thead>
                         <tbody>
-                            {showAdminActions ? <>
+                            {isAdminDashboard ? 
+                                <>
                                 {equipmentsToShow ? equipmentsToShow.map((equipment) =>         
                                     <tr className="table-row" key={equipment.id}>
                                         <td>{equipment.equipmentType}</td>
@@ -277,16 +276,14 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                                         </td>
                                         <td>{equipment.brand}</td>
                                         <td>{equipment.serialNumber}</td>
-                                        {showOwnerEmail && equipment.owner ? 
                                             <td onClick={() => showUserDetails(equipment.owner as User)}> 
                                                 <OverlayTrigger
                                                     overlay={<Tooltip id="button-tooltip-2">{equipment.owner?.email}</Tooltip>}
                                                     placement="top-start"
                                                 >
-                                                    <span>{equipment.owner?.email}</span>
+                                                <span>{equipment.owner?.email}</span>
                                                 </OverlayTrigger>
-                                            </td> : <></>
-                                        }
+                                         </td> 
                                         <td>
                                             {equipment.localization ? equipment.localization.department : ""}
                                         </td>
@@ -328,9 +325,8 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                                                 </td>
                                             </>
                                     </tr>
-                            ): <></>} </> 
-                            : <>
-                                {equipmentsToShow ? equipmentsToShow.map((equipment) =>
+                            ): <></>} </> : <>
+                            {equipmentsToShow ? equipmentsToShow.map((equipment) =>
                                     <tr className="table-row" key={equipment.id}>
                                         <td>{equipment.equipmentType}</td>
                                         <td>{equipment.equipmentState}</td>
@@ -361,7 +357,7 @@ const EquipmentList: React.FC<Props> = ({equipments, showOwnerEmail, refreshData
                                             {showChangeLocalization ? <><td><button className="button" onClick={() => changeLocalization(equipment)}>Change localization</button></td></> : <td></td>}
                                         </td>
                                     </tr>
-                                ): <></>} 
+                                ): <></>}
                             </>}
                         
                         <UpdateEquipment
