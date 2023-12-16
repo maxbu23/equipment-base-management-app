@@ -11,6 +11,7 @@ const AddNewUserComponent = () => {
     const [equipmentType, setEquipmentType] = useState("");
     const [name, setName] = useState("");
     const [serialNumber, setSerialNumber] = useState("")
+    const [barcode, setBarcode] = useState("");
 
     function sendCreateNewEquipmentRequest() {
         const newEquipment: Equipment = createNewEquipment()
@@ -36,7 +37,8 @@ const AddNewUserComponent = () => {
             name: name,
             brand: brand,
             serialNumber: serialNumber,
-            equipmentType: equipmentType as EquipmentType
+            equipmentType: equipmentType as EquipmentType,
+            barcode: barcode
         }
         return newEquipment;
     }
@@ -64,6 +66,8 @@ const AddNewUserComponent = () => {
                 <Form.Control onChange={(event) => setBrand(event.target.value)}/>
                 <Form.Label>Serial number</Form.Label>
                 <Form.Control onChange={(event) => setSerialNumber(event.target.value)} />
+                <Form.Label>Barcode</Form.Label>
+                <Form.Control onChange={(event) => setBarcode(event.target.value)} />
                 <div style={{padding: "10px"}}>
                     <button className='button' onClick={() => sendCreateNewEquipmentRequest()}>Add</button>
                 </div>

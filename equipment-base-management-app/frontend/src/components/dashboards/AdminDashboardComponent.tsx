@@ -85,7 +85,6 @@ const AdminDashboardComponent = () => {
             <Navbar data-bs-theme="dark">
                 <Container>
                     <Nav className="me-auto">
-                        <Nav.Link href="/registration-form">Add new user</Nav.Link>
                         <Nav.Link href="/add-new-equipment">Add new equipment</Nav.Link>
                         <Nav.Link href="/backup-import">Backup/Import</Nav.Link>
                     </Nav>

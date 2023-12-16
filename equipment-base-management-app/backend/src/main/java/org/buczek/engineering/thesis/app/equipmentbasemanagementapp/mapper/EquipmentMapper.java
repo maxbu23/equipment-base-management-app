@@ -30,6 +30,7 @@ public class EquipmentMapper {
                 .name(equipment.getName())
                 .brand(equipment.getBrand())
                 .serialNumber(equipment.getSerialNumber())
+                .barcode(equipment.getBarcode())
                 .localization(localizationMapper.entityToDto(equipment.getLocalization()))
                 .build();
     }

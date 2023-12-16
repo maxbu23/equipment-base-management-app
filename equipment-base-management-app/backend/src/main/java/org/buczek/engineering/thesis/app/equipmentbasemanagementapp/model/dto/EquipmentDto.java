@@ -12,6 +12,7 @@ public record EquipmentDto(
         String name,
         String brand,
         String serialNumber,
+        String barcode,
         EquipmentType equipmentType,
         EquipmentState equipmentState,
         Long userId,

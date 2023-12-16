@@ -33,11 +33,6 @@ function App() {
             <AdminDashboard />
           </PrivateRoute>
         }/>
-        <Route path="/registration-form" element={
-          <AdminRoute>
-            <RegistrationComponent />
-          </AdminRoute>
-        }/>
         <Route path="add-new-equipment" element={
           <AdminRoute>
               <AddNewUserComponent />
