@@ -100,10 +100,13 @@ public class EquipmentService {
         return equipmentMapper.entityToDto(equipmentOptional.get());
     }
 
-    public void saveImportedEquipments(MultipartFile multipartFile) {
+    public void saveImportedEquipments(MultipartFile multipartFile, boolean force) {
         try {
             log.info("Importing equipment data...");
             List<Equipment> equipments = xlsxReader.readEquipmentsFromXLSXFile(multipartFile);
+            if (force) {
+                equipmentRepository.deleteAll();
+            }
             equipmentRepository.saveAll(equipments);
         } catch (IOException e) {
             throw new RuntimeException(e);

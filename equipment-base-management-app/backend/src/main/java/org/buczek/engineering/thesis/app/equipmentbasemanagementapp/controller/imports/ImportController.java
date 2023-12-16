@@ -15,11 +15,7 @@ public class ImportController {
 
     private final EquipmentService equipmentService;
     @PostMapping("/import")
-    public void importEquipmentsFromFile(@RequestParam("file") MultipartFile multipartFile) {
-        System.out.println(multipartFile);
-        System.out.println(multipartFile.getName());
-        System.out.println(multipartFile.getContentType());
-        System.out.println(multipartFile.getOriginalFilename());
-        equipmentService.saveImportedEquipments(multipartFile);
+    public void importEquipmentsFromFile(@RequestParam("file") MultipartFile multipartFile, @RequestParam("force") boolean force) {
+        equipmentService.saveImportedEquipments(multipartFile, force);
     }
 }

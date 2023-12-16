@@ -8,6 +8,7 @@ const ImportFile = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     const [file, setFile] = useState(null);
+    const [force, setForce] = useState(false);
 
     const handleFileChange = (event: any) => {
         setFile(event.target.files[0]);
@@ -20,7 +21,7 @@ const ImportFile = () => {
     const sendFileToServer = async (file: any) => {
       const formData = new FormData();
       formData.append('file', file);
-      axios.post('/api/v1/admin/import', 
+      axios.post(`/api/v1/admin/import?force=${force}`,
       formData, 
       {
         headers: {
@@ -59,6 +60,7 @@ const ImportFile = () => {
                       id="custom-switch"
                       label="Force"
                       style={{marginLeft: "10px"}}
+                      onChange={() => setForce(!force)}
                     />
                     </div>
                   </Form.Group>
