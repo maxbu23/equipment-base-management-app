@@ -141,7 +141,7 @@ const AssignEquipment = (props: Props) => {
                     <Form.Label>Equipment: {equipmentToAssign.name} ({equipmentToAssign.serialNumber})</Form.Label>
                 </div>
                 <div>
-                <Form.Label>User: {selectedUserId}</Form.Label>
+                <Form.Label>User:</Form.Label>
                     <select size={5} style={{height: "300px", width:"100%"}}>
                         {users ? users.map((user) => (
                             <option onClick={() => setSelectedUserId(user.id as number)}>{user.firstname + " " + user.lastname + " (" + user.email + ")"}</option>
@@ -149,10 +149,10 @@ const AssignEquipment = (props: Props) => {
                     </select>
                 </div>
                 <div>
-                <Form.Label>Localization: {selectedLocalizationId}</Form.Label>
+                <Form.Label>Localization (department / building / floor / classroom)</Form.Label>
                     <select size={5} style={{height: "300px", width:"100%"}}>
                         {localizations ? localizations.map((localization) => (
-                            <option onClick={() => setSelectedLocalizationId(localization.id as string)}>{localization.department + " " + localization.building + " " + localization.roomNumber}</option>
+                            <option onClick={() => setSelectedLocalizationId(localization.id as string)}>{localization.department + " / " + localization.building + " / " + localization.floor + " / " + localization.roomNumber}</option>
                         )) : <></>}
                     </select>
                 </div>

@@ -1,7 +1,6 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.EquipmentMapper;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.LocalizationMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper.UserMapper;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
@@ -10,7 +9,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.AssignEquipmentRequest;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;

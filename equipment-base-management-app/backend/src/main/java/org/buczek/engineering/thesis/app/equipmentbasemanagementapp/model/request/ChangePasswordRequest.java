@@ -1,4 +1,4 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request;
 
 public record ChangePasswordRequest(
         Long userId,

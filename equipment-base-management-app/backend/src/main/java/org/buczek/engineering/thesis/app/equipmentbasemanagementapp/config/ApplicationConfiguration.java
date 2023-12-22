@@ -1,7 +1,7 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config;
 
 import lombok.RequiredArgsConstructor;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfig {
+public class ApplicationConfiguration {
 
     private final UserRepository userRepository;
 

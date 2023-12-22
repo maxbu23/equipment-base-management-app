@@ -13,7 +13,7 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.AssignEquipmentRequest;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.ChangeEquipmentLocalization;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.XLSXReader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

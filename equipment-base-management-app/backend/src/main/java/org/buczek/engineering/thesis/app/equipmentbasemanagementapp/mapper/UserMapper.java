@@ -1,7 +1,7 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.mapper;
 
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserDto;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component

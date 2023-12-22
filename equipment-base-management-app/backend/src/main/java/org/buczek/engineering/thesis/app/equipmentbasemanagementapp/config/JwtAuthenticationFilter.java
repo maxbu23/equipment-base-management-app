@@ -1,4 +1,4 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -6,12 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.JwtService;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -3,8 +3,7 @@ package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserAndEquipmentsDto;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.UserDto;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
 

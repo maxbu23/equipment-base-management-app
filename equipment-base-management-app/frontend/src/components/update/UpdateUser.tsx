@@ -107,7 +107,7 @@ const UpdateUser = (props: Props) => {
                         </div>
                     )): <></>}
                 </Form> */}
-                <Button style={{width:"100%", marginTop: "10px"}} className='submit-button' onClick={() => sendUpdateUserRequest()}>Update</Button>
+                <Button style={{width:"100%", marginTop: "10px"}} className='button' onClick={() => sendUpdateUserRequest()}>Update</Button>
             </div>            
         </div>   
           </Modal.Body>

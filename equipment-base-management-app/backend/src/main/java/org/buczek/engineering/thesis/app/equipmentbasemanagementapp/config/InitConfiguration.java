@@ -10,9 +10,9 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.LocalizationRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.UserRepository;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.Role;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.email.EmailSenderService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.XLSXReader;
 import org.springframework.beans.factory.annotation.Value;

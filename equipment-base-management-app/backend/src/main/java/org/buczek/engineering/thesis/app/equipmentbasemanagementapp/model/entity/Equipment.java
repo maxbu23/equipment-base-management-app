@@ -7,15 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
 
 @Entity
 @NoArgsConstructor

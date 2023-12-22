@@ -52,22 +52,22 @@ const AddNewUserComponent = () => {
                     </Container>
                 </Navbar>
             </div>
-            <div className='creating-form'>
+            <div style={{padding: "10px"}} className='creating-form'>
                 <Form.Label>Name</Form.Label>
-                <Form.Control onChange={(event) => setName(event.target.value) }/>
-                <Form.Label>Equipment type</Form.Label>
-                <Form.Select aria-label="Default select example" onChange={(event) => setEquipmentType(event.target.value)}>
+                <Form.Control style={{marginTop: "-7px"}} onChange={(event) => setName(event.target.value) }/>
+                <Form.Label style={{paddingTop: "5px", marginTop: "5px"}} >Equipment type</Form.Label>
+                <Form.Select style={{marginTop: "-7px"}} aria-label="Default select example" onChange={(event) => setEquipmentType(event.target.value)}>
                     <option color="red" value="">Select equipment type</option>
                     {Object.values(EquipmentType).map((type) => (
                         <option value={type.toUpperCase()}>{type.toUpperCase()}</option>
                     ))}
                 </Form.Select>
-                <Form.Label>Brand</Form.Label>
-                <Form.Control onChange={(event) => setBrand(event.target.value)}/>
-                <Form.Label>Serial number</Form.Label>
-                <Form.Control onChange={(event) => setSerialNumber(event.target.value)} />
-                <Form.Label>Barcode</Form.Label>
-                <Form.Control onChange={(event) => setBarcode(event.target.value)} />
+                <Form.Label style={{paddingTop: "5px", marginTop: "5px"}}>Brand</Form.Label>
+                <Form.Control style={{marginTop: "-7px"}} onChange={(event) => setBrand(event.target.value)}/>
+                <Form.Label style={{paddingTop: "5px", marginTop: "5px"}}>Serial number</Form.Label>
+                <Form.Control style={{marginTop: "-7px"}} onChange={(event) => setSerialNumber(event.target.value)} />
+                <Form.Label style={{paddingTop: "5px", marginTop: "5px"}}>Barcode</Form.Label>
+                <Form.Control style={{marginTop: "-7px"}} onChange={(event) => setBarcode(event.target.value)} />
                 <div style={{padding: "10px"}}>
                     <button className='button' onClick={() => sendCreateNewEquipmentRequest()}>Add</button>
                 </div>

@@ -8,9 +8,9 @@ import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.Us
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.EquipmentRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.UserRepository;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.Role;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.PasswordGenerator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

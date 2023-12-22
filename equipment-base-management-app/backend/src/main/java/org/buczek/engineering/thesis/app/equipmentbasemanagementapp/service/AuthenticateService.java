@@ -1,15 +1,16 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.config.exception.IncorrectPasswordException;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.UserRepository;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.JwtService;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.AuthenticationRequest;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.ChangePasswordRequest;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.User;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.RegisterRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.response.AuthenticationResponse;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.repository.UserRepository;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.AuthenticationRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.ChangePasswordRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.Role;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.User;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.email.EmailSenderService;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.utils.PasswordGenerator;
 import org.springframework.security.authentication.AuthenticationManager;

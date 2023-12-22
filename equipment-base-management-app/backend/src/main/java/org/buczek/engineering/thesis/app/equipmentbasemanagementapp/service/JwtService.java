@@ -1,4 +1,4 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

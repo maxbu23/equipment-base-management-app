@@ -20,6 +20,8 @@ const UpdateEquipment = (props: Props) => {
     const [updatingName, setUpdatingName] = useState(props.equipment.name);
     const [updatingBrand, setUpdatingBrand] = useState(props.equipment.brand);
     const [updatingSerialNumber, setUpdatingSerialNumber] = useState(props.equipment.serialNumber);
+    // todo:
+    // const [updatingBarcode, setUpdatingBarcode] = useState(props.equipment.barcode);
     const [updatingType, setUpdatingType] = useState(props.equipment.equipmentType.toString());
     const [updatingState, setUpdatingState] = useState(props.equipment.equipmentState?.toString());
 
@@ -89,6 +91,8 @@ const UpdateEquipment = (props: Props) => {
                     <Form.Control value={updatingBrand} onChange={(event) => setUpdatingBrand(event.target.value)}/>
                     <Form.Label>Serial number</Form.Label>
                     <Form.Control value={updatingSerialNumber} onChange={(event) => setUpdatingSerialNumber(event.target.value)} />
+                    <Form.Label>Barcode</Form.Label>
+                    <Form.Control value="1230982891" onChange={(event) => setUpdatingSerialNumber(event.target.value)} />
                     {updatingState !== "ASSIGNED" ? 
                         <div>
                             <Form.Label>Status</Form.Label>

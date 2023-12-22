@@ -1,4 +1,4 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class AuthenticationRequest {
 
-    private String firstname;
-    private String lastname;
     private String email;
+    private String password;
 
 }

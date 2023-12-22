@@ -1,10 +1,10 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.model.Role;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.Role;
 
 @Data
 @Builder

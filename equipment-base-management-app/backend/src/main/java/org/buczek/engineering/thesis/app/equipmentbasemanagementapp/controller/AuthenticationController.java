@@ -1,9 +1,11 @@
-package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth;
+package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.AuthenticationRequest;
-import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.security.config.auth.request.ChangePasswordRequest;
-import org.springframework.http.HttpStatus;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.AuthenticationRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.ChangePasswordRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.request.RegisterRequest;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.response.AuthenticationResponse;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.service.AuthenticateService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

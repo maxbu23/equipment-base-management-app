@@ -99,7 +99,7 @@ const EquipmentList: React.FC<Props> = ({equipments, isAdminDashboard, showChang
         useMemo(() => {
 
             equipments.sort((a, b) => {
-                if (a.equipmentState === 'ASSIGNED' && b.equipmentState !== 'ASSIGNED') {
+                if ((a.equipmentState === 'ASSIGNED' || a.equipmentState === 'BROKEN' || a.equipmentState === 'IN_SERVICE') && b.equipmentState !== 'ASSIGNED') {
                     return -1;
                 }
                 if (a.equipmentState !== 'ASSIGNED' && b.equipmentState === 'ASSIGNED') {
@@ -107,6 +107,17 @@ const EquipmentList: React.FC<Props> = ({equipments, isAdminDashboard, showChang
                 }
                 return 0;
             });
+
+            // useMemo(() => {
+            //     equipments.sort((a, b) => {
+            //         if ((a.equipmentState === 'BROKEN' || a.equipmentState === 'IN_SERVICE') && b.equipmentState === 'ASSIGNED') {
+            //             return -1;
+            //         }
+            //         if (a.equipmentState === 'ASSIGNED' && (b.equipmentState === 'BROKEN' || b.equipmentState === 'IN_SERVICE')) {
+            //             return 1;
+            //         }
+            //         return 0;
+            //     });
 
             const regex = new RegExp(filterValue, 'i');
             let filteredEquipments;
@@ -203,6 +214,7 @@ const EquipmentList: React.FC<Props> = ({equipments, isAdminDashboard, showChang
             })
         }   
 
+        
         return(
             <>                  
                 <div style={{display: "flex", margin: "5px"}}>
@@ -284,6 +296,7 @@ const EquipmentList: React.FC<Props> = ({equipments, isAdminDashboard, showChang
                                                 <span>{equipment.owner?.email}</span>
                                                 </OverlayTrigger>
                                          </td> 
+
                                         <td>
                                             {equipment.localization ? equipment.localization.department : ""}
                                         </td>
