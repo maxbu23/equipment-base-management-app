@@ -26,7 +26,6 @@ const Scanner = () => {
     };
 
     function sendGetEquipmentByBarcodeRequest() {
-        alert("Barcode: " + barcode);
         axios.get<Equipment>(
             `api/v1/user/equipments/barcodes/${barcode}`,
             {
@@ -36,7 +35,6 @@ const Scanner = () => {
                 }
             }
         ).then((response: AxiosResponse<Equipment>) => {
-            alert(response.data);
             setCurrentEquipment(response.data);
             setEquipmentDetailModalShow(true);
         }).catch((error) => {
@@ -59,7 +57,7 @@ const Scanner = () => {
                                 if (!isScanning && barcode === "") {
                                 return (
                                     <Nav>
-                                    <Nav.Link onClick={() => setIsScanning(true)}>Start scanning</Nav.Link>
+                                        <Nav.Link onClick={() => setIsScanning(true)}>Start scanning</Nav.Link>
                                     </Nav>
                                 )
                                 } else if(!isScanning && barcode !== "") {
@@ -81,10 +79,15 @@ const Scanner = () => {
             <div>
                 {(() => {
                     if (!isScanning) {
-                        return barcode === "" ? <></> : <div className='creating-form'><p style={{textAlign:"center"}}>Last Scanne Barcode: {barcode}</p></div>
+                        return barcode === "" ? <></> : <div className='creating-form'><p style={{textAlign:"center"}}>Barcode: {barcode}</p></div>
                     } else {
                         return (
-                            <BarcodeScanner onDetected={handleBarcodeDetected} />
+                            <div >
+                                <div>
+                                    <BarcodeScanner onDetected={handleBarcodeDetected} />
+                                </div>
+                            </div>
+                            
                         )
                     }
                 })()

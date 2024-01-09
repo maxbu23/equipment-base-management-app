@@ -33,19 +33,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        log.info("Internal filter process starting...");
 
-        if (request.getServletPath().contains("/api/v1/auth/authenticate")) {
-            final String authHeader = request.getHeader("Authorization");
-            log.info("Authorization header: {}", authHeader);
+        if (request.getServletPath().contains("/api/v1/auth/authenticate") || request.getServletPath().contains("/swagger-ui/")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         final String authHeader = request.getHeader("Authorization");
-        log.info("Authorization header: {}", authHeader);
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.warn("Headers does not contain Authorization header or header is invalid!");
             filterChain.doFilter(request, response);
             return;
         }

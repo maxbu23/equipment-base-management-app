@@ -31,18 +31,11 @@ class EquipmentServiceTest {
     private static final long USER_ID = 200L;
     private static final long LOCALIZATION_ID = 300L;
 
-    @Mock
-    private EquipmentRepository equipmentRepository;
-    @Mock
-    private UserService userService;
-    @Mock
-    private LocalizationService localizationService;
-
-    @Mock(answer = Answers.CALLS_REAL_METHODS)
-    private EquipmentMapper equipmentMapper;
-    @Mock(answer = Answers.CALLS_REAL_METHODS)
-    private UserMapper userMapper;
-
+    @Mock private EquipmentRepository equipmentRepository;
+    @Mock private UserService userService;
+    @Mock private LocalizationService localizationService;
+    @Mock(answer = Answers.CALLS_REAL_METHODS) private EquipmentMapper equipmentMapper;
+    @Mock(answer = Answers.CALLS_REAL_METHODS) private UserMapper userMapper;
     @InjectMocks
     private EquipmentService tested;
 

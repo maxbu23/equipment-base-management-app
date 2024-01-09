@@ -22,6 +22,15 @@ html {
     border-radius: 10px;
 }
 
+.scanner {
+    display: block;
+  /* justify-content: center; */
+  align-items: center;
+  padding-top: 100px;
+  /* height: 50vh;  */
+  padding-bottom: 200px;
+}
+
 .creating-form {
     margin-top:     10px;
     margin-right: 10%;

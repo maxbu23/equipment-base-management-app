@@ -13,6 +13,7 @@ import java.util.function.Function;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -51,7 +52,11 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String jwtToken) {
-        return extractExpiration(jwtToken).before(new Date());
+        boolean isTokenExpired = extractExpiration(jwtToken).before(new Date());
+        if (isTokenExpired) {
+            log.info("JWT token is expired");
+        }
+        return isTokenExpired;
     }
 
     private Date extractExpiration(String jwtToken) {
@@ -64,7 +69,6 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String jwtToken) {
-        log.info(jwtToken);
         return Jwts.parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()

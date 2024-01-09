@@ -9,7 +9,8 @@ type FunctionType = () => void;
 interface Props {
     onHide: FunctionType;
     show: boolean;
-    equipmentToAssign: Equipment;
+    equipmentIdToAssign: Equipment;
+    assignMode: boolean;
 }
 
 interface AssignEquipmentsRequest {
@@ -18,11 +19,17 @@ interface AssignEquipmentsRequest {
     localizationId: string;
 }
 
-const AssignEquipment = (props: Props) => {
+interface ChangeEquipmentLocalizationRequest {
+    equipmentId: string;
+    localizationId: string;
+}
 
-    const [jwt, setJwt] = useLocalState("", "jwt")
+const LocalizationList = (props: Props) => {
 
-    const [equipmentToAssign, setEquipmentToAssign] = useState<Equipment>(props.equipmentToAssign);
+    const [jwt, setJwt] = useLocalState("", "jwt");
+    const [userId, setUserId] = useLocalState(-1, "id") 
+
+    const [equipmentIdToAssign, setEquipmenIdToAssign] = useState<Equipment>(props.equipmentIdToAssign);
 
     // all available localizations
     const [localizations, setLocalizations] = useState<Localization[]>([]);
@@ -34,7 +41,7 @@ const AssignEquipment = (props: Props) => {
     const [selectedUserId, setSelectedUserId] = useState<number>();
     
     useEffect(() => {
-        setEquipmentToAssign(props.equipmentToAssign)
+        setEquipmenIdToAssign(props.equipmentIdToAssign)
         setSelectedLocalizationId("");
         setSelectedUserId(-1);
         fetchAndSetAllUsers();
@@ -74,40 +81,58 @@ const AssignEquipment = (props: Props) => {
     }
 
     function sendAssignEquipmentRequest() {
-        const request: AssignEquipmentsRequest = createAssignEquipmentsRequest();
-        axios.put(
-            `/api/v1/admin/equipments/assign`,
-            request,
-            {
-                headers: {
-                    Authorization: `Bearer ${jwt}`,
-                    Accept: "application/json"
+        if (props.assignMode) {
+            const request: AssignEquipmentsRequest = createAssignEquipmentsRequest();
+            axios.put(
+                `/api/v1/equipments/assign`,
+                request,
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        Accept: "application/json"
+                    }
                 }
-            }
-        ).then((response) => {
-            if (response.status === 200) {
-                window.location.href = 'admin-dashboard'
-            }
-        })
+            ).then((response) => {
+                if (response.status === 200) {
+                    window.location.href = 'mobile-dashboard'
+                }
+            })
+        } else {
+            const request: ChangeEquipmentLocalizationRequest = createChangeLocalizationRequest();
+            axios.put(
+                `/api/v1/user/equipments/localization`,
+                request,
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                        Accept: "application/json"
+                    }
+                }
+            ).then((response) => {
+                if (response.status === 200) {
+                    window.location.href = 'mobile-dashboard'
+                }
+            })
+        }
+        
     }
 
     function createAssignEquipmentsRequest() : AssignEquipmentsRequest {
         let request = {
-            userId: selectedUserId as number,
-            equipmentId: equipmentToAssign.id,
+            userId: userId as number,
+            equipmentId: equipmentIdToAssign.id,
             localizationId: selectedLocalizationId
         }
         return request;
     } 
 
-    // function addEquipment(id: string) {
-    //     if (equipmentIdsForAssign.includes(id)) {
-    //         const newUpdatingEquipmentIds = equipmentIdsForAssign.filter(_id => _id != id);
-    //         setEquipmentIdsForAssign(newUpdatingEquipmentIds)
-    //     } else {
-    //         setEquipmentIdsForAssign(equipmentIdsForAssign => [...equipmentIdsForAssign, id])
-    //     }
-    // }
+    function createChangeLocalizationRequest() : ChangeEquipmentLocalizationRequest {
+        let request = {
+            equipmentId: equipmentIdToAssign.id,
+            localizationId: selectedLocalizationId
+        }
+        return request;
+    } 
 
     return (
         <Modal
@@ -117,40 +142,31 @@ const AssignEquipment = (props: Props) => {
         >
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
-                Assign equipment
+                {props.assignMode === true ? <>Assign Equipment</> : <>Change localization</>}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <div>
+          <div style={{paddingBottom: "10px"}}>
             <div className='registration-form-user'>
-
                 <div>
-                    <Form.Label>Equipment: {equipmentToAssign.name} ({equipmentToAssign.serialNumber})</Form.Label>
-                </div>
-                <div>
-                <Form.Label>User: {selectedUserId}</Form.Label>
-                    <select size={5} style={{height: "300px", width:"100%"}}>
-                        {users ? users.map((user) => (
-                            <option onClick={() => setSelectedUserId(user.id as number)}>{user.firstname + " " + user.lastname + " (" + user.email + ")"}</option>
-                        )) : <></>}
-                    </select>
-                </div>
-                <div>
-                <Form.Label>Localization: {selectedLocalizationId}</Form.Label>
-                    <select size={5} style={{height: "300px", width:"100%"}}>
+                <Form.Label>Localization (department/building/room number) </Form.Label>
+                    <select size={5} style={{height: "50px", width:"100%"}} onChange={(e) => setSelectedLocalizationId(e.target.value)}>
                         {localizations ? localizations.map((localization) => (
-                            <option onClick={() => setSelectedLocalizationId(localization.id as string)}>{localization.department + " " + localization.building + " " + localization.roomNumber}</option>
+                            <option key={localization.id} value={localization.id}>{localization.department + " " + localization.building + " " + localization.roomNumber}</option>
                         )) : <></>}
                     </select>
+                    <br/>
                 </div>
             </div>            
         </div>   
-        <div>                   
-            <button className="button" onClick={() => sendAssignEquipmentRequest()}>Assign</button>
+        <div>                            
+            <button className="button" onClick={() => sendAssignEquipmentRequest()}>
+            {props.assignMode === true ? <>Assign</> : <>Change</>}
+            </button>
         </div> 
         </Modal.Body>
         </Modal>
       );
 }
 
-export default AssignEquipment;
+export default LocalizationList;

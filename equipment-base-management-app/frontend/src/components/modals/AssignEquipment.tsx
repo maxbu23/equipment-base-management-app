@@ -76,7 +76,7 @@ const AssignEquipment = (props: Props) => {
     function sendAssignEquipmentRequest() {
         const request: AssignEquipmentsRequest = createAssignEquipmentsRequest();
         axios.put(
-            `/api/v1/admin/equipments/assign`,
+            `/api/v1/equipments/assign`,
             request,
             {
                 headers: {

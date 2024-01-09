@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class EquipmentMapper {
 
     private final LocalizationMapper localizationMapper;
+    private final UserMapper userMapper;
 
     public Equipment dtoToEntity(EquipmentDto equipmentDto) {
         return Equipment.builder()
@@ -32,6 +33,7 @@ public class EquipmentMapper {
                 .serialNumber(equipment.getSerialNumber())
                 .barcode(equipment.getBarcode())
                 .localization(localizationMapper.entityToDto(equipment.getLocalization()))
+                .owner(userMapper.entityToDto(equipment.getOwner()))
                 .build();
     }
 }

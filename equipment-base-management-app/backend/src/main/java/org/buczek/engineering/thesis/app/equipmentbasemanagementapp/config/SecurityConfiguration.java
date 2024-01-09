@@ -10,12 +10,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.Role.ADMIN;
+import static org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.Role.USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,46 +29,19 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests(
-//                        request -> request
-//                                .requestMatchers(antMatcher("/api/v1/auth/**"))
-//                                .permitAll()
-//                                .anyRequest()
-//                                .authenticated()
-//                )
-//                .sessionManagement(
-//                        config -> config
-//                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-//        httpSecurity
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .authorizeHttpRequests()
-//                .requestMatchers(antMatcher("/api/v1/auth/**"), antMatcher("/h2-console.html"))
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
-                        authorizationManagerRequestMatcherRegistry
-//                                .requestMatchers(AntPathRequestMatcher.antMatcher(POST, "/api/v1/auth/register")).hasRole(ADMIN.name())
-//                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/admin/**")).hasRole(ADMIN.name())
-//                                .requestMatchers(AntPathRequestMatcher.antMatcher(POST, "/api/v1/auth/authenticate")).hasAnyRole(ADMIN.name(), USER.name())
-//                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/auth/authenticate"))
-//                                .permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/auth/**")).permitAll()
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(reg ->
+                        reg
+                                .requestMatchers(
+                                        AntPathRequestMatcher.antMatcher("/swagger-ui/**"),
+                                        AntPathRequestMatcher.antMatcher("/swagger-resources/*"),
+                                        AntPathRequestMatcher.antMatcher("/v3/api-docs/**"),
+                                        AntPathRequestMatcher.antMatcher("/swagger-ui.html"),
+                                        AntPathRequestMatcher.antMatcher("/api/v1/auth/**")
+                                ).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/admin/**")).hasAuthority(ADMIN.name())
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/user/**")).hasAuthority(USER.name())
                                 .anyRequest()
                                 .authenticated()
                 )

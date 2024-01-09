@@ -1,5 +1,7 @@
 package org.buczek.engineering.thesis.app.equipmentbasemanagementapp.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
@@ -34,7 +36,7 @@ public class EquipmentController {
         equipmentService.updateEquipment(equipmentDto);
     }
 
-    @PutMapping("/admin/equipments/assign")
+    @PutMapping("/equipments/assign")
     public void assignEquipment(@RequestBody AssignEquipmentRequest request) {
         equipmentService.assignEquipment(request);
     }
@@ -56,8 +58,19 @@ public class EquipmentController {
         return allEquipmentsByUserId;
     }
 
+    @Operation(
+            summary = "Get a equipment by barcode",
+            description = "Returns an equipment as DTO by barcode"
+    )
     @GetMapping("/user/equipments/barcodes/{barcode}")
-    public EquipmentDto getEquipmentByBarcode(@PathVariable String barcode) {
+    public EquipmentDto getEquipmentByBarcode(
+            @PathVariable
+            @Parameter(
+                    name = "barcode",
+                    description = "Barcode of equipment",
+                    example = "1"
+            ) String barcode
+    ) {
         return equipmentService.getEquipmentByBarcode(barcode);
     }
 

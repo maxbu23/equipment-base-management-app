@@ -95,6 +95,7 @@ public class InitConfiguration implements CommandLineRunner {
                 .serialNumber("ADS-2312-222")
                 .brand("Lenovo")
                 .equipmentState(EquipmentState.NOT_ASSIGNED)
+                .barcode("123098123")
                 .build();
         Equipment equipment2 = Equipment.builder()
                 .name("Mac Book Air 14")
@@ -218,6 +219,7 @@ public class InitConfiguration implements CommandLineRunner {
                 .lastname("Wawrzyniak")
                 .role(Role.USER)
                 .email("j.wawrzyniak@gmail.com")
+                .password(passwordEncoder.encode("password"))
                 .build();
 
         userRepository.save(user1);

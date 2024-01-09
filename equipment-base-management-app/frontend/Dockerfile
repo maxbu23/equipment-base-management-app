@@ -1,11 +1,19 @@
-FROM node:14-alpine
+FROM node:latest as build-stage
 
-WORKDIR /usr/src/app
+WORKDIR /app/frontend
+
+COPY package*.json ./
+
+RUN npm install
 
 COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+FROM nginx:stable-alpine as production-stage
 
-CMD ["npm", "start"]
+COPY --from=build-stage /app/frontend/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

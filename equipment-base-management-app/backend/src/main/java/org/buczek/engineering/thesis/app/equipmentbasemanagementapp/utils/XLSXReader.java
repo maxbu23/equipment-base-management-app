@@ -10,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.EquipmentDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.dto.LocalizationDto;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Equipment;
+import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.entity.Localization;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentState;
 import org.buczek.engineering.thesis.app.equipmentbasemanagementapp.model.enums.EquipmentType;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,8 +51,18 @@ public class XLSXReader {
             if (i++ <= 20) {
                 continue;
             }
+            localizations.add(mapRowToLocalizationDtoObject(row));
+        }
+        return localizations;
+    }
+
+    public List<Localization> readLocationsFromXLSXFile(MultipartFile file) throws IOException {
+        Sheet sheet = prepareWoorkbookSheet(file);
+        ArrayList<Localization> localizations = new ArrayList<>();
+        for (Row row : sheet) {
             localizations.add(mapRowToLocalizationObject(row));
         }
+
         return localizations;
     }
 
@@ -111,8 +122,17 @@ public class XLSXReader {
         return new FileInputStream(file);
     }
 
-    private LocalizationDto mapRowToLocalizationObject(Row row) {
+    private LocalizationDto mapRowToLocalizationDtoObject(Row row) {
         return LocalizationDto.builder()
+                .department(row.getCell(0).getStringCellValue())
+                .building(row.getCell(1).getStringCellValue())
+                .floor((int) row.getCell(2).getNumericCellValue())
+                .roomNumber((int) row.getCell(3).getNumericCellValue())
+                .build();
+    }
+
+    private Localization mapRowToLocalizationObject(Row row) {
+        return Localization.builder()
                 .department(row.getCell(0).getStringCellValue())
                 .building(row.getCell(1).getStringCellValue())
                 .floor((int) row.getCell(2).getNumericCellValue())

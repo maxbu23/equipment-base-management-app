@@ -10,8 +10,11 @@ const BarcodeScanner = ({ onDetected }) => {
               type: "LiveStream",
               target: scannerRef.current,
               constraints: {
+                width: "200",
+                height: "500",
                 facingMode: "environment"
               },
+              
             },
             decoder: {
               readers: ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader", "code_39_vin_reader", "codabar_reader", "upc_reader", "upc_e_reader", "i2of5_reader"],

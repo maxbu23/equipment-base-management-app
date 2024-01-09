@@ -57,8 +57,14 @@ public class EquipmentService {
     public void updateEquipment(EquipmentDto equipmentDto) {
         Optional<Equipment> equipmentOptional = equipmentRepository.findById(equipmentDto.id());
         if (equipmentOptional.isPresent()) {
-            equipmentRepository.save(equipmentMapper.dtoToEntity(equipmentDto));
-
+            Equipment equipment = equipmentOptional.get();
+            User owner = equipment.getOwner();
+            Localization localization = equipment.getLocalization();
+            Equipment updatedEquipment = equipmentMapper.dtoToEntity(equipmentDto);
+            updatedEquipment.setOwner(owner);
+            updatedEquipment.setLocalization(localization);
+            updatedEquipment.setId(equipment.getId());
+            equipmentRepository.save(updatedEquipment);
         }
     }
 
@@ -74,6 +80,8 @@ public class EquipmentService {
         Equipment equipment = equipmentOptional.get();
         prepareEquipmentToAssignment(equipment, owner, localization);
         equipmentRepository.save(equipment);
+
+        log.info("Assigned equipment({}) to user({}) and localization({})", equipment, owner, localization);
     }
 
     public void removeEquipmentAssignment(Long equipmentId) {
@@ -120,9 +128,11 @@ public class EquipmentService {
         }
         Localization localization = localizationService.findLocalizationById(request.localizationId());
         Equipment equipment = equipmentOptional.get();
+        Localization oldLocalization = equipment.getLocalization();
         equipment.setLocalization(localization);
         equipmentRepository.save(equipment);
-
+        
+        log.info("Changed localization({}) to localization({}) for equipment({})", oldLocalization, localization, equipment);
     }
 
     private void prepareEquipmentToAssignment(Equipment equipment, User owner, Localization localization) {
